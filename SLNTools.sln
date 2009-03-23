@@ -1,0 +1,56 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CWDev.SLNTools.Core.dll", "CWDev.SLNTools.Core.dll\CWDev.SLNTools.Core.dll.csproj", "{055CF73F-58D6-4E8F-89B0-3FDDC5CC57F5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CWDev.SLNTools.UIKit.dll", "CWDev.SLNTools.UIKit.dll\CWDev.SLNTools.UIKit.dll.csproj", "{71CBD77B-D29A-42F6-B0F1-D0EFFE095CCC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SLNTools.exe", "SLNTools.exe\SLNTools.exe.csproj", "{00082D4F-899D-4A3B-B8C6-E9A25244E2B3}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SLNTools.MSI", "SLNTools.MSI\VSSolutionTools.MSI.vdproj", "{DEAE008A-CCF6-4266-BE9D-940FE549B04E}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 5
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://tfs10.codeplex.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = CWDev.SLNTools.Core.dll\\CWDev.SLNTools.Core.dll.csproj
+		SccProjectName1 = CWDev.SLNTools.Core.dll
+		SccLocalPath1 = CWDev.SLNTools.Core.dll
+		SccProjectUniqueName2 = CWDev.SLNTools.UIKit.dll\\CWDev.SLNTools.UIKit.dll.csproj
+		SccProjectName2 = CWDev.SLNTools.UIKit.dll
+		SccLocalPath2 = CWDev.SLNTools.UIKit.dll
+		SccProjectUniqueName3 = SLNTools.exe\\SLNTools.exe.csproj
+		SccProjectName3 = SLNTools.exe
+		SccLocalPath3 = SLNTools.exe
+		SccProjectUniqueName4 = SLNTools.MSI\\VSSolutionTools.MSI.vdproj
+		SccProjectName4 = SLNTools.MSI
+		SccLocalPath4 = SLNTools.MSI
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{055CF73F-58D6-4E8F-89B0-3FDDC5CC57F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{055CF73F-58D6-4E8F-89B0-3FDDC5CC57F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{055CF73F-58D6-4E8F-89B0-3FDDC5CC57F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{055CF73F-58D6-4E8F-89B0-3FDDC5CC57F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71CBD77B-D29A-42F6-B0F1-D0EFFE095CCC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71CBD77B-D29A-42F6-B0F1-D0EFFE095CCC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71CBD77B-D29A-42F6-B0F1-D0EFFE095CCC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71CBD77B-D29A-42F6-B0F1-D0EFFE095CCC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00082D4F-899D-4A3B-B8C6-E9A25244E2B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00082D4F-899D-4A3B-B8C6-E9A25244E2B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00082D4F-899D-4A3B-B8C6-E9A25244E2B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00082D4F-899D-4A3B-B8C6-E9A25244E2B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEAE008A-CCF6-4266-BE9D-940FE549B04E}.Debug|Any CPU.ActiveCfg = Debug
+		{DEAE008A-CCF6-4266-BE9D-940FE549B04E}.Debug|Any CPU.Build.0 = Debug
+		{DEAE008A-CCF6-4266-BE9D-940FE549B04E}.Release|Any CPU.ActiveCfg = Release
+		{DEAE008A-CCF6-4266-BE9D-940FE549B04E}.Release|Any CPU.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
