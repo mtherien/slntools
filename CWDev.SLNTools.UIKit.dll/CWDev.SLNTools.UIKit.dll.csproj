@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{71CBD77B-D29A-42F6-B0F1-D0EFFE095CCC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CWDev.SLNTools.UIKit.dll</RootNamespace>
+    <AssemblyName>CWDev.SLNTools.UIKit.dll</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CompareSolutionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CompareSolutionsForm.Designer.cs">
+      <DependentUpon>CompareSolutionsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConflictsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConflictsControl.Designer.cs">
+      <DependentUpon>ConflictsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CreateFilterForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CreateFilterForm.Designer.cs">
+      <DependentUpon>CreateFilterForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DifferencesControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DifferencesControl.Designer.cs">
+      <DependentUpon>DifferencesControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MergeSolutionsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MergeSolutionsForm.Designer.cs">
+      <DependentUpon>MergeSolutionsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeDifferenceConflictResolverForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TypeDifferenceConflictResolverForm.Designer.cs">
+      <DependentUpon>TypeDifferenceConflictResolverForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UpdateOriginalSolutionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UpdateOriginalSolutionForm.Designer.cs">
+      <DependentUpon>UpdateOriginalSolutionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ValueConflictResolverForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ValueConflictResolverForm.Designer.cs">
+      <DependentUpon>ValueConflictResolverForm.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="CompareSolutionsForm.resx">
+      <DependentUpon>CompareSolutionsForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConflictsControl.resx">
+      <DependentUpon>ConflictsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CreateFilterForm.resx">
+      <DependentUpon>CreateFilterForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DifferencesControl.resx">
+      <DependentUpon>DifferencesControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MergeSolutionsForm.resx">
+      <DependentUpon>MergeSolutionsForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TypeDifferenceConflictResolverForm.resx">
+      <DependentUpon>TypeDifferenceConflictResolverForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UpdateOriginalSolutionForm.resx">
+      <DependentUpon>UpdateOriginalSolutionForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ValueConflictResolverForm.resx">
+      <DependentUpon>ValueConflictResolverForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CWDev.SLNTools.Core.dll\CWDev.SLNTools.Core.dll.csproj">
+      <Project>{055CF73F-58D6-4E8F-89B0-3FDDC5CC57F5}</Project>
+      <Name>CWDev.SLNTools.Core.dll</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

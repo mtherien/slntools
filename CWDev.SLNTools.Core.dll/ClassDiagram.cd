@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="CWDev.VSSolutionTools.Core.PropertyLine">
+    <Position X="0.5" Y="11.75" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAQAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>PropertyLine.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.SolutionFileReader">
+    <Position X="7.75" Y="0.5" Width="3.75" />
+    <Members>
+      <Method Name="FindProjectByGuid" Hidden="true" />
+      <Method Name="HandleNestedProjects" Hidden="true" />
+      <Method Name="HandleProjectConfigurationPlatforms" Hidden="true" />
+      <Method Name="HandleVersionControlLines" Hidden="true" />
+      <Field Name="m_currentLineNumber" Hidden="true" />
+      <Field Name="m_reader" Hidden="true" />
+      <Field Name="m_solutionFile" Hidden="true" />
+      <Field Name="ms_patternParseGlobalSection" Hidden="true" />
+      <Field Name="ms_patternParseProject" Hidden="true" />
+      <Field Name="ms_patternParseProjectSection" Hidden="true" />
+      <Field Name="ms_patternParsePropertyLine" Hidden="true" />
+      <Field Name="ms_regexConvertEscapedValues" Hidden="true" />
+      <Field Name="ms_regexParseGlobalSection" Hidden="true" />
+      <Field Name="ms_regexParseProject" Hidden="true" />
+      <Field Name="ms_regexParseProjectSection" Hidden="true" />
+      <Field Name="ms_regexParsePropertyLine" Hidden="true" />
+      <Method Name="ReadGlobal" Hidden="true" />
+      <Method Name="ReadGlobalSection" Hidden="true" />
+      <Method Name="ReadHeader" Hidden="true" />
+      <Method Name="ReadLine" Hidden="true" />
+      <Method Name="ReadProject" Hidden="true" />
+      <Method Name="ReadProjectSection" Hidden="true" />
+      <Method Name="ReadPropertyLine" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>CEBAIBkAAEAYgEAAAASAAQAIEAgAAAAAgAABIQAAAGg=</HashCode>
+      <FileName>SolutionFileReader.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.SolutionFileWriter">
+    <Position X="7.75" Y="3" Width="3.75" />
+    <Members>
+      <Field Name="m_solutionFile" Hidden="true" />
+      <Field Name="m_writer" Hidden="true" />
+      <Method Name="WriteGlobal" Hidden="true" />
+      <Method Name="WriteGlobalSections" Hidden="true" />
+      <Method Name="WriteHeader" Hidden="true" />
+      <Method Name="WriteProjects" Hidden="true" />
+      <Method Name="WriteSection" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>CAAACAAAABAAAAAAAAAAAQgAAAABAAAAAAAhAAEAAAA=</HashCode>
+      <FileName>SolutionFileWriter.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.SolutionFile">
+    <Position X="0.5" Y="0.5" Width="6.75" />
+    <Members>
+      <Field Name="m_globalSections" Hidden="true" />
+      <Field Name="m_headers" Hidden="true" />
+      <Field Name="m_projectsByGuid" Hidden="true" />
+      <Field Name="m_projectsInOrder" Hidden="true" />
+      <Field Name="m_solutionFullPath" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AEAAAYEAAAAAAIAAEAgACAQICAIIAwAkAhBAAAITCAA=</HashCode>
+      <FileName>SolutionFile.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.Section">
+    <Position X="0.5" Y="16.25" Width="6.75" />
+    <Members>
+      <Field Name="m_name" Hidden="true" />
+      <Field Name="m_propertyLines" Hidden="true" />
+      <Field Name="m_sectionType" Hidden="true" />
+      <Field Name="m_step" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>EAAAABAAAAAAAAAEAQAAAARAAAAAEAAAIAIAAAAAAAA=</HashCode>
+      <FileName>Section.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.KnownProjectTypeGuid">
+    <Position X="7.75" Y="7" Width="2" />
+    <TypeIdentifier>
+      <HashCode>BAAACAAACAAAABAAQAAAAAABAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>KnownProjectTypeGuid.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.Project">
+    <Position X="0.5" Y="7" Width="6.75" />
+    <Members>
+      <Field Name="m_container" Hidden="true" />
+      <Field Name="m_parentFolderGuid" Hidden="true" />
+      <Field Name="m_projectConfigurationPlatformsLines" Hidden="true" />
+      <Field Name="m_projectGuid" Hidden="true" />
+      <Field Name="m_projectName" Hidden="true" />
+      <Field Name="m_projectSections" Hidden="true" />
+      <Field Name="m_projectTypeGuid" Hidden="true" />
+      <Field Name="m_relativePath" Hidden="true" />
+      <Field Name="m_versionControlLines" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>CAAAAABIAAABAICECAEAAAgAhABABAQAQAADIIIAIAQ=</HashCode>
+      <FileName>Project.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.GlobalSection">
+    <Position X="0.5" Y="14" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GlobalSection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.ProjectSection">
+    <Position X="4" Y="14" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ProjectSection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

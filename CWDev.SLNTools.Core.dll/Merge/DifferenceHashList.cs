@@ -1,0 +1,17 @@
+﻿using System.Collections.ObjectModel;
+
+namespace CWDev.VSSolutionTools.Core.Merge
+{
+    public class DifferenceHashList : KeyedCollection<ElementIdentifier, Difference>
+    {
+        public DifferenceHashList()
+        {
+
+        }
+
+        protected override ElementIdentifier GetKeyForItem(Difference item)
+        {
+            return item.Identifier;
+        }
+    }
+}

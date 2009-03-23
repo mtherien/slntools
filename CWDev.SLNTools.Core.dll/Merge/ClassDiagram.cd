@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="CWDev.VSSolutionTools.Core.Merge.Conflict">
+    <Position X="1.5" Y="16" Width="2.75" />
+    <Members>
+      <Field Name="m_identifier" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAABAAAAAAAAAQAAAAAAQAAAAAA=</HashCode>
+      <FileName>Merge\Conflict.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.Merge.ValueConflict">
+    <Position X="0.5" Y="18.25" Width="2.5" />
+    <Members>
+      <Field Name="m_newValueInDestinationBranch" Hidden="true" />
+      <Field Name="m_newValueInSourceBranch" Hidden="true" />
+      <Field Name="m_oldValue" Hidden="true" />
+      <Field Name="m_operationOnParent" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAACAAAAEAAAAAEAQDAAAACACAAABAAAAAAA=</HashCode>
+      <FileName>Merge\ValueConflict.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.Merge.NodeConflict">
+    <Position X="3.5" Y="18.25" Width="3.75" />
+    <Members>
+      <Field Name="m_operationOnParent" Hidden="true" />
+      <Field Name="m_subconflicts" Hidden="true" />
+    </Members>
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAACAAAAEQAAIAAAABAAAAAAAAAABAAAAACA=</HashCode>
+      <FileName>Merge\NodeConflict.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.Merge.TypeDifferenceConflict">
+    <Position X="7.75" Y="18.25" Width="2.75" />
+    <Members>
+      <Field Name="m_differenceInDestinationBranch" Hidden="true" />
+      <Field Name="m_differenceInSourceBranch" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAACBAAAEAAAAAAAAAAAAAAAAAAIAAAAAACA=</HashCode>
+      <FileName>Merge\TypeDifferenceConflict.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.Merge.Difference">
+    <Position X="1.5" Y="9.75" Width="2.75" />
+    <Members>
+      <Field Name="m_identifier" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAABAAAABAAAAAAAAAABQAAAAAA=</HashCode>
+      <FileName>Merge\Difference.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.Merge.ElementIdentifier">
+    <Position X="1.5" Y="0.5" Width="2.75" />
+    <Members>
+      <Field Name="m_friendlyName" Hidden="true" />
+      <Field Name="m_name" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAAAAEAAEgAAAAAQAAAAAAIAAAAAQAAAAAAA=</HashCode>
+      <FileName>Merge\ElementIdentifier.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.Merge.Element">
+    <Position X="1.5" Y="3.25" Width="2.75" />
+    <Members>
+      <Field Name="m_identifier" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAABAAAAAAAAAAAAAAAAQAAAgAA=</HashCode>
+      <FileName>Merge\Element.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.Merge.ValueElement">
+    <Position X="0.5" Y="5.5" Width="2.25" />
+    <Members>
+      <Field Name="m_value" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQAAAAAAAAAAAQAAAAAAAAgAAAAgAA=</HashCode>
+      <FileName>Merge\ValueElement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.Merge.NodeElement">
+    <Position X="3.25" Y="5.5" Width="2.25" />
+    <Members>
+      <Field Name="m_childs" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIQAAAAAABAAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Merge\NodeElement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.Merge.EmptyNodeElement">
+    <Position X="3.25" Y="7.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Merge\EmptyChildsElement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.Merge.ValueDifference">
+    <Position X="0.75" Y="12.5" Width="2.75" />
+    <Members>
+      <Field Name="m_newValue" Hidden="true" />
+      <Field Name="m_oldValue" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAQEAAAAEEAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Merge\ValueDifference.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="CWDev.VSSolutionTools.Core.Merge.NodeDifference">
+    <Position X="4" Y="12.5" Width="3.25" />
+    <Members>
+      <Field Name="m_subdifferences" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQEAAAABAAAAAIAAAAAAACAAAAAAAA=</HashCode>
+      <FileName>Merge\NodeDifference.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="CWDev.VSSolutionTools.Core.Merge.OperationOnParent">
+    <Position X="5" Y="9.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAEAAABAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Merge\OperationOnParent.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>
