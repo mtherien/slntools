@@ -65,11 +65,6 @@
       <Name>CWDev.SLNTools.UIKit.dll</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="All Projects %28Latest Branche WinFixFrs%29.sln" />
-    <Content Include="All Projects %28Latest Main%29.sln" />
-    <Content Include="All Projects %28Lors du Branch%29.sln" />
-  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

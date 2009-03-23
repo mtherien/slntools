@@ -37,7 +37,7 @@ namespace CWDev.VSSolutionTools
             //args = new string[] { "MergeSolutions", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\VSSolutionTools.exe\All Projects (Lors du Branch).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\VSSolutionTools.exe\All Projects (Latest Branche WinFixFrs).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\VSSolutionTools.exe\All Projects (Latest Main).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\VSSolutionTools.exe\Results.sln" };
             //args = new string[] { "CreateFilterFileFromSolution", @"E:\Dev\CC\Main\TousLesProjets.sln" };
             //args = new string[] { "OpenFilterFile", "/SolutionStarter:# Visual Studio 2005|C:\\Program Files (x86)\\Microsoft Visual Studio 8\\Common7\\IDE\\devenv.exe|\"{SolutionFullPath}\"", @"E:\Dev\CC\Main\TestFilter.slnfilter" };
-            args = new string[] { "/?" };
+            //args = new string[] { "/?" };
 
             string[] commandName;
             string[] commandArguments;
