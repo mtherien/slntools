@@ -1,9 +1,14 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Xml;
 
 namespace CWDev.SLNTools.Core.Filter
 {
+    using Merge;
+
+    public delegate bool AcceptDifferencesHandler(ReadOnlyCollection<Difference> differences);
+
     public class FilterFile
     {
         public static FilterFile FromFile(string filterFullPath)
@@ -46,12 +51,14 @@ namespace CWDev.SLNTools.Core.Filter
             m_filterFullPath = null;
             m_projectsToKeep = new List<string>();
             m_watchForChangesOnFilteredSolution = false;
+            m_watcher = null;
         }
 
         private string m_sourceSolutionFullPath;
         private string m_filterFullPath;
         private List<string> m_projectsToKeep;
         private bool m_watchForChangesOnFilteredSolution;
+        private FilteredSolutionWatcher m_watcher;   
 
         public string SourceSolutionFullPath
         {
@@ -75,15 +82,15 @@ namespace CWDev.SLNTools.Core.Filter
             get { return Path.ChangeExtension(this.FilterFullPath, ".sln"); }
         }
 
+        public List<string> ProjectsToKeep
+        {
+            get { return m_projectsToKeep; }
+        }
+
         public bool WatchForChangesOnFilteredSolution
         {
             get { return m_watchForChangesOnFilteredSolution; }
             set { m_watchForChangesOnFilteredSolution = value; }
-        }
-
-        public List<string> ProjectsToKeep
-        {
-            get { return m_projectsToKeep; }
         }
 
         public SolutionFile Apply()
@@ -125,6 +132,27 @@ namespace CWDev.SLNTools.Core.Filter
             foreach (Project dependency in project.Dependencies)
             {
                 AddRecursiveDependenciesToList(includedProjects, dependency);
+            }
+        }
+
+        public void StartFilteredSolutionWatcher(SolutionFile filteredSolution, AcceptDifferencesHandler handler)
+        {
+            if (m_watchForChangesOnFilteredSolution && (m_watcher == null))
+            {
+                m_watcher = new FilteredSolutionWatcher(
+                            handler,
+                            this,
+                            filteredSolution);
+                m_watcher.Start();
+            }
+        }
+
+        public void StopFilteredSolutionWatcher()
+        {
+            if (m_watcher != null)
+            {
+                m_watcher.Stop();
+                m_watcher = null;
             }
         }
 
