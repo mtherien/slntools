@@ -123,12 +123,12 @@
   <metadata name="labelMessage.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
+  <metadata name="label1.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
   <data name="m_labelStateDescription.Text" xml:space="preserve">
     <value>The file is readonly, you might have to checkout the file from a source control application. It should be noted that the original solution file can be found in the '-Original Solution-' folder of the filtered solution.
 
 </value>
   </data>
-  <metadata name="label1.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>False</value>
-  </metadata>
 </root>

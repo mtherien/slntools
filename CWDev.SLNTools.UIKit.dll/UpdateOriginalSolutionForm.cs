@@ -25,7 +25,10 @@ namespace CWDev.SLNTools.UIKit
             m_watcher.NotifyFilter = NotifyFilters.Attributes;
             m_watcher.Path = Path.GetDirectoryName(originalSolutionFullPath);
             m_watcher.Filter = Path.GetFileName(originalSolutionFullPath);
-            m_watcher.Changed += OnChanged;
+            m_watcher.Changed += delegate(object source, FileSystemEventArgs e)
+                        {
+                            UpdateState();
+                        };
             m_watcher.EnableRaisingEvents = true;
         }
 
@@ -59,11 +62,6 @@ namespace CWDev.SLNTools.UIKit
             {
                 invoker.Invoke();
             }
-        }
-
-        private void OnChanged(object source, FileSystemEventArgs e)
-        {
-            UpdateState();
         }
     }
 }

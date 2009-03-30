@@ -8,7 +8,7 @@
     <ProjectGuid>{71CBD77B-D29A-42F6-B0F1-D0EFFE095CCC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CWDev.SLNTools.UIKit.dll</RootNamespace>
+    <RootNamespace>CWDev.SLNTools.UIKit</RootNamespace>
     <AssemblyName>CWDev.SLNTools.UIKit.dll</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -73,6 +73,7 @@
       <DependentUpon>MergeSolutionsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TopMostFormFix.cs" />
     <Compile Include="TypeDifferenceConflictResolverForm.cs">
       <SubType>Form</SubType>
     </Compile>

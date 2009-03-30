@@ -6,24 +6,9 @@ namespace CWDev.SLNTools.Core.Filter
 {
     public class FilterFile
     {
-        public const string OriginalSolutionFolderGuid = "{3D86F2A1-6348-4351-9B53-2A75735A2AB4}";
-
         public static FilterFile FromFile(string filterFullPath)
         {
-            FilterFile filterFile = new FilterFile();
-            filterFile.FilterFullPath = filterFullPath;
-
-            XmlDocument xmldoc = new XmlDocument();
-            xmldoc.Load(filterFullPath);
-
-            XmlNode nodeSourceSln = xmldoc.SelectSingleNode("/Config/SourceSLN");
-            filterFile.SourceSolutionFullPath = Path.Combine(Path.GetDirectoryName(filterFullPath), Path.GetFileName(nodeSourceSln.InnerText));
-
-            foreach (XmlNode node in xmldoc.SelectNodes("/Config/ProjectToKeep"))
-            {
-                filterFile.ProjectsToKeep.Add(node.InnerText);
-            }
-            return filterFile;
+            return FromStream(filterFullPath, new FileStream(filterFullPath, FileMode.Open));
         }
 
         public static FilterFile FromStream(string filterFullPath, Stream stream)
@@ -34,55 +19,68 @@ namespace CWDev.SLNTools.Core.Filter
             XmlDocument xmldoc = new XmlDocument();
             xmldoc.Load(stream);
 
-            XmlNode nodeSourceSln = xmldoc.SelectSingleNode("/Config/SourceSLN");
-            filterFile.SourceSolutionFullPath = Path.Combine(Path.GetDirectoryName(filterFullPath), Path.GetFileName(nodeSourceSln.InnerText));
+            XmlNode configNode = xmldoc.SelectSingleNode("Config");
 
-            foreach (XmlNode node in xmldoc.SelectNodes("/Config/ProjectToKeep"))
+            XmlNode sourceSlnNode = configNode.SelectSingleNode("SourceSLN");
+            filterFile.SourceSolutionFullPath = Path.Combine(
+                        Path.GetDirectoryName(filterFullPath), 
+                        Path.GetFileName(sourceSlnNode.InnerText));
+
+            XmlNode watchForChangesNode = configNode.SelectSingleNode("WatchForChangesOnFilteredSolution");
+            if (watchForChangesNode != null)
+            {
+                filterFile.WatchForChangesOnFilteredSolution = bool.Parse(watchForChangesNode.InnerText);
+            }
+
+            foreach (XmlNode node in configNode.SelectNodes("ProjectToKeep"))
             {
                 filterFile.ProjectsToKeep.Add(node.InnerText);
             }
+
             return filterFile;
         }
 
         public FilterFile()
         {
             m_sourceSolutionFullPath = null;
-            m_sourceSolution = null;
             m_filterFullPath = null;
             m_projectsToKeep = new List<string>();
+            m_watchForChangesOnFilteredSolution = false;
         }
 
         private string m_sourceSolutionFullPath;
-        private SolutionFile m_sourceSolution;
         private string m_filterFullPath;
         private List<string> m_projectsToKeep;
+        private bool m_watchForChangesOnFilteredSolution;
 
         public string SourceSolutionFullPath
         {
             get { return m_sourceSolutionFullPath; }
-            set 
-            { 
-                m_sourceSolutionFullPath = value;
-                ReloadSourceSolution();
-            }
+            set { m_sourceSolutionFullPath = value; }
         }
+
         public SolutionFile SourceSolution
         {
-            get { return m_sourceSolution; }
+            get { return SolutionFile.FromFile(m_sourceSolutionFullPath); }
         }
-        public void ReloadSourceSolution()
-        {
-            m_sourceSolution = SolutionFile.FromFile(m_sourceSolutionFullPath);
-        }
+
         public string FilterFullPath
         {
             get { return m_filterFullPath; }
             set { m_filterFullPath = value; }
         }
+
         public string DestinationSolutionFullPath
         {
             get { return Path.ChangeExtension(this.FilterFullPath, ".sln"); }
         }
+
+        public bool WatchForChangesOnFilteredSolution
+        {
+            get { return m_watchForChangesOnFilteredSolution; }
+            set { m_watchForChangesOnFilteredSolution = value; }
+        }
+
         public List<string> ProjectsToKeep
         {
             get { return m_projectsToKeep; }
@@ -95,7 +93,11 @@ namespace CWDev.SLNTools.Core.Filter
 
         public SolutionFile ApplyOn(SolutionFile original)
         {
-            SolutionFile filteredSolutionFile = new SolutionFile(original.SolutionFullPath, original.Headers, original.GlobalSections);
+            SolutionFile filteredSolutionFile = new SolutionFile(
+                        this.DestinationSolutionFullPath, 
+                        original.Headers, 
+                        original.GlobalSections);
+
             List<Project> includedProjects = new List<Project>();
             foreach (string projectFullName in this.ProjectsToKeep)
             {
@@ -110,23 +112,6 @@ namespace CWDev.SLNTools.Core.Filter
             {
                 filteredSolutionFile.AddOrUpdateProject(project);
             }
-
-            string solutionName = Path.GetFileName(original.SolutionFullPath);
-            filteredSolutionFile.AddOrUpdateProject(
-                        OriginalSolutionFolderGuid,
-                        KnownProjectTypeGuid.SolutionFolder,
-                        "-OriginalSolution-",
-                        "",
-                        new ProjectSection[]
-                        {
-                            new ProjectSection(
-                                "SolutionItems",
-                                "ProjectSection",
-                                "preProject",
-                                new PropertyLine[] { new PropertyLine(solutionName, solutionName) })
-                        },
-                        null,
-                        null);
 
             return filteredSolutionFile;
         }
@@ -151,41 +136,26 @@ namespace CWDev.SLNTools.Core.Filter
         public void SaveAs(string filterFullPath)
         {
             XmlDocument docFilter = new XmlDocument();
-            XmlNode nodeConfig = docFilter.CreateElement("Config");
-            docFilter.AppendChild(nodeConfig);
-            XmlNode nodeSourceSLN = docFilter.CreateElement("SourceSLN");
-            nodeSourceSLN.InnerText = Path.GetFileName(m_sourceSolutionFullPath);
-            nodeConfig.AppendChild(nodeSourceSLN);
+
+            XmlNode configNode = docFilter.CreateElement("Config");
+            docFilter.AppendChild(configNode);
+
+            XmlNode sourceSlnNode = docFilter.CreateElement("SourceSLN");
+            sourceSlnNode.InnerText = Path.GetFileName(m_sourceSolutionFullPath);
+            configNode.AppendChild(sourceSlnNode);
+
+            XmlNode watchForChangesNode = docFilter.CreateElement("WatchForChangesOnFilteredSolution");
+            watchForChangesNode.InnerText = m_watchForChangesOnFilteredSolution.ToString();
+            configNode.AppendChild(watchForChangesNode);
 
             foreach (string projectFullName in this.ProjectsToKeep)
             {
                 XmlNode node = docFilter.CreateElement("ProjectToKeep");
                 node.InnerText = projectFullName;
-                nodeConfig.AppendChild(node);
+                configNode.AppendChild(node);
             }
 
             docFilter.Save(filterFullPath);
-        }
-
-        public SolutionFile SaveFilteredSolution()
-        {
-            SolutionFile filteredSolution = Apply();
-            filteredSolution.SaveAs(this.DestinationSolutionFullPath);
-            return filteredSolution;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (! base.Equals(obj))
-                return false;
-
-            FilterFile other = obj as FilterFile;
-            if (this.FilterFullPath != other.FilterFullPath)
-                return false;
-            if (this.ProjectsToKeep.Count != other.ProjectsToKeep.Count)
-                return false;
-            // TODO
-            return true;
         }
     }
 }
