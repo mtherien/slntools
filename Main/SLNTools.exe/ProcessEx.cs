@@ -1,0 +1,73 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
+
+namespace CWDev.SLNTools
+{
+    static class ProcessEx
+    {
+        public static List<Process> GetChildsOfProcess(Process parent)
+        {
+            List<Process> childs = new List<Process>();
+
+            PROCESSENTRY32 procEntry = new PROCESSENTRY32();
+            procEntry.dwSize = (UInt32)Marshal.SizeOf(typeof(PROCESSENTRY32));
+            IntPtr handleToSnapshot = CreateToolhelp32Snapshot(SnapshotFlags.Process, 0);
+            if (!Process32First(handleToSnapshot, ref procEntry))
+            {
+                throw new Win32Exception();
+            }
+
+            do
+            {
+                if (procEntry.th32ParentProcessID == parent.Id)
+                {
+                    childs.Add(Process.GetProcessById((int)procEntry.th32ProcessID));
+                }
+            } while (Process32Next(handleToSnapshot, ref procEntry));
+
+            return childs;
+        }
+
+        //inner enum used only internally
+        [Flags]
+        private enum SnapshotFlags : uint
+        {
+            HeapList = 0x00000001,
+            Process = 0x00000002,
+            Thread = 0x00000004,
+            Module = 0x00000008,
+            Module32 = 0x00000010,
+            Inherit = 0x80000000,
+            All = 0x0000001F
+        }
+        //inner struct used only internally
+        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
+        private struct PROCESSENTRY32
+        {
+            const int MAX_PATH = 260;
+            internal UInt32 dwSize;
+            internal UInt32 cntUsage;
+            internal UInt32 th32ProcessID;
+            internal IntPtr th32DefaultHeapID;
+            internal UInt32 th32ModuleID;
+            internal UInt32 cntThreads;
+            internal UInt32 th32ParentProcessID;
+            internal Int32 pcPriClassBase;
+            internal UInt32 dwFlags;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = MAX_PATH)]
+            internal string szExeFile;
+        }
+
+        [DllImport("kernel32", SetLastError = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        static extern IntPtr CreateToolhelp32Snapshot([In]SnapshotFlags dwFlags, [In]UInt32 th32ProcessID);
+
+        [DllImport("kernel32", SetLastError = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        static extern bool Process32First([In]IntPtr hSnapshot, ref PROCESSENTRY32 lppe);
+
+        [DllImport("kernel32", SetLastError = true, CharSet = System.Runtime.InteropServices.CharSet.Auto)]
+        static extern bool Process32Next([In]IntPtr hSnapshot, ref PROCESSENTRY32 lppe);
+    }
+}

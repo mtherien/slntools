@@ -46,12 +46,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLine\CommandLineParser.cs" />
+    <Compile Include="FilteredSolutionWatcher.cs" />
+    <Compile Include="ProcessEx.cs" />
     <Compile Include="EditFilterFileCommand.cs" />
     <Compile Include="CreateFilterFileFromSolutionCommand.cs" />
     <Compile Include="MergeSolutionsCommand.cs" />
     <Compile Include="CompareSolutionsCommand.cs" />
     <Compile Include="Command.cs" />
-    <Compile Include="OpenFilterFileCommand.cs" />
+    <Compile Include="OpenFilterFileCommand.cs">
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
