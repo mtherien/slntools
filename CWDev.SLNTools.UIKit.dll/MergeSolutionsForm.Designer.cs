@@ -1,4 +1,4 @@
-namespace CWDev.VSSolutionTools.UIKit
+namespace CWDev.SLNTools.UIKit
 {
     partial class MergeSolutionsForm
     {
@@ -35,12 +35,12 @@ namespace CWDev.VSSolutionTools.UIKit
             System.Windows.Forms.GroupBox groupboxAcceptedDifferences;
             this.m_splitContainerDifferencesFoundAndWorkArea = new System.Windows.Forms.SplitContainer();
             this.m_splitContainerDifferencesFound = new System.Windows.Forms.SplitContainer();
-            this.m_differencesInSourceBranchControl = new CWDev.VSSolutionTools.UIKit.DifferencesControl();
-            this.m_differencesInDestinationBranchControl = new CWDev.VSSolutionTools.UIKit.DifferencesControl();
+            this.m_differencesInSourceBranchControl = new CWDev.SLNTools.UIKit.DifferencesControl();
+            this.m_differencesInDestinationBranchControl = new CWDev.SLNTools.UIKit.DifferencesControl();
             this.m_splitContainerConflictAndResult = new System.Windows.Forms.SplitContainer();
-            this.m_conflictsControl = new CWDev.VSSolutionTools.UIKit.ConflictsControl();
+            this.m_conflictsControl = new CWDev.SLNTools.UIKit.ConflictsControl();
             this.m_buttonResolveAll = new System.Windows.Forms.Button();
-            this.m_acceptedDifferencesControl = new CWDev.VSSolutionTools.UIKit.DifferencesControl();
+            this.m_acceptedDifferencesControl = new CWDev.SLNTools.UIKit.DifferencesControl();
             this.m_buttonSave = new System.Windows.Forms.Button();
             this.m_buttonCancel = new System.Windows.Forms.Button();
             mainpanel = new System.Windows.Forms.Panel();

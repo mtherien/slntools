@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace CWDev.VSSolutionTools
+namespace CWDev.SLNTools
 {
     using CommandLine;
     using Core;

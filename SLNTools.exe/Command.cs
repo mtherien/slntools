@@ -1,4 +1,4 @@
-namespace CWDev.VSSolutionTools
+namespace CWDev.SLNTools
 {
     internal abstract class Command
     {

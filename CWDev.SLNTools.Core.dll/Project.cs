@@ -5,7 +5,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-namespace CWDev.VSSolutionTools.Core
+namespace CWDev.SLNTools.Core
 {
     using Merge;
 

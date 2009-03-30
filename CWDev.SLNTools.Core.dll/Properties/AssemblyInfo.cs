@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("CWDev.VSSolutionTools.dll")]
+[assembly: AssemblyTitle("CWDev.SLNTools.dll")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("CWDev.VSSolutionTools.dll")]
+[assembly: AssemblyProduct("CWDev.SLNTools.dll")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2007")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

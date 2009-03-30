@@ -1,4 +1,4 @@
-namespace CWDev.VSSolutionTools
+namespace CWDev.SLNTools
 {
     using CommandLine;
     using UIKit;

@@ -1,4 +1,4 @@
-namespace CWDev.VSSolutionTools.UIKit
+namespace CWDev.SLNTools.UIKit
 {
     partial class CreateFilterForm
     {

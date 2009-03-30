@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CWDev.VSSolutionTools.Core.Merge
+namespace CWDev.SLNTools.Core.Merge
 {
     public class NodeElement : Element
     {

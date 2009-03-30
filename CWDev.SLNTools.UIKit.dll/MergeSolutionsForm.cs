@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace CWDev.VSSolutionTools.UIKit
+namespace CWDev.SLNTools.UIKit
 {
     using Core;
     using Core.Merge;

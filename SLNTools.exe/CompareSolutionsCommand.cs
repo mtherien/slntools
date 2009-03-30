@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace CWDev.VSSolutionTools
+namespace CWDev.SLNTools
 {
     using CommandLine;
     using Core;

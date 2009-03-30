@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace CWDev.VSSolutionTools.Core
+namespace CWDev.SLNTools.Core
 {
     using Merge;
 

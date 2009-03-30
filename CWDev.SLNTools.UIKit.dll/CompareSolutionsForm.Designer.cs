@@ -1,4 +1,4 @@
-namespace CWDev.VSSolutionTools.UIKit
+namespace CWDev.SLNTools.UIKit
 {
     partial class CompareSolutionsForm
     {
@@ -29,7 +29,7 @@ namespace CWDev.VSSolutionTools.UIKit
         private void InitializeComponent()
         {
             System.Windows.Forms.GroupBox groupBoxDifferencesFoundInSourceBranch;
-            this.m_differences = new CWDev.VSSolutionTools.UIKit.DifferencesControl();
+            this.m_differences = new CWDev.SLNTools.UIKit.DifferencesControl();
             groupBoxDifferencesFoundInSourceBranch = new System.Windows.Forms.GroupBox();
             groupBoxDifferencesFoundInSourceBranch.SuspendLayout();
             this.SuspendLayout();
