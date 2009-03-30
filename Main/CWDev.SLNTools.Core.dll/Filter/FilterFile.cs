@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
-namespace CWDev.VSSolutionTools.Core.Filter
+namespace CWDev.SLNTools.Core.Filter
 {
     public class FilterFile
     {

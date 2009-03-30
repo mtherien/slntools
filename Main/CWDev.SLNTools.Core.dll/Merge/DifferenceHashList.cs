@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace CWDev.VSSolutionTools.Core.Merge
+namespace CWDev.SLNTools.Core.Merge
 {
     public class DifferenceHashList : KeyedCollection<ElementIdentifier, Difference>
     {

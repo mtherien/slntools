@@ -1,4 +1,4 @@
-namespace CWDev.VSSolutionTools.UIKit
+namespace CWDev.SLNTools.UIKit
 {
     partial class UpdateOriginalSolutionForm
     {
@@ -36,7 +36,7 @@ namespace CWDev.VSSolutionTools.UIKit
             this.m_buttonNo = new System.Windows.Forms.Button();
             this.m_labelState = new System.Windows.Forms.Label();
             this.m_labelStateDescription = new System.Windows.Forms.Label();
-            this.m_differencesInFilteredSolution = new CWDev.VSSolutionTools.UIKit.DifferencesControl();
+            this.m_differencesInFilteredSolution = new CWDev.SLNTools.UIKit.DifferencesControl();
             labelOriginalSolutionFileState = new System.Windows.Forms.Label();
             labelMessage = new System.Windows.Forms.Label();
             label1 = new System.Windows.Forms.Label();
@@ -145,7 +145,7 @@ namespace CWDev.VSSolutionTools.UIKit
             this.MinimumSize = new System.Drawing.Size(370, 319);
             this.Name = "UpdateOriginalSolutionForm";
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.Text = "VSSolutionTools - Update Original Solution";
+            this.Text = "SLNTools - Update Original Solution";
             this.TopMost = true;
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 
-namespace CWDev.VSSolutionTools.Core
+namespace CWDev.SLNTools.Core
 {
     using Merge;
 

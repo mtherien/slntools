@@ -1,4 +1,4 @@
-namespace CWDev.VSSolutionTools.Core
+namespace CWDev.SLNTools.Core
 {
     public class KnownProjectTypeGuid
     {

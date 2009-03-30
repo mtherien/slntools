@@ -1,6 +1,6 @@
 using System;
 
-namespace CWDev.VSSolutionTools.Core.Merge
+namespace CWDev.SLNTools.Core.Merge
 {
     public abstract class Difference
     {

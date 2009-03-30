@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace CWDev.VSSolutionTools.Core
+namespace CWDev.SLNTools.Core
 {
     public class SolutionFileReader : IDisposable
     {

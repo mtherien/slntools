@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace CWDev.VSSolutionTools.Core
+namespace CWDev.SLNTools.Core
 {
     public class SolutionFileWriter : IDisposable
     {

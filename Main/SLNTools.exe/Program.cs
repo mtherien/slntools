@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-namespace CWDev.VSSolutionTools
+namespace CWDev.SLNTools
 {
     using CommandLine;
     using Core;
@@ -33,8 +33,8 @@ namespace CWDev.VSSolutionTools
         [STAThread]
         static void Main(string[] args)
         {
-            //args = new string[] { "CompareSolutions", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\VSSolutionTools.exe\All Projects (Lors du Branch).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\VSSolutionTools.exe\All Projects (Latest Branche WinFixFrs).sln" };
-            //args = new string[] { "MergeSolutions", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\VSSolutionTools.exe\All Projects (Lors du Branch).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\VSSolutionTools.exe\All Projects (Latest Branche WinFixFrs).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\VSSolutionTools.exe\All Projects (Latest Main).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\VSSolutionTools.exe\Results.sln" };
+            //args = new string[] { "CompareSolutions", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\SLNTools.exe\All Projects (Lors du Branch).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\SLNTools.exe\All Projects (Latest Branche WinFixFrs).sln" };
+            //args = new string[] { "MergeSolutions", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\SLNTools.exe\All Projects (Lors du Branch).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\SLNTools.exe\All Projects (Latest Branche WinFixFrs).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\SLNTools.exe\All Projects (Latest Main).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\SLNTools.exe\Results.sln" };
             //args = new string[] { "CreateFilterFileFromSolution", @"E:\Dev\CC\Main\TousLesProjets.sln" };
             //args = new string[] { "OpenFilterFile", "/SolutionStarter:# Visual Studio 2005|C:\\Program Files (x86)\\Microsoft Visual Studio 8\\Common7\\IDE\\devenv.exe|\"{SolutionFullPath}\"", @"E:\Dev\CC\Main\TestFilter.slnfilter" };
             //args = new string[] { "/?" };

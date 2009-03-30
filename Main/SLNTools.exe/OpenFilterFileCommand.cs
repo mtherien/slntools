@@ -6,7 +6,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
-namespace CWDev.VSSolutionTools
+namespace CWDev.SLNTools
 {
     using CommandLine;
     using Core;
@@ -166,7 +166,7 @@ namespace CWDev.VSSolutionTools
                 //    FilterFile newFilterFile = FilterFile.FromStream(e.FullPath, fs);
                 //    if (!newFilterFile.Equals(m_filterFile))
                 //    {
-                //        if (MessageBox.Show("The filter file has been modified. Do you want to reapply it?", "VSSolutionTools", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                //        if (MessageBox.Show("The filter file has been modified. Do you want to reapply it?", "SLNTools", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 //        {
                 //            m_filterFile = newFilterFile;
                 //            m_filteredSolution = m_filterFile.SaveFilteredSolution();
@@ -175,7 +175,7 @@ namespace CWDev.VSSolutionTools
                 //}
                 //else if (e.FullPath == m_filterFile.SourceSolutionFullPath)
                 //{
-                //    if (MessageBox.Show("The source solution file has been modified. Do you want to reapply the filter on the new version?", "VSSolutionTools", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                //    if (MessageBox.Show("The source solution file has been modified. Do you want to reapply the filter on the new version?", "SLNTools", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 //    {
                 //        m_filterFile.ReloadSourceSolution();
                 //        m_filteredSolution = m_filterFile.SaveFilteredSolution();
