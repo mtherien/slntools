@@ -46,7 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLine\CommandLineParser.cs" />
-    <Compile Include="FilteredSolutionWatcher.cs" />
     <Compile Include="ProcessEx.cs" />
     <Compile Include="EditFilterFileCommand.cs" />
     <Compile Include="CreateFilterFileFromSolutionCommand.cs" />

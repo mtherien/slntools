@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Filter\FilteredSolutionWatcher.cs" />
     <Compile Include="PropertyLineList.cs" />
     <Compile Include="Merge\Conflict.cs" />
     <Compile Include="Merge\OperationOnParent.cs" />

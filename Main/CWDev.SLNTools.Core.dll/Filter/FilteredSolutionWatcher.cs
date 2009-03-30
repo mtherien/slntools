@@ -1,21 +1,20 @@
 using System;
 using System.IO;
 using System.Threading;
-using System.Windows.Forms;
 
-namespace CWDev.SLNTools
+namespace CWDev.SLNTools.Core.Filter
 {
     using Core;
-    using Core.Filter;
     using Core.Merge;
-    using UIKit;
 
     internal class FilteredSolutionWatcher
     {
         public FilteredSolutionWatcher(
+                    AcceptDifferencesHandler handler,
                     FilterFile filterFile,
                     SolutionFile filteredSolution)
         {
+            m_acceptDifferencesHandler = handler;
             m_filterFile = filterFile;
             m_filteredSolution = filteredSolution;
 
@@ -26,6 +25,7 @@ namespace CWDev.SLNTools
             m_watcher.Changed += OnChanged;
         }
 
+        private AcceptDifferencesHandler m_acceptDifferencesHandler;
         private FilterFile m_filterFile;
         private SolutionFile m_filteredSolution;
         private FileSystemWatcher m_watcher;
@@ -64,17 +64,11 @@ namespace CWDev.SLNTools
                         });
                         if (difference.Subdifferences.Count > 0)
                         {
-                            using (TopMostFormFix fix = new TopMostFormFix())
+                            if (m_acceptDifferencesHandler(difference.Subdifferences))
                             {
-                                using (UpdateOriginalSolutionForm form = new UpdateOriginalSolutionForm(difference.Subdifferences, m_filterFile.SourceSolutionFullPath))
-                                {
-                                    if (form.ShowDialog() == DialogResult.Yes)
-                                    {
-                                        SolutionFile newOriginalSolution = new SolutionFile(m_filterFile.SourceSolution, difference.Subdifferences);
-                                        newOriginalSolution.Save();
-                                        m_filteredSolution = newFilteredSolution;
-                                    }
-                                }
+                                SolutionFile newOriginalSolution = new SolutionFile(m_filterFile.SourceSolution, difference.Subdifferences);
+                                newOriginalSolution.Save();
+                                m_filteredSolution = newFilteredSolution;
                             }
                         }
                     }

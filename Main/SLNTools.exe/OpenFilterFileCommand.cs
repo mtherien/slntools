@@ -1,12 +1,16 @@
 using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Windows.Forms;
 
 namespace CWDev.SLNTools
 {
     using CommandLine;
     using Core;
     using Core.Filter;
+    using Core.Merge;
+    using UIKit;
 
     internal class OpenFilterFileArguments
     {
@@ -33,14 +37,18 @@ namespace CWDev.SLNTools
                 filteredSolution.AddOrUpdateProject(originalSolutionProject);
                 filteredSolution.Save();
 
-                FilteredSolutionWatcher watcher = new FilteredSolutionWatcher(
-                            filterFile,
-                            filteredSolution);
-
-                if (filterFile.WatchForChangesOnFilteredSolution)
-                {
-                    watcher.Start();
-                }
+                filterFile.StartFilteredSolutionWatcher(
+                            filteredSolution,
+                            delegate(ReadOnlyCollection<Difference> differences)
+                            {
+                                using (TopMostFormFix fix = new TopMostFormFix())
+                                {
+                                    using (UpdateOriginalSolutionForm form = new UpdateOriginalSolutionForm(differences, filterFile.SourceSolutionFullPath))
+                                    {
+                                        return (form.ShowDialog() == DialogResult.Yes);
+                                    }
+                                }
+                            });
 
                 DateTime startTime = DateTime.Now;
                 Process process = Process.Start(filteredSolution.SolutionFullPath);
@@ -64,7 +72,7 @@ namespace CWDev.SLNTools
                     }
                 }
 
-                watcher.Stop();
+                filterFile.StopFilteredSolutionWatcher();
             }
         }
 
