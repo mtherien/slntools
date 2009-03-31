@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using System.Windows.Forms;
 
 namespace CWDev.SLNTools
 {
@@ -10,7 +11,6 @@ namespace CWDev.SLNTools
     using Core;
     using Core.Filter;
     using Core.Merge;
-    using System.Windows.Forms;
 
     public enum CommandList
     {
@@ -35,8 +35,8 @@ namespace CWDev.SLNTools
         {
             //args = new string[] { "CompareSolutions", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\SLNTools.exe\All Projects (Lors du Branch).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\SLNTools.exe\All Projects (Latest Branche WinFixFrs).sln" };
             //args = new string[] { "MergeSolutions", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\SLNTools.exe\All Projects (Lors du Branch).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\SLNTools.exe\All Projects (Latest Branche WinFixFrs).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\SLNTools.exe\All Projects (Latest Main).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\SLNTools.exe\Results.sln" };
-            //args = new string[] { "CreateFilterFileFromSolution", @"E:\Dev\CC\Main\TousLesProjets.sln" };
-            //args = new string[] { "OpenFilterFile", "/SolutionStarter:# Visual Studio 2005|C:\\Program Files (x86)\\Microsoft Visual Studio 8\\Common7\\IDE\\devenv.exe|\"{SolutionFullPath}\"", @"E:\Dev\CC\Main\TestFilter.slnfilter" };
+            //args = new string[] { "CreateFilterFileFromSolution", @"C:\DevCodePlex\SLNTools\Main\SLNTools.sln" };
+            //args = new string[] { "OpenFilterFile", @"C:\DevCodePlex\SLNTools\Main\Test.slnfilter" };
             //args = new string[] { "/?" };
 
             string[] commandName;

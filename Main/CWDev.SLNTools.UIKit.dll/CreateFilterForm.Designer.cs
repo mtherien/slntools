@@ -170,6 +170,7 @@ namespace CWDev.SLNTools.UIKit
             // 
             // m_buttonSaveAndQuit
             // 
+            this.m_buttonSaveAndQuit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_buttonSaveAndQuit.Location = new System.Drawing.Point(515, 549);
             this.m_buttonSaveAndQuit.Name = "m_buttonSaveAndQuit";
             this.m_buttonSaveAndQuit.Size = new System.Drawing.Size(101, 23);

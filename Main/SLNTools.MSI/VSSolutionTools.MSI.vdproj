@@ -15,26 +15,26 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_4B4413AF76324B4D9B0B5D719480AF5A"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_7082083325729058F7FF571F7632736C"
+        "MsmKey" = "8:_49D82775B26134B1E7468B6CDCBD57E6"
         "OwnerKey" = "8:_4B4413AF76324B4D9B0B5D719480AF5A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7082083325729058F7FF571F7632736C"
+        "MsmKey" = "8:_49D82775B26134B1E7468B6CDCBD57E6"
         "OwnerKey" = "8:_81160FBD3FBD479FB783F9D6730F0C32"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_7082083325729058F7FF571F7632736C"
-        "OwnerKey" = "8:_90344B30612F42504A53BE8D5F5688FA"
+        "MsmKey" = "8:_49D82775B26134B1E7468B6CDCBD57E6"
+        "OwnerKey" = "8:_B3346A78DED845AB34B80BD19AB8345E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_4B4413AF76324B4D9B0B5D719480AF5A"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -45,7 +45,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_90344B30612F42504A53BE8D5F5688FA"
+        "MsmKey" = "8:_B3346A78DED845AB34B80BD19AB8345E"
         "OwnerKey" = "8:_4B4413AF76324B4D9B0B5D719480AF5A"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -64,18 +64,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_90344B30612F42504A53BE8D5F5688FA"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7082083325729058F7FF571F7632736C"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_81160FBD3FBD479FB783F9D6730F0C32"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -83,6 +71,18 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_4B4413AF76324B4D9B0B5D719480AF5A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_B3346A78DED845AB34B80BD19AB8345E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_49D82775B26134B1E7468B6CDCBD57E6"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -190,14 +190,14 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7082083325729058F7FF571F7632736C"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_49D82775B26134B1E7468B6CDCBD57E6"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:CWDev.SLNTools.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_7082083325729058F7FF571F7632736C"
+                    "_49D82775B26134B1E7468B6CDCBD57E6"
                     {
                     "Name" = "8:CWDev.SLNTools.Core.dll"
                     "Attributes" = "3:512"
@@ -221,14 +221,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_90344B30612F42504A53BE8D5F5688FA"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B3346A78DED845AB34B80BD19AB8345E"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:CWDev.SLNTools.UIKit.dll, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_90344B30612F42504A53BE8D5F5688FA"
+                    "_B3346A78DED845AB34B80BD19AB8345E"
                     {
                     "Name" = "8:CWDev.SLNTools.UIKit.dll.dll"
                     "Attributes" = "3:512"
@@ -290,7 +290,7 @@
         {
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_256EFD712D6B45DCB7AD7BF5C72114D7"
             {
-            "DefaultLocation" = "8:[ProgramFilesFolder][Manufacturer]\\[ProductName]"
+            "DefaultLocation" = "8:[ProgramFilesFolder]\\[ProductName]"
             "Name" = "8:#1925"
             "AlwaysCreate" = "11:FALSE"
             "Condition" = "8:"
@@ -339,7 +339,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Tools for SLN File"
         "ProductCode" = "8:{00B10AF0-840E-4601-96D6-14D4FEF13A9C}"
-        "PackageCode" = "8:{6C04D1B3-F853-4081-9FB3-AF459159A8BB}"
+        "PackageCode" = "8:{ED9976AD-4CBF-44CD-80D3-6490AE8F51F2}"
         "UpgradeCode" = "8:{9A791ED6-C6EA-4234-84E2-9A08122BBC61}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
@@ -979,7 +979,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_4B4413AF76324B4D9B0B5D719480AF5A"
             {
-            "SourcePath" = "8:..\\SLNTools.exe\\obj\\Release\\SLNTools.exe"
+            "SourcePath" = "8:..\\SLNTools.exe\\obj\\Debug\\SLNTools.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_256EFD712D6B45DCB7AD7BF5C72114D7"
@@ -1007,7 +1007,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_81160FBD3FBD479FB783F9D6730F0C32"
             {
-            "SourcePath" = "8:..\\CWDev.SLNTools.UIKit.dll\\obj\\Release\\CWDev.SLNTools.UIKit.dll.dll"
+            "SourcePath" = "8:..\\CWDev.SLNTools.UIKit.dll\\obj\\Debug\\CWDev.SLNTools.UIKit.dll.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_256EFD712D6B45DCB7AD7BF5C72114D7"
@@ -1035,7 +1035,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_B8949AA2DC0C4D10A25D8BB7C114824A"
             {
-            "SourcePath" = "8:..\\CWDev.SLNTools.Core.dll\\obj\\Release\\CWDev.SLNTools.Core.dll"
+            "SourcePath" = "8:..\\CWDev.SLNTools.Core.dll\\obj\\Debug\\CWDev.SLNTools.Core.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_256EFD712D6B45DCB7AD7BF5C72114D7"

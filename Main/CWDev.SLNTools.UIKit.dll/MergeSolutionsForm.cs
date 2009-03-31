@@ -21,6 +21,7 @@ namespace CWDev.SLNTools.UIKit
                 ValueConflictResolver valueConflictResolver)
         {
             InitializeComponent();
+            FormPosition.LoadFromRegistry(this);
 
             m_differencesInSourceBranchControl.Data = differenceInSourceBranch.Subdifferences;
             m_differencesInDestinationBranchControl.Data = differenceInDestinationBranch.Subdifferences;
@@ -72,6 +73,12 @@ namespace CWDev.SLNTools.UIKit
         {
             m_conflict.Resolve(m_typeDifferenceConflictResolver, m_valueConflictResolver);
             UpdateUI();
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            FormPosition.SaveInRegistry(this);
+            base.OnClosing(e);
         }
     }
 }

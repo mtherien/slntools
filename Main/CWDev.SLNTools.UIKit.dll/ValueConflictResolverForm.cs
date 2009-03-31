@@ -16,6 +16,7 @@ namespace CWDev.SLNTools.UIKit
                     string latestValueInDestinationBranch)
         {
             InitializeComponent();
+            FormPosition.LoadFromRegistry(this);
 
             m_result = null;
 
@@ -53,6 +54,12 @@ namespace CWDev.SLNTools.UIKit
             {
                 m_result = m_textboxCustomValue.Text;
             }
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            FormPosition.SaveInRegistry(this);
+            base.OnClosing(e);
         }
     }
 }

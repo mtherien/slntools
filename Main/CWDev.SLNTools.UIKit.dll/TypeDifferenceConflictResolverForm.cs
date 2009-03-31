@@ -18,6 +18,7 @@ namespace CWDev.SLNTools.UIKit
                     Difference differenceTypeInDestinationBranch)
         {
             InitializeComponent();
+            FormPosition.LoadFromRegistry(this);
 
             m_result = null;
 
@@ -48,6 +49,12 @@ namespace CWDev.SLNTools.UIKit
             {
                 m_result = (Difference)m_radioKeepDestination.Tag;
             }
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            FormPosition.SaveInRegistry(this);
+            base.OnClosing(e);
         }
     }
 }
