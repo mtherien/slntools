@@ -30,6 +30,8 @@ namespace CWDev.SLNTools.UIKit
         {
             System.Windows.Forms.Label labelSourceSolution;
             System.Windows.Forms.Label labelSelectTheProjectsYouWishToKeep;
+            System.Windows.Forms.GroupBox groupBoxOptions;
+            this.m_checkboxWatchForChangesOnFilteredSolution = new System.Windows.Forms.CheckBox();
             this.m_labelSelected = new System.Windows.Forms.Label();
             this.m_textboxSourceSolution = new System.Windows.Forms.TextBox();
             this.m_labelErrorMessage = new System.Windows.Forms.Label();
@@ -45,6 +47,8 @@ namespace CWDev.SLNTools.UIKit
             this.m_buttonSaveAndQuit = new System.Windows.Forms.Button();
             labelSourceSolution = new System.Windows.Forms.Label();
             labelSelectTheProjectsYouWishToKeep = new System.Windows.Forms.Label();
+            groupBoxOptions = new System.Windows.Forms.GroupBox();
+            groupBoxOptions.SuspendLayout();
             this.m_menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,7 +58,7 @@ namespace CWDev.SLNTools.UIKit
             labelSourceSolution.Location = new System.Drawing.Point(12, 40);
             labelSourceSolution.Name = "labelSourceSolution";
             labelSourceSolution.Size = new System.Drawing.Size(85, 13);
-            labelSourceSolution.TabIndex = 1;
+            labelSourceSolution.TabIndex = 0;
             labelSourceSolution.Text = "&Source Solution:";
             // 
             // labelSelectTheProjectsYouWishToKeep
@@ -63,17 +67,39 @@ namespace CWDev.SLNTools.UIKit
             labelSelectTheProjectsYouWishToKeep.Location = new System.Drawing.Point(12, 74);
             labelSelectTheProjectsYouWishToKeep.Name = "labelSelectTheProjectsYouWishToKeep";
             labelSelectTheProjectsYouWishToKeep.Size = new System.Drawing.Size(181, 13);
-            labelSelectTheProjectsYouWishToKeep.TabIndex = 3;
+            labelSelectTheProjectsYouWishToKeep.TabIndex = 2;
             labelSelectTheProjectsYouWishToKeep.Text = "Select the &projects you wish to keep:";
+            // 
+            // groupBoxOptions
+            // 
+            groupBoxOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            groupBoxOptions.Controls.Add(this.m_checkboxWatchForChangesOnFilteredSolution);
+            groupBoxOptions.Location = new System.Drawing.Point(8, 157);
+            groupBoxOptions.Name = "groupBoxOptions";
+            groupBoxOptions.Size = new System.Drawing.Size(452, 47);
+            groupBoxOptions.TabIndex = 5;
+            groupBoxOptions.TabStop = false;
+            groupBoxOptions.Text = "Options (when the filter file is opened)";
+            // 
+            // m_checkboxWatchForChangesOnFilteredSolution
+            // 
+            this.m_checkboxWatchForChangesOnFilteredSolution.AutoSize = true;
+            this.m_checkboxWatchForChangesOnFilteredSolution.Location = new System.Drawing.Point(6, 19);
+            this.m_checkboxWatchForChangesOnFilteredSolution.Name = "m_checkboxWatchForChangesOnFilteredSolution";
+            this.m_checkboxWatchForChangesOnFilteredSolution.Size = new System.Drawing.Size(223, 17);
+            this.m_checkboxWatchForChangesOnFilteredSolution.TabIndex = 0;
+            this.m_checkboxWatchForChangesOnFilteredSolution.Text = "&Watch for changes on the filtered solution";
+            this.m_checkboxWatchForChangesOnFilteredSolution.UseVisualStyleBackColor = true;
             // 
             // m_labelSelected
             // 
             this.m_labelSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_labelSelected.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.m_labelSelected.Location = new System.Drawing.Point(393, 74);
+            this.m_labelSelected.Location = new System.Drawing.Point(237, 74);
             this.m_labelSelected.Name = "m_labelSelected";
             this.m_labelSelected.Size = new System.Drawing.Size(220, 13);
-            this.m_labelSelected.TabIndex = 4;
+            this.m_labelSelected.TabIndex = 3;
             // 
             // m_textboxSourceSolution
             // 
@@ -82,17 +108,17 @@ namespace CWDev.SLNTools.UIKit
             this.m_textboxSourceSolution.Location = new System.Drawing.Point(117, 37);
             this.m_textboxSourceSolution.Name = "m_textboxSourceSolution";
             this.m_textboxSourceSolution.ReadOnly = true;
-            this.m_textboxSourceSolution.Size = new System.Drawing.Size(496, 20);
-            this.m_textboxSourceSolution.TabIndex = 2;
+            this.m_textboxSourceSolution.Size = new System.Drawing.Size(340, 20);
+            this.m_textboxSourceSolution.TabIndex = 1;
             // 
             // m_labelErrorMessage
             // 
             this.m_labelErrorMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.m_labelErrorMessage.ForeColor = System.Drawing.Color.Red;
-            this.m_labelErrorMessage.Location = new System.Drawing.Point(9, 525);
+            this.m_labelErrorMessage.Location = new System.Drawing.Point(9, 207);
             this.m_labelErrorMessage.Name = "m_labelErrorMessage";
-            this.m_labelErrorMessage.Size = new System.Drawing.Size(604, 13);
+            this.m_labelErrorMessage.Size = new System.Drawing.Size(448, 13);
             this.m_labelErrorMessage.TabIndex = 6;
             // 
             // m_menuStrip
@@ -101,7 +127,7 @@ namespace CWDev.SLNTools.UIKit
             this.fileToolStripMenuItem});
             this.m_menuStrip.Location = new System.Drawing.Point(0, 0);
             this.m_menuStrip.Name = "m_menuStrip";
-            this.m_menuStrip.Size = new System.Drawing.Size(628, 24);
+            this.m_menuStrip.Size = new System.Drawing.Size(472, 24);
             this.m_menuStrip.TabIndex = 0;
             this.m_menuStrip.Text = "m_menuStrip";
             // 
@@ -164,14 +190,14 @@ namespace CWDev.SLNTools.UIKit
             this.m_treeview.CheckBoxes = true;
             this.m_treeview.Location = new System.Drawing.Point(8, 90);
             this.m_treeview.Name = "m_treeview";
-            this.m_treeview.Size = new System.Drawing.Size(608, 432);
-            this.m_treeview.TabIndex = 5;
+            this.m_treeview.Size = new System.Drawing.Size(452, 61);
+            this.m_treeview.TabIndex = 4;
             this.m_treeview.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.m_treeview_AfterCheck);
             // 
             // m_buttonSaveAndQuit
             // 
             this.m_buttonSaveAndQuit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_buttonSaveAndQuit.Location = new System.Drawing.Point(515, 549);
+            this.m_buttonSaveAndQuit.Location = new System.Drawing.Point(359, 231);
             this.m_buttonSaveAndQuit.Name = "m_buttonSaveAndQuit";
             this.m_buttonSaveAndQuit.Size = new System.Drawing.Size(101, 23);
             this.m_buttonSaveAndQuit.TabIndex = 7;
@@ -183,7 +209,8 @@ namespace CWDev.SLNTools.UIKit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(628, 578);
+            this.ClientSize = new System.Drawing.Size(472, 260);
+            this.Controls.Add(groupBoxOptions);
             this.Controls.Add(this.m_buttonSaveAndQuit);
             this.Controls.Add(this.m_treeview);
             this.Controls.Add(this.m_labelSelected);
@@ -193,9 +220,11 @@ namespace CWDev.SLNTools.UIKit
             this.Controls.Add(this.m_textboxSourceSolution);
             this.Controls.Add(this.m_menuStrip);
             this.MainMenuStrip = this.m_menuStrip;
-            this.MinimumSize = new System.Drawing.Size(480, 223);
+            this.MinimumSize = new System.Drawing.Size(480, 294);
             this.Name = "CreateFilterForm";
             this.Text = "Create Filter";
+            groupBoxOptions.ResumeLayout(false);
+            groupBoxOptions.PerformLayout();
             this.m_menuStrip.ResumeLayout(false);
             this.m_menuStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -218,5 +247,6 @@ namespace CWDev.SLNTools.UIKit
         private System.Windows.Forms.ToolStripMenuItem m_menuitemExit;
         private System.Windows.Forms.TreeView m_treeview;
         private System.Windows.Forms.Button m_buttonSaveAndQuit;
+        private System.Windows.Forms.CheckBox m_checkboxWatchForChangesOnFilteredSolution;
     }
 }

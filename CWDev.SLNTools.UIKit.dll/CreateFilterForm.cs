@@ -59,6 +59,7 @@ namespace CWDev.SLNTools.UIKit
                     m_treeview.Sort();
                     m_treeview.SelectedNode = m_treeview.Nodes[0];
                     m_treeview.EndUpdate();
+                    m_checkboxWatchForChangesOnFilteredSolution.Checked = m_filterFile.WatchForChangesOnFilteredSolution;
                 }
             }
             catch (Exception ex)
@@ -200,7 +201,8 @@ namespace CWDev.SLNTools.UIKit
         {
             try
             {
-                Save();
+                m_filterFile.WatchForChangesOnFilteredSolution = m_checkboxWatchForChangesOnFilteredSolution.Checked;
+                m_filterFile.Save();
                 return true;
             }
             catch (Exception ex)
@@ -221,6 +223,7 @@ namespace CWDev.SLNTools.UIKit
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
                         m_filterFile.FilterFullPath = fileDialog.FileName;
+                        m_filterFile.WatchForChangesOnFilteredSolution = m_checkboxWatchForChangesOnFilteredSolution.Checked;
                         m_filterFile.Save();
                         return true;
                     }
