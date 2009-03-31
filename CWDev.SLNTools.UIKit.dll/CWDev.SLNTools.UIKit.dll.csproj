@@ -72,6 +72,7 @@
     <Compile Include="MergeSolutionsForm.Designer.cs">
       <DependentUpon>MergeSolutionsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormPosition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TopMostFormFix.cs" />
     <Compile Include="TypeDifferenceConflictResolverForm.cs">

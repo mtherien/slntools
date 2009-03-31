@@ -16,6 +16,7 @@ namespace CWDev.SLNTools.UIKit
         public UpdateOriginalSolutionForm(IEnumerable<Difference> differences, string originalSolutionFullPath)
         {
             InitializeComponent();
+            FormPosition.LoadFromRegistry(this);
 
             m_differencesInFilteredSolution.Data = differences;
             m_originalSolutionFullPath = originalSolutionFullPath;
@@ -62,6 +63,12 @@ namespace CWDev.SLNTools.UIKit
             {
                 invoker.Invoke();
             }
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            FormPosition.SaveInRegistry(this);
+            base.OnClosing(e);
         }
     }
 }

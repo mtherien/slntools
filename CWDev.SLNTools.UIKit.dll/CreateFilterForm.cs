@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.IO;
-using System.Text;
 using System.Windows.Forms;
-using System.Xml;
 
 namespace CWDev.SLNTools.UIKit
 {
@@ -19,6 +16,7 @@ namespace CWDev.SLNTools.UIKit
         {
             InitializeComponent();
             Init(filename);
+            FormPosition.LoadFromRegistry(this);
         }
 
         private FilterFile m_filterFile;
@@ -233,6 +231,12 @@ namespace CWDev.SLNTools.UIKit
                 MessageBox.Show(string.Format("Error while creating the filter file.\nException: {0}", ex));
             }
             return false;
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            FormPosition.SaveInRegistry(this);
+            base.OnClosing(e);
         }
     }
 }
