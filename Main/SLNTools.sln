@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CWDev.SLNTools.UIKit.dll", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SLNTools.exe", "SLNTools.exe\SLNTools.exe.csproj", "{00082D4F-899D-4A3B-B8C6-E9A25244E2B3}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SLNTools.MSI", "SLNTools.MSI\VSSolutionTools.MSI.vdproj", "{DEAE008A-CCF6-4266-BE9D-940FE549B04E}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SLNTools.MSI", "SLNTools.MSI\SLNTools.MSI.vdproj", "{E2EB3596-2996-4B66-A1A7-07A476B1C62B}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
@@ -24,7 +24,7 @@ Global
 		SccProjectUniqueName3 = SLNTools.exe\\SLNTools.exe.csproj
 		SccProjectName3 = SLNTools.exe
 		SccLocalPath3 = SLNTools.exe
-		SccProjectUniqueName4 = SLNTools.MSI\\VSSolutionTools.MSI.vdproj
+		SccProjectUniqueName4 = SLNTools.MSI\\SLNTools.MSI.vdproj
 		SccProjectName4 = SLNTools.MSI
 		SccLocalPath4 = SLNTools.MSI
 	EndGlobalSection
@@ -45,10 +45,10 @@ Global
 		{00082D4F-899D-4A3B-B8C6-E9A25244E2B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00082D4F-899D-4A3B-B8C6-E9A25244E2B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00082D4F-899D-4A3B-B8C6-E9A25244E2B3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DEAE008A-CCF6-4266-BE9D-940FE549B04E}.Debug|Any CPU.ActiveCfg = Debug
-		{DEAE008A-CCF6-4266-BE9D-940FE549B04E}.Debug|Any CPU.Build.0 = Debug
-		{DEAE008A-CCF6-4266-BE9D-940FE549B04E}.Release|Any CPU.ActiveCfg = Release
-		{DEAE008A-CCF6-4266-BE9D-940FE549B04E}.Release|Any CPU.Build.0 = Release
+		{E2EB3596-2996-4B66-A1A7-07A476B1C62B}.Debug|Any CPU.ActiveCfg = Debug
+		{E2EB3596-2996-4B66-A1A7-07A476B1C62B}.Debug|Any CPU.Build.0 = Debug
+		{E2EB3596-2996-4B66-A1A7-07A476B1C62B}.Release|Any CPU.ActiveCfg = Release
+		{E2EB3596-2996-4B66-A1A7-07A476B1C62B}.Release|Any CPU.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
