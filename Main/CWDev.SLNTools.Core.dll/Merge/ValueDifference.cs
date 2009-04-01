@@ -61,13 +61,13 @@ namespace CWDev.SLNTools.Core.Merge
             switch (this.OperationOnParent)
             {
                 case OperationOnParent.Added:
-                    return string.Format("{0} has been added (value = \"{1}\").", this.Identifier, this.NewValue);                
+                    return string.Format("{0} has been added with the value \"{1}\".", this.Identifier, this.NewValue);                
 
                 case OperationOnParent.Modified:
-                    return string.Format("{0} value changed from \"{1}\" to \"{2}\".", this.Identifier, this.OldValue, this.NewValue);
+                    return string.Format("{0} value modified from \"{1}\" to \"{2}\".", this.Identifier, this.OldValue, this.NewValue);
 
                 case OperationOnParent.Removed:
-                    return string.Format("{0} has been removed (old value = \"{1}\").", this.Identifier, this.OldValue);
+                    return string.Format("{0} has been removed. Old value = \"{1}\".", this.Identifier, this.OldValue);
 
                 default:
                     throw new Exception("TODO");
