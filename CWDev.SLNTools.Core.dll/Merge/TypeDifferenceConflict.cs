@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace CWDev.SLNTools.Core.Merge
 {
     public class TypeDifferenceConflict : Conflict
@@ -18,10 +20,11 @@ namespace CWDev.SLNTools.Core.Merge
         public Difference DifferenceInDestinationBranch { get { return m_differenceInDestinationBranch; } }
 
         public override Difference Resolve(
+                    ConflictContext context,
                     TypeDifferenceConflictResolver typeDifferenceConflictResolver,
                     ValueConflictResolver valueConflictResolver)
         {
-            return typeDifferenceConflictResolver(this.ToString(), m_differenceInSourceBranch, m_differenceInDestinationBranch);
+            return typeDifferenceConflictResolver(context.CreateSubcontext(this), m_differenceInSourceBranch, m_differenceInDestinationBranch);
         }
 
         public override string ToString()

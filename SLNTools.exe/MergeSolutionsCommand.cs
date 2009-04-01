@@ -42,19 +42,19 @@ namespace CWDev.SLNTools
                             differenceInSourceBranch, 
                             differenceInDestinationBranch, 
                             conflict,
-                            delegate(string conflictDescription, Difference differenceTypeInSourceBranch, Difference differenceTypeInDestinationBranch)
+                            delegate(ConflictContext context, Difference differenceTypeInSourceBranch, Difference differenceTypeInDestinationBranch)
                             {
                                 TypeDifferenceConflictResolverForm resolverForm = new TypeDifferenceConflictResolverForm(
-                                            conflictDescription,
+                                            context,
                                             differenceTypeInSourceBranch,
                                             differenceTypeInDestinationBranch);
                                 resolverForm.ShowDialog();
                                 return resolverForm.Result;
                             },
-                            delegate(string conflictDescription, string latestValueInSourceBranch, string latestValueInDestinationBranch)
+                            delegate(ConflictContext context, string latestValueInSourceBranch, string latestValueInDestinationBranch)
                             {
                                 ValueConflictResolverForm resolverForm = new ValueConflictResolverForm(
-                                            conflictDescription,
+                                            context,
                                             latestValueInSourceBranch,
                                             latestValueInDestinationBranch);
                                 resolverForm.ShowDialog();

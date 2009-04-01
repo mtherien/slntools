@@ -30,11 +30,11 @@
         {
             System.Windows.Forms.Button buttonCancel;
             this.m_buttonAccept = new System.Windows.Forms.Button();
-            this.m_richtextboxConflictDescription = new System.Windows.Forms.RichTextBox();
             this.m_radioKeepSource = new System.Windows.Forms.RadioButton();
             this.m_radioKeepDestination = new System.Windows.Forms.RadioButton();
             this.m_textboxChangeDescriptionFromSourceBranch = new System.Windows.Forms.TextBox();
             this.m_textboxChangeDescriptionFromDestinationBranch = new System.Windows.Forms.TextBox();
+            this.m_conflictcontextcontrol = new CWDev.SLNTools.UIKit.ConflictContextControl();
             buttonCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -60,18 +60,6 @@
             this.m_buttonAccept.Text = "&Accept";
             this.m_buttonAccept.UseVisualStyleBackColor = true;
             this.m_buttonAccept.Click += new System.EventHandler(this.m_buttonAccept_Click);
-            // 
-            // m_richtextboxConflictDescription
-            // 
-            this.m_richtextboxConflictDescription.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_richtextboxConflictDescription.Location = new System.Drawing.Point(12, 12);
-            this.m_richtextboxConflictDescription.Name = "m_richtextboxConflictDescription";
-            this.m_richtextboxConflictDescription.ReadOnly = true;
-            this.m_richtextboxConflictDescription.Size = new System.Drawing.Size(442, 64);
-            this.m_richtextboxConflictDescription.TabIndex = 0;
-            this.m_richtextboxConflictDescription.Text = "Conflict\'s description";
             // 
             // m_radioKeepSource
             // 
@@ -119,21 +107,31 @@
             this.m_textboxChangeDescriptionFromDestinationBranch.Size = new System.Drawing.Size(230, 20);
             this.m_textboxChangeDescriptionFromDestinationBranch.TabIndex = 4;
             // 
+            // m_conflictcontextcontrol
+            // 
+            this.m_conflictcontextcontrol.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_conflictcontextcontrol.Location = new System.Drawing.Point(12, 12);
+            this.m_conflictcontextcontrol.Name = "m_conflictcontextcontrol";
+            this.m_conflictcontextcontrol.Size = new System.Drawing.Size(442, 64);
+            this.m_conflictcontextcontrol.TabIndex = 0;
+            // 
             // TypeDifferenceConflictResolverForm
             // 
             this.AcceptButton = this.m_buttonAccept;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = buttonCancel;
-            this.ClientSize = new System.Drawing.Size(466, 176);
+            this.ClientSize = new System.Drawing.Size(466, 202);
             this.ControlBox = false;
+            this.Controls.Add(this.m_conflictcontextcontrol);
             this.Controls.Add(this.m_textboxChangeDescriptionFromDestinationBranch);
             this.Controls.Add(this.m_textboxChangeDescriptionFromSourceBranch);
             this.Controls.Add(this.m_buttonAccept);
             this.Controls.Add(buttonCancel);
             this.Controls.Add(this.m_radioKeepDestination);
             this.Controls.Add(this.m_radioKeepSource);
-            this.Controls.Add(this.m_richtextboxConflictDescription);
             this.MaximumSize = new System.Drawing.Size(10000, 10000);
             this.MinimumSize = new System.Drawing.Size(470, 210);
             this.Name = "TypeDifferenceConflictResolverForm";
@@ -145,11 +143,11 @@
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox m_richtextboxConflictDescription;
         private System.Windows.Forms.RadioButton m_radioKeepSource;
         private System.Windows.Forms.RadioButton m_radioKeepDestination;
         private System.Windows.Forms.TextBox m_textboxChangeDescriptionFromSourceBranch;
         private System.Windows.Forms.TextBox m_textboxChangeDescriptionFromDestinationBranch;
         private System.Windows.Forms.Button m_buttonAccept;
+        private ConflictContextControl m_conflictcontextcontrol;
     }
 }
