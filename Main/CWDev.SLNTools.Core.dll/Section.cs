@@ -1,9 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace CWDev.SLNTools.Core
 {
-    using System;
     using Merge;
 
     public abstract class Section

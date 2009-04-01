@@ -8,10 +8,12 @@ using System.Windows.Forms;
 
 namespace CWDev.SLNTools.UIKit
 {
+    using Core.Merge;
+
     public partial class ValueConflictResolverForm : Form
     {
         public ValueConflictResolverForm(
-                    string conflictDescription, 
+                    ConflictContext context, 
                     string latestValueInSourceBranch, 
                     string latestValueInDestinationBranch)
         {
@@ -20,7 +22,7 @@ namespace CWDev.SLNTools.UIKit
 
             m_result = null;
 
-            m_richtextboxConflictDescription.Text = conflictDescription;
+            m_conflictcontextcontrol.Data = context;
             m_textboxValueFromSourceBranch.Text = latestValueInSourceBranch;
             m_textboxValueFromDestinationBranch.Text = latestValueInDestinationBranch;
             m_buttonAccept.Enabled = false;

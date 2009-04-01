@@ -13,7 +13,7 @@ namespace CWDev.SLNTools.UIKit
     public partial class TypeDifferenceConflictResolverForm : Form
     {
         public TypeDifferenceConflictResolverForm(
-                    string conflictDescription,
+                    ConflictContext context,
                     Difference differenceTypeInSourceBranch, 
                     Difference differenceTypeInDestinationBranch)
         {
@@ -22,7 +22,7 @@ namespace CWDev.SLNTools.UIKit
 
             m_result = null;
 
-            m_richtextboxConflictDescription.Text = conflictDescription;
+            m_conflictcontextcontrol.Data = context;
             m_radioKeepSource.Tag = differenceTypeInSourceBranch;
             m_textboxChangeDescriptionFromSourceBranch.Text = differenceTypeInSourceBranch.ToString();
             m_radioKeepDestination.Tag = differenceTypeInDestinationBranch;

@@ -34,12 +34,13 @@ namespace CWDev.SLNTools.Core.Merge
         public ReadOnlyCollection<Conflict> Subconflicts { get { return m_subconflicts.AsReadOnly(); } }
 
         public override Difference Resolve(
+                    ConflictContext context,
                     TypeDifferenceConflictResolver typeDifferenceConflictResolver,
                     ValueConflictResolver valueConflictResolver)
         {
             foreach (Conflict subconflict in new List<Conflict>(m_subconflicts)) // Iterate on a copy of the list to be able to modify the original list in the loop
             {
-                Difference resolvedDifference = subconflict.Resolve(typeDifferenceConflictResolver, valueConflictResolver);
+                Difference resolvedDifference = subconflict.Resolve(context.CreateSubcontext(this), typeDifferenceConflictResolver, valueConflictResolver);
                 if (resolvedDifference != null)
                 {
                     m_subconflicts.Remove(subconflict);

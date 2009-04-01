@@ -54,6 +54,12 @@
     <Compile Include="ConflictsControl.Designer.cs">
       <DependentUpon>ConflictsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConflictContextControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ConflictContextControl.Designer.cs">
+      <DependentUpon>ConflictContextControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="CreateFilterForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -101,6 +107,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ConflictsControl.resx">
       <DependentUpon>ConflictsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConflictContextControl.resx">
+      <DependentUpon>ConflictContextControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CreateFilterForm.resx">
       <DependentUpon>CreateFilterForm.cs</DependentUpon>

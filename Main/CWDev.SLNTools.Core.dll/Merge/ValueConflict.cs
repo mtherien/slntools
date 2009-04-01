@@ -32,10 +32,11 @@ namespace CWDev.SLNTools.Core.Merge
         public string NewValueInDestinationBranch { get { return m_newValueInDestinationBranch; } }
 
         public override Difference Resolve(
+                    ConflictContext context,
                     TypeDifferenceConflictResolver typeDifferenceConflictResolver,
                     ValueConflictResolver valueConflictResolver)
         {
-            string resolvedValue = valueConflictResolver(this.ToString(), m_newValueInSourceBranch, m_newValueInDestinationBranch);
+            string resolvedValue = valueConflictResolver(context.CreateSubcontext(this), m_newValueInSourceBranch, m_newValueInDestinationBranch);
             if (resolvedValue != null)
             {
                 return new ValueDifference(this.Identifier, this.OperationOnParent, m_oldValue, resolvedValue);

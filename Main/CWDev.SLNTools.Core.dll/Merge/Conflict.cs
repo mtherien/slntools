@@ -3,11 +3,11 @@ using System.Collections.Generic;
 namespace CWDev.SLNTools.Core.Merge
 {
     public delegate string ValueConflictResolver(
-                string conflictDescription,
+                ConflictContext context,
                 string latestValueInSourceBranch,
                 string latestValueInDestinationBranch);
     public delegate Difference TypeDifferenceConflictResolver(
-                string conflictDescription,
+                ConflictContext context,
                 Difference differenceInSourceBranch,
                 Difference differenceInDestinationBranch);
 
@@ -43,8 +43,16 @@ namespace CWDev.SLNTools.Core.Merge
         private ElementIdentifier m_identifier;
 
         public ElementIdentifier Identifier { get { return m_identifier; } }
-       
+
+        public Difference Resolve(
+                    TypeDifferenceConflictResolver typeDifferenceConflictResolver,
+                    ValueConflictResolver valueConflictResolver)
+        {
+            return Resolve(new ConflictContext(), typeDifferenceConflictResolver, valueConflictResolver);
+        }
+
         public abstract Difference Resolve(
+                        ConflictContext context,
                         TypeDifferenceConflictResolver typeDifferenceConflictResolver,
                         ValueConflictResolver valueConflictResolver);
     }
