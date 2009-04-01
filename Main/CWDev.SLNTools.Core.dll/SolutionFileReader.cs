@@ -332,7 +332,7 @@ namespace CWDev.SLNTools.Core
                 Project relatedProject = null;
                 foreach (Project project in m_solutionFile.ProjectsInOrders)
                 {
-                    if (project.RelativePath == uniqueName)
+                    if (string.Compare(project.RelativePath, uniqueName, StringComparison.InvariantCultureIgnoreCase) == 0)
                     {
                         relatedProject = project;
                     }

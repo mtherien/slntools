@@ -46,9 +46,9 @@ namespace CWDev.SLNTools
                 if (parsedArguments.Solutions.Length < 4)
                     throw new Exception("TODO");
 
-                SolutionFile rootSolution = SolutionFile.FromFile(parsedArguments.Solutions[0]);
-                SolutionFile latestSolutionInSourceBranch = SolutionFile.FromFile(parsedArguments.Solutions[1]);
-                SolutionFile latestSolutionInDestinationBranch = SolutionFile.FromFile(parsedArguments.Solutions[2]);
+                SolutionFile latestSolutionInSourceBranch = SolutionFile.FromFile(parsedArguments.Solutions[0]);
+                SolutionFile latestSolutionInDestinationBranch = SolutionFile.FromFile(parsedArguments.Solutions[1]);
+                SolutionFile rootSolution = SolutionFile.FromFile(parsedArguments.Solutions[2]);
                 string mergedSolutionName = parsedArguments.Solutions[3];
 
                 NodeDifference differenceInSourceBranch;

@@ -60,6 +60,7 @@ namespace CWDev.SLNTools
             //args = new string[] { "CreateFilterFileFromSolution", @"C:\DevCodePlex\SLNTools\Main\SLNTools.sln" };
             //args = new string[] { "OpenFilterFile", @"C:\DevCodePlex\SLNTools\Main\Test.slnfilter" };
             //args = new string[] { "/?" };
+            // args = new string[] { "CreateFilterFileFromSolution", @"D:\DevClean\Baseline\D-NewAccountManagement\TousLesProjets.sln" };           
 
             string[] commandName;
             string[] commandArguments;
