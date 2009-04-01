@@ -27,26 +27,21 @@ namespace CWDev.SLNTools.UIKit
 {
     using Core.Merge;
 
-    public partial class ConflictsControl : UserControl
+    public partial class ConflictsControl : TreeView
     {
-        public ConflictsControl()
-        {
-            InitializeComponent();
-        }
-
         public IEnumerable<Conflict> Data
         {
             set
             {
-                m_treeview.Nodes.Clear();
+                this.Nodes.Clear();
                 if (value != null)
                 {
                     foreach (Conflict conflict in value)
                     {
-                        TreeNode node = m_treeview.Nodes.Add(conflict.ToString());
+                        TreeNode node = this.Nodes.Add(conflict.ToString());
                         FillConflictNode(node, conflict);
                     }
-                    m_treeview.Sort();
+                    this.Sort();
                 }
              }
         }

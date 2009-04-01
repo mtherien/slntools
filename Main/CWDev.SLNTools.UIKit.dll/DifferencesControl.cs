@@ -27,26 +27,21 @@ namespace CWDev.SLNTools.UIKit
 {
     using Core.Merge;
 
-    public partial class DifferencesControl : UserControl
+    public partial class DifferencesControl : TreeView
     {
-        public DifferencesControl()
-        {
-            InitializeComponent();
-        }
-
         public IEnumerable<Difference> Data
         {
             set
             {
-                m_treeview.Nodes.Clear();
+                this.Nodes.Clear();
                 if (value != null)
                 {
                     foreach (Difference difference in value)
                     {
-                        TreeNode node = m_treeview.Nodes.Add(difference.ToString());
+                        TreeNode node = this.Nodes.Add(difference.ToString());
                         FillNode(node, difference);
                     }
-                    m_treeview.Sort();
+                    this.Sort();
                 }
              }
         }

@@ -28,21 +28,16 @@ namespace CWDev.SLNTools.UIKit
 {
     using Core.Merge;
 
-    public partial class ConflictContextControl : UserControl
+    public partial class ConflictContextControl : TreeView
     {
-        public ConflictContextControl()
-        {
-            InitializeComponent();
-        }
-
         public ConflictContext Data
         {
             set
             {
-                m_treeview.Nodes.Clear();
+                this.Nodes.Clear();
                 if (value != null)
                 {
-                    TreeNodeCollection current = m_treeview.Nodes;
+                    TreeNodeCollection current = this.Nodes;
                     bool first = true;
                     foreach (Conflict conflict in value.HierachyZoom)
                     {
@@ -56,7 +51,7 @@ namespace CWDev.SLNTools.UIKit
                             current = newNode.Nodes;
                         }
                     }
-                    m_treeview.ExpandAll();
+                    this.ExpandAll();
                 }
              }
         }
