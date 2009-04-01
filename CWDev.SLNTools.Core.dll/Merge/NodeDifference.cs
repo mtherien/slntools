@@ -125,20 +125,7 @@ namespace CWDev.SLNTools.Core.Merge
 
         public override string ToString()
         {
-            switch (this.OperationOnParent)
-            {
-                case OperationOnParent.Added:
-                    return string.Format("{0} has been added:", this.Identifier);
-
-                case OperationOnParent.Modified:
-                    return string.Format("{0} has been modified:", this.Identifier);
-
-                case OperationOnParent.Removed:
-                    return string.Format("{0} has been removed.", this.Identifier);
-
-                default:
-                    throw new Exception("TODO");
-            }
+            return string.Format("{0} has been {1}", this.Identifier, this.OperationOnParent.ToString().ToLower());
         }
     }
 }

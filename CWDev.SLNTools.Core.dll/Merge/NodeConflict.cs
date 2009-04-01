@@ -62,7 +62,7 @@ namespace CWDev.SLNTools.Core.Merge
 
         public override string ToString()
         {
-            return string.Format("{0} element conflict in {1}:", this.OperationOnParent, this.Identifier);
+            return string.Format("{0} has been {1}", this.Identifier, this.OperationOnParent.ToString().ToLower());
         }
     }
 }

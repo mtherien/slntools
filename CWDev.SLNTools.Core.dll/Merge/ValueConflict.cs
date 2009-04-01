@@ -49,7 +49,11 @@ namespace CWDev.SLNTools.Core.Merge
 
         public override string ToString()
         {
-            return string.Format("{0} value conflict for {1}: 'Source={2}' and 'Destination={3}'.", this.OperationOnParent, this.Identifier, this.NewValueInSourceBranch, this.NewValueInDestinationBranch);
+            return string.Format("Both branches {0} {1} but with different values: Source = \"{2}\" and Destination = \"{3}\".",
+                        this.OperationOnParent.ToString().ToLower(),
+                        this.Identifier,
+                        this.NewValueInSourceBranch,
+                        this.NewValueInDestinationBranch);
         }
     }
 }

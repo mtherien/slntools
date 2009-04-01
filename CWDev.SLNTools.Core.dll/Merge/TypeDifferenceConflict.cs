@@ -29,7 +29,10 @@ namespace CWDev.SLNTools.Core.Merge
 
         public override string ToString()
         {
-            return string.Format("Type of difference conflict for {0}: Source={1} and Destination={2}", this.Identifier, this.DifferenceInSourceBranch.OperationOnParent, this.DifferenceInDestinationBranch.OperationOnParent);
+            return string.Format("{0} was {1} in the source branch but it was {2} in the destination branch.", 
+                        this.Identifier, 
+                        this.DifferenceInSourceBranch.OperationOnParent.ToString().ToLower(),
+                        this.DifferenceInDestinationBranch.OperationOnParent.ToString().ToLower());
         }
     }
 }
