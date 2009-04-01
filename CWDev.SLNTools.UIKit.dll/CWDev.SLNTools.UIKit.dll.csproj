@@ -49,16 +49,10 @@
       <DependentUpon>CompareSolutionsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="ConflictsControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ConflictsControl.Designer.cs">
-      <DependentUpon>ConflictsControl.cs</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="ConflictContextControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="ConflictContextControl.Designer.cs">
-      <DependentUpon>ConflictContextControl.cs</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="CreateFilterForm.cs">
       <SubType>Form</SubType>
@@ -67,10 +61,7 @@
       <DependentUpon>CreateFilterForm.cs</DependentUpon>
     </Compile>
     <Compile Include="DifferencesControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="DifferencesControl.Designer.cs">
-      <DependentUpon>DifferencesControl.cs</DependentUpon>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Include="MergeSolutionsForm.cs">
       <SubType>Form</SubType>
@@ -105,18 +96,9 @@
       <DependentUpon>CompareSolutionsForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="ConflictsControl.resx">
-      <DependentUpon>ConflictsControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ConflictContextControl.resx">
-      <DependentUpon>ConflictContextControl.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="CreateFilterForm.resx">
       <DependentUpon>CreateFilterForm.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DifferencesControl.resx">
-      <DependentUpon>DifferencesControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MergeSolutionsForm.resx">
       <DependentUpon>MergeSolutionsForm.cs</DependentUpon>
