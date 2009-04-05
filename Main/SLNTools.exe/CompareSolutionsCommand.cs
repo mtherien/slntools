@@ -48,13 +48,13 @@ namespace CWDev.SLNTools
             {
                 if (parsedArguments.Solutions.Length < 2)
                 {
-                    reporter.Handler("Two solution files should be provided.");
+                    reporter.Handler("Two solution files should be provided, in order:\n   Old.sln\n   New.sln");
                     return;
                 }
 
-                SolutionFile rootSolution = SolutionFile.FromFile(parsedArguments.Solutions[0]);
+                SolutionFile oldSolution = SolutionFile.FromFile(parsedArguments.Solutions[0]);
                 SolutionFile latestSolution = SolutionFile.FromFile(parsedArguments.Solutions[1]);
-                Difference difference = latestSolution.CompareTo(rootSolution);
+                Difference difference = latestSolution.CompareTo(oldSolution);
                 if (difference == null)
                 {
                     difference = new NodeDifference(new ElementIdentifier("Solution File"), OperationOnParent.Modified, new List<Difference>());

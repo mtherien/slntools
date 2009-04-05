@@ -53,13 +53,13 @@ namespace CWDev.SLNTools
 
                 SolutionFile latestSolutionInSourceBranch = SolutionFile.FromFile(parsedArguments.Solutions[0]);
                 SolutionFile latestSolutionInDestinationBranch = SolutionFile.FromFile(parsedArguments.Solutions[1]);
-                SolutionFile rootSolution = SolutionFile.FromFile(parsedArguments.Solutions[2]);
+                SolutionFile commonAncestrorSolution = SolutionFile.FromFile(parsedArguments.Solutions[2]);
                 string mergedSolutionName = parsedArguments.Solutions[3];
 
                 NodeDifference differenceInSourceBranch;
                 NodeDifference differenceInDestinationBranch;
                 NodeConflict conflict = Conflict.Merge(
-                                rootSolution.GetElement(), 
+                                commonAncestrorSolution.GetElement(), 
                                 latestSolutionInSourceBranch.GetElement(), 
                                 latestSolutionInDestinationBranch.GetElement(),
                                 out differenceInSourceBranch,
@@ -90,7 +90,7 @@ namespace CWDev.SLNTools
                 {
                     if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
-                        SolutionFile mergedSolution = new SolutionFile(rootSolution, form.Result);
+                        SolutionFile mergedSolution = new SolutionFile(commonAncestrorSolution, form.Result);
                         mergedSolution.SaveAs(mergedSolutionName);
                     }
                 }
