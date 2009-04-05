@@ -23,6 +23,7 @@
 using System;
 using System.IO;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace CWDev.SLNTools.Core.Filter
 {
@@ -97,7 +98,8 @@ namespace CWDev.SLNTools.Core.Filter
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("TODO " + ex.ToString());
+                    // TODO Better handling of error, this assembly shouldn't display UI by itself
+                    MessageBox.Show(ex.ToString(), "OnChanged handler");
                 }
             }
         }

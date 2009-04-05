@@ -103,14 +103,14 @@ namespace CWDev.SLNTools.Core
                 if (identifier.Name == "SectionType")
                 {
                     if (difference.OperationOnParent == OperationOnParent.Removed)
-                        throw new Exception("TODO");
+                        throw new Exception("Cannot remove the SectionType attribute of a section.");
 
                     m_sectionType = difference.NewValue;
                 } 
                 else if (identifier.Name == "Step")
                 {
                     if (difference.OperationOnParent == OperationOnParent.Removed)
-                        throw new Exception("TODO");
+                        throw new Exception("Cannot remove the Step attribute of a section.");
 
                     m_step = difference.NewValue;
                 }
@@ -122,7 +122,7 @@ namespace CWDev.SLNTools.Core
                 }
                 else
                 {
-                    throw new Exception("TODO");
+                    throw new Exception(string.Format("Invalid identifier '{0}'.", identifier.Name));
                 }
             }
         }

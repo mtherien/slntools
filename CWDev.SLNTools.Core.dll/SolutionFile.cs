@@ -287,7 +287,7 @@ namespace CWDev.SLNTools.Core
                 if (identifier.Name.StartsWith("Header"))
                 {
                     if (difference.OperationOnParent != OperationOnParent.Modified)
-                        throw new Exception("TODO");
+                        throw new Exception(string.Format("The header of a solution cannot be {0}.", difference.OperationOnParent.ToString().ToLower()));
 
                     RemoveAllHeaderLine();
                     foreach (string line in ((ValueDifference)difference).NewValue.Split('|'))
@@ -321,7 +321,7 @@ namespace CWDev.SLNTools.Core
                             RemoveProjectByGuid(projectGuid);
                             break;
                         default:
-                            throw new Exception("TODO");
+                            throw new ArgumentOutOfRangeException("difference.OperationOnParent", difference.OperationOnParent.ToString(), "Invalid value");
                     }
                 }
                 else if (identifier.Name.StartsWith("GS_"))
@@ -346,13 +346,13 @@ namespace CWDev.SLNTools.Core
                             RemoveGlobalSectionByName(sectionName);
                             break;
                         default:
-                            throw new Exception("TODO");
+                            throw new ArgumentOutOfRangeException("difference.OperationOnParent", difference.OperationOnParent.ToString(), "Invalid value");
                     }
                 }
                 else
                 {
-                    throw new Exception("TODO");
-                }               
+                    throw new Exception(string.Format("Invalid identifier '{0}'.", identifier.Name));
+                }
             }
         }
     }

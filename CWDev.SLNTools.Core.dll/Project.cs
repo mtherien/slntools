@@ -413,21 +413,21 @@ namespace CWDev.SLNTools.Core
                 if (identifier.Name == "ProjectTypeGuid")
                 {
                     if (difference.OperationOnParent == OperationOnParent.Removed)
-                        throw new Exception("TODO");
+                        throw new Exception("Cannot remove the ProjectTypeGuid attribute of a project.");
 
                     m_projectTypeGuid = ((ValueDifference)difference).NewValue;
                 }
                 else if (identifier.Name == "ProjectName")
                 {
                     if (difference.OperationOnParent == OperationOnParent.Removed)
-                        throw new Exception("TODO");
+                        throw new Exception("Cannot remove the ProjectName attribute of a project.");
 
                     m_projectName = ((ValueDifference)difference).NewValue;
                 }
                 else if (identifier.Name == "RelativePath")
                 {
                     if (difference.OperationOnParent == OperationOnParent.Removed)
-                        throw new Exception("TODO");
+                        throw new Exception("Cannot remove the RelativePath attribute of a project.");
 
                     m_relativePath = ((ValueDifference)difference).NewValue;
                 }
@@ -470,7 +470,7 @@ namespace CWDev.SLNTools.Core
                             m_projectSections.Remove(FindProjectSection(sectionName));
                             break;
                         default:
-                            throw new Exception("TODO");
+                            throw new ArgumentOutOfRangeException("difference.OperationOnParent", difference.OperationOnParent.ToString(), "Invalid value");
                     }
                 }
                 else if (identifier.Name.StartsWith("VCL_"))
@@ -487,7 +487,7 @@ namespace CWDev.SLNTools.Core
                 }
                 else
                 {
-                    throw new Exception("TODO");
+                    throw new Exception(string.Format("Invalid identifier '{0}'.", identifier.Name));
                 }
             }
         }
