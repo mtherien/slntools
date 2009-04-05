@@ -254,10 +254,17 @@ namespace CWDev.SLNTools.UIKit
                     fileDialog.Filter = "Solution Filter File (*.slnfilter)|*.slnfilter|All files (*.*)|*.*";
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        m_filterFile.FilterFullPath = fileDialog.FileName;
-                        m_filterFile.WatchForChangesOnFilteredSolution = m_checkboxWatchForChangesOnFilteredSolution.Checked;
-                        m_filterFile.Save();
-                        return true;
+                        if (Path.GetDirectoryName(Path.GetFullPath(fileDialog.FileName)) == Path.GetDirectoryName(Path.GetFullPath(m_filterFile.SourceSolutionFullPath)))
+                        {
+                            m_filterFile.FilterFullPath = fileDialog.FileName;
+                            m_filterFile.WatchForChangesOnFilteredSolution = m_checkboxWatchForChangesOnFilteredSolution.Checked;
+                            m_filterFile.Save();
+                            return true;
+                        }
+                        else
+                        {
+                            MessageBox.Show("Filter file need to be in the same folder as the source solution.");
+                        }
                     }
                 }
             }
