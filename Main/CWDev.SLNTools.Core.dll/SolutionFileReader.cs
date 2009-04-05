@@ -248,7 +248,8 @@ namespace CWDev.SLNTools.Core
             m_solutionFile.AddGlobalSection(name, type, step, new List<PropertyLine>());
         }
 
-        private static readonly Regex ms_regexParseProjectConfigurationPlatformsName = new Regex(@"^(?<GUID>\{[-0-9a-zA-Z]+\})\.(?<DESCRIPTION>.*)$");
+        private static readonly string ms_patternParseProjectConfigurationPlatformsName = @"^(?<GUID>\{[-0-9a-zA-Z]+\})\.(?<DESCRIPTION>.*)$";
+        private static readonly Regex ms_regexParseProjectConfigurationPlatformsName = new Regex(ms_patternParseProjectConfigurationPlatformsName);
 
         private void HandleProjectConfigurationPlatforms(string name, string type, string step, List<PropertyLine> propertyLines, int startLineNumber)
         {
@@ -269,7 +270,10 @@ namespace CWDev.SLNTools.Core
                 }
                 else 
                 {
-                    throw new Exception("TODO");
+                    throw new IOException(string.Format("Invalid format for a project configuration name on line #{0}.\nFound: {1}\nExpected: A line respecting the pattern '{2}'.",
+                                    m_currentLineNumber,
+                                    propertyLine.Name,
+                                    ms_patternParseProjectConfigurationPlatformsName));
                 }
             }
             m_solutionFile.AddGlobalSection(name, type, step, new List<PropertyLine>());

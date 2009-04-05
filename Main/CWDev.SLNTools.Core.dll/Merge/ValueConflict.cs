@@ -35,7 +35,7 @@ namespace CWDev.SLNTools.Core.Merge
             : base(identifier)
         {
             if (!Enum.IsDefined(operationOnParent.GetType(), operationOnParent))
-                throw new ArgumentNullException("TODO operationOnParent");
+                throw new ArgumentOutOfRangeException("operationOnParent", operationOnParent.ToString(), "Invalid value");
 
             m_operationOnParent = operationOnParent;
             m_oldValue = commonAncestrorValue;

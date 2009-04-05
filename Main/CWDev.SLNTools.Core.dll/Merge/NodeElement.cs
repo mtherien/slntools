@@ -33,7 +33,7 @@ namespace CWDev.SLNTools.Core.Merge
             : base(identifier)
         {
             if (childs == null)
-                throw new Exception("TODO");
+                throw new ArgumentNullException("childs");
 
             m_childs = childs;
         }
@@ -51,9 +51,9 @@ namespace CWDev.SLNTools.Core.Merge
         {
             NodeElement old = oldElement as NodeElement;
             if (old == null)
-                throw new Exception("TODO");
-            if (! old.Identifier.Equals(this.Identifier))
-                throw new Exception("TODO");
+                throw new ArgumentNullException("old");
+            if (!old.Identifier.Equals(this.Identifier))
+                throw new Exception("Cannot compare elements that does not share the same identifier.");
 
             List<Difference> differences = new List<Difference>();
             ElementHashList newChilds = this.Childs;

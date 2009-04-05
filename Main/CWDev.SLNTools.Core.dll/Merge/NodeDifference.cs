@@ -59,9 +59,9 @@ namespace CWDev.SLNTools.Core.Merge
             NodeDifference source = this;
             NodeDifference destination = destinationDifference as NodeDifference;
             if (destination == null)
-                throw new Exception("TODO");
+                throw new ArgumentNullException("destination");
             if (!source.Identifier.Equals(destination.Identifier))
-                throw new Exception("TODO");
+                throw new Exception("Cannot compare differences that does not share the same identifier.");
 
             if (source.OperationOnParent != destination.OperationOnParent)
             {

@@ -34,7 +34,7 @@ namespace CWDev.SLNTools.Core.Merge
             : base(identifier, operationOnParent)
         {
             if (oldValue == newValue)
-                throw new Exception("TODO"); // This also handle the null/null case
+                throw new Exception("Cannot create a ValueDifference were 'oldValue == newValue'.");
 
             m_oldValue = oldValue;
             m_newValue = newValue;
@@ -51,11 +51,11 @@ namespace CWDev.SLNTools.Core.Merge
             ValueDifference source = this;
             ValueDifference destination = destinationDifference as ValueDifference;
             if (destination == null)
-                throw new Exception("TODO");
+                throw new ArgumentNullException("destination");
             if (!source.Identifier.Equals(destination.Identifier))
-                throw new Exception("TODO");
+                throw new Exception("Cannot compare differences that does not share the same identifier.");
             if (source.OldValue != destination.OldValue)
-                throw new Exception("TODO");
+                throw new Exception("Cannot compare value differences that does not share the same 'OldValue'.");
 
             if (source.OperationOnParent != destination.OperationOnParent)
             {
@@ -92,7 +92,7 @@ namespace CWDev.SLNTools.Core.Merge
                     return string.Format("{0} has been removed. Old value = \"{1}\".", this.Identifier, this.OldValue);
 
                 default:
-                    throw new Exception("TODO");
+                    throw new ArgumentOutOfRangeException("OperationOnParent", this.OperationOnParent.ToString(), "Invalid value");
             }
         }
     }

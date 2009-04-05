@@ -29,7 +29,7 @@ namespace CWDev.SLNTools.Core.Merge
         protected Element(ElementIdentifier identifier)
         {
             if (identifier == null)
-                throw new Exception("TODO");
+                throw new ArgumentNullException("identifier");
 
             m_identifier = identifier;
         }

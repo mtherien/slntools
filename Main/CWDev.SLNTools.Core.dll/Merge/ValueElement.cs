@@ -47,9 +47,9 @@ namespace CWDev.SLNTools.Core.Merge
         {
             ValueElement old = oldElement as ValueElement;
             if (old == null)
-                throw new Exception("TODO");
+                throw new ArgumentNullException("oldElement");
             if (!old.Identifier.Equals(this.Identifier))
-                throw new Exception("TODO");
+                throw new Exception("Cannot compare element that does not share the same identifier.");
 
             if (this.Value != old.Value)
             {
