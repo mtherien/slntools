@@ -21,37 +21,29 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Text;
 using System.Windows.Forms;
 
 namespace CWDev.SLNTools
 {
     using CommandLine;
-    using Core;
-    using Core.Filter;
-    using Core.Merge;
 
-    public enum CommandList
+    internal class Program
     {
-        SortProjects,
-        CompareSolutions,
-        MergeSolutions,
-        CreateFilterFileFromSolution,
-        EditFilterFile,
-        OpenFilterFile
-    }
+        private enum CommandList
+        {
+            CompareSolutions,
+            MergeSolutions,
+            CreateFilterFileFromSolution,
+            EditFilterFile,
+            OpenFilterFile
+        }
 
-    class Arguments
-    {
-        [DefaultArgument(ArgumentType.Required, HelpText = "Command Name")]
-        public CommandList Command = (CommandList) 0;
-    }
+        private class Arguments
+        {
+            [DefaultArgument(ArgumentType.Required, HelpText = "Command Name (CompareSolutions|MergeSolutions|CreateFilterFileFromSolution|EditFilterFile|OpenFilterFile|SortProjects)")]
+            public CommandList Command = (CommandList)(-1);
+        }
 
-    class Program
-    {
         [STAThread]
         static void Main(string[] args)
         {
@@ -60,64 +52,72 @@ namespace CWDev.SLNTools
             //args = new string[] { "CreateFilterFileFromSolution", @"C:\DevCodePlex\SLNTools\Main\SLNTools.sln" };
             //args = new string[] { "OpenFilterFile", @"C:\DevCodePlex\SLNTools\Main\Test.slnfilter" };
             //args = new string[] { "/?" };
-            // args = new string[] { "CreateFilterFileFromSolution", @"D:\DevClean\Baseline\D-NewAccountManagement\TousLesProjets.sln" };           
+            //args = new string[] { "CreateFilterFileFromSolution", @"D:\DevClean\Baseline\D-NewAccountManagement\TousLesProjets.sln" };
+            //args = new string[] { "MergeSolutions" };
 
-            string[] commandName;
-            string[] commandArguments;
-            if (args.Length > 1)
+            try
             {
-                commandName = new string[1];
-                Array.ConstrainedCopy(args, 0, commandName, 0, 1);
-                commandArguments = new string[args.Length - 1];
-                Array.ConstrainedCopy(args, 1, commandArguments, 0, commandArguments.Length);
-            }
-            else
-            {
-                commandName = args;
-                commandArguments = new string[0];
-            }
-
-            Arguments parsedArguments = new Arguments();
-            if (Parser.ParseArguments(commandName, parsedArguments))
-            {
-                Command command;
-                switch (parsedArguments.Command)
+                string[] commandName;
+                string[] commandArguments;
+                if (args.Length > 1)
                 {
-                    case CommandList.CompareSolutions:
-                        command = new CompareSolutionsCommand();
-                        break;
-
-                    case CommandList.MergeSolutions:
-                        command = new MergeSolutionsCommand();
-                        break;
-
-                    case CommandList.CreateFilterFileFromSolution:
-                        command = new CreateFilterFileFromSolutionCommand();
-                        break;
-
-                    case CommandList.OpenFilterFile:
-                        command = new OpenFilterFileCommand();
-                        break;
-
-                    case CommandList.EditFilterFile:
-                        command = new EditFilterFileCommand();
-                        break;
-
-                    default:
-                        throw new Exception("TODO");
+                    commandName = new string[1];
+                    Array.ConstrainedCopy(args, 0, commandName, 0, 1);
+                    commandArguments = new string[args.Length - 1];
+                    Array.ConstrainedCopy(args, 1, commandArguments, 0, commandArguments.Length);
                 }
-                try
+                else
                 {
-                    command.Run(commandArguments);
+                    commandName = args;
+                    commandArguments = new string[0];
                 }
-                catch (Exception ex)
+
+                Arguments parsedArguments = new Arguments();
+
+                MessageBoxErrorReporter reporter = new MessageBoxErrorReporter();
+                reporter.CommandUsage = Parser.ArgumentsUsage(parsedArguments.GetType());
+
+                if (Parser.ParseArguments(commandName, parsedArguments, reporter.Handler))
                 {
-                    MessageBox.Show(ex.ToString());
+                    Command command;
+                    switch (parsedArguments.Command)
+                    {
+                        case CommandList.CompareSolutions:
+                            command = new CompareSolutionsCommand();
+                            break;
+
+                        case CommandList.MergeSolutions:
+                            command = new MergeSolutionsCommand();
+                            break;
+
+                        case CommandList.CreateFilterFileFromSolution:
+                            command = new CreateFilterFileFromSolutionCommand();
+                            break;
+
+                        case CommandList.OpenFilterFile:
+                            command = new OpenFilterFileCommand();
+                            break;
+
+                        case CommandList.EditFilterFile:
+                            command = new EditFilterFileCommand();
+                            break;
+
+                        default:
+                            command = null;
+                            reporter.Handler("Invalid command name.");
+                            break;
+                    }
+
+                    if (command != null)
+                    {
+                        reporter.CommandName = parsedArguments.Command.ToString();
+                        command.Run(commandArguments, reporter);
+                    }
                 }
             }
-            else
+            catch (Exception ex)
             {
-                MessageBox.Show("VSSolutionTool.exe usage:\n" + Parser.ArgumentsUsage(parsedArguments.GetType()));
+                MessageBox.Show(ex.ToString());
             }
         }
     }

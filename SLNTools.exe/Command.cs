@@ -24,6 +24,6 @@ namespace CWDev.SLNTools
 {
     internal abstract class Command
     {
-        public abstract void Run(string[] args);
+        public abstract void Run(string[] args, MessageBoxErrorReporter reporter);
     }
 }

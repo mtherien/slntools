@@ -38,13 +38,18 @@ namespace CWDev.SLNTools
             public string[] Solutions = null;
         }
 
-        public override void Run(string[] args)
+        public override void Run(string[] args, MessageBoxErrorReporter reporter)
         {
             Arguments parsedArguments = new Arguments();
-            if (Parser.ParseArgumentsWithUsage(args, parsedArguments))
+            reporter.CommandUsage = Parser.ArgumentsUsage(parsedArguments.GetType());
+
+            if (Parser.ParseArguments(args, parsedArguments, reporter.Handler))
             {
                 if (parsedArguments.Solutions.Length < 4)
-                    throw new Exception("TODO");
+                {
+                    reporter.Handler("Four solution files should be provided, in order:\n   SourceBranch.sln\n   DestinationBranch.sln\n   CommonAncestror.sln\n   Result.sln");
+                    return;
+                }
 
                 SolutionFile latestSolutionInSourceBranch = SolutionFile.FromFile(parsedArguments.Solutions[0]);
                 SolutionFile latestSolutionInDestinationBranch = SolutionFile.FromFile(parsedArguments.Solutions[1]);

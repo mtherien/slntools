@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandLine\CommandLineParser.cs" />
+    <Compile Include="MessageBoxErrorReporter.cs" />
     <Compile Include="ProcessEx.cs" />
     <Compile Include="EditFilterFileCommand.cs" />
     <Compile Include="CreateFilterFileFromSolutionCommand.cs" />

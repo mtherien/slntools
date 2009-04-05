@@ -20,31 +20,45 @@
 
 #endregion
 
+using System.IO;
+using System.Reflection;
+using System.Windows.Forms;
+
 namespace CWDev.SLNTools
 {
-    using CommandLine;
-    using UIKit;
-
-    internal class EditFilterFileCommand : Command
+    internal class MessageBoxErrorReporter
     {
-        private class Arguments
+        internal MessageBoxErrorReporter()
         {
-            [DefaultArgument(ArgumentType.AtMostOnce)]
-            public string FilterFile = null;
+            m_commandName = "";
+            m_commandUsage = null;
         }
 
-        public override void Run(string[] args, MessageBoxErrorReporter reporter)
-        {
-            Arguments parsedArguments = new Arguments();
-            reporter.CommandUsage = Parser.ArgumentsUsage(parsedArguments.GetType());
+        private string m_commandName;
+        private string m_commandUsage;
 
-            if (Parser.ParseArguments(args, parsedArguments, reporter.Handler))
-            {
-                using (CreateFilterForm form = new CreateFilterForm(parsedArguments.FilterFile))
-                {
-                    form.ShowDialog();
-                }
-            }
+        public string CommandName
+        {
+            get { return m_commandName; }
+            set { m_commandName = value; }
+        }
+
+        public string CommandUsage
+        {
+            get { return m_commandUsage; }
+            set { m_commandUsage = value; }
+        }
+
+        public void Handler(string message)
+        {
+            MessageBox.Show(
+                    string.Format(
+                        "{0}\n\nUsage:\n{1} {2}\n{3}",
+                        message,
+                        Path.GetFileName(Assembly.GetEntryAssembly().Location),
+                        m_commandName,
+                        m_commandUsage),
+                    "SLNTools");
         }
     }
 }

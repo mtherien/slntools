@@ -33,10 +33,12 @@ namespace CWDev.SLNTools
             public string SolutionFile = null;
         }
 
-        public override void Run(string[] args)
+        public override void Run(string[] args, MessageBoxErrorReporter reporter)
         {
             Arguments parsedArguments = new Arguments();
-            if (Parser.ParseArgumentsWithUsage(args, parsedArguments))
+            reporter.CommandUsage = Parser.ArgumentsUsage(parsedArguments.GetType());
+
+            if (Parser.ParseArguments(args, parsedArguments, reporter.Handler))
             {
                 using (CreateFilterForm form = new CreateFilterForm(parsedArguments.SolutionFile))
                 {
