@@ -29,7 +29,7 @@ namespace CWDev.SLNTools.Core.Merge
         public ValueConflict(
                     ElementIdentifier identifier,
                     OperationOnParent operationOnParent,
-                    string rootValue,
+                    string commonAncestrorValue,
                     string newValueInSourceBranch,
                     string newValueInDestinationBranch)
             : base(identifier)
@@ -38,7 +38,7 @@ namespace CWDev.SLNTools.Core.Merge
                 throw new ArgumentNullException("TODO operationOnParent");
 
             m_operationOnParent = operationOnParent;
-            m_oldValue = rootValue;
+            m_oldValue = commonAncestrorValue;
             m_newValueInSourceBranch = newValueInSourceBranch;
             m_newValueInDestinationBranch = newValueInDestinationBranch;
         }

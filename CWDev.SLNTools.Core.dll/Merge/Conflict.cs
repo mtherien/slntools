@@ -36,19 +36,19 @@ namespace CWDev.SLNTools.Core.Merge
     public abstract class Conflict
     {
         public static NodeConflict Merge(
-                    NodeElement rootElement,
+                    NodeElement commonAncestrorElement,
                     NodeElement latestElementInSourceBranch,
                     NodeElement latestElementInDestinationBranch,
                     out NodeDifference differenceInSourceBranch,
                     out NodeDifference differenceInDestinationBranch)
         {
-            differenceInSourceBranch = (NodeDifference) latestElementInSourceBranch.CompareTo(rootElement);
+            differenceInSourceBranch = (NodeDifference) latestElementInSourceBranch.CompareTo(commonAncestrorElement);
             if (differenceInSourceBranch == null)
             {
                 differenceInSourceBranch = new NodeDifference(new ElementIdentifier("Solution File"), OperationOnParent.Modified, new List<Difference>());
             }
 
-            differenceInDestinationBranch = (NodeDifference) latestElementInDestinationBranch.CompareTo(rootElement);
+            differenceInDestinationBranch = (NodeDifference) latestElementInDestinationBranch.CompareTo(commonAncestrorElement);
             if (differenceInDestinationBranch == null)
             {
                 differenceInDestinationBranch = new NodeDifference(new ElementIdentifier("Solution File"), OperationOnParent.Modified, new List<Difference>());
