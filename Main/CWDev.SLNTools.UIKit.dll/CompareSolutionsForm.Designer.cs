@@ -65,7 +65,7 @@ namespace CWDev.SLNTools.UIKit
             this.ClientSize = new System.Drawing.Size(472, 641);
             this.Controls.Add(groupBoxDifferencesFoundInSourceBranch);
             this.Name = "CompareSolutionsForm";
-            this.Text = "Solution Merger";
+            this.Text = "Solution Comparer";
             groupBoxDifferencesFoundInSourceBranch.ResumeLayout(false);
             this.ResumeLayout(false);
 

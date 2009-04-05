@@ -70,7 +70,7 @@ namespace CWDev.SLNTools.UIKit
             label1.Name = "label1";
             label1.Size = new System.Drawing.Size(381, 16);
             label1.TabIndex = 6;
-            label1.Text = "Do you want to apply these changes back into the original solution?\"\r\n";
+            label1.Text = "Do you want to apply these changes to the original solution?";
             // 
             // m_buttonYes
             // 
