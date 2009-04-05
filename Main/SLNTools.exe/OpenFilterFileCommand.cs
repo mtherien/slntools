@@ -34,21 +34,23 @@ namespace CWDev.SLNTools
     using Core.Merge;
     using UIKit;
 
-    internal class OpenFilterFileArguments
-    {
-        [DefaultArgument(ArgumentType.Required | ArgumentType.AtMostOnce)]
-        public string FilterFile = null;
-
-        [Argument(ArgumentType.AtMostOnce)]
-        public bool Wait = false;
-    }
-
     internal class OpenFilterFileCommand : Command
     {
-        public override void Run(string[] args)
+        private class Arguments
         {
-            OpenFilterFileArguments parsedArguments = new OpenFilterFileArguments();
-            if (Parser.ParseArgumentsWithUsage(args, parsedArguments))
+            [DefaultArgument(ArgumentType.Required | ArgumentType.AtMostOnce)]
+            public string FilterFile = null;
+
+            [Argument(ArgumentType.AtMostOnce)]
+            public bool Wait = false;
+        }
+
+        public override void Run(string[] args, MessageBoxErrorReporter reporter)
+        {
+            Arguments parsedArguments = new Arguments();
+            reporter.CommandUsage = Parser.ArgumentsUsage(parsedArguments.GetType());
+
+            if (Parser.ParseArguments(args, parsedArguments, reporter.Handler))
             {
                 FilterFile filterFile = FilterFile.FromFile(parsedArguments.FilterFile);
 

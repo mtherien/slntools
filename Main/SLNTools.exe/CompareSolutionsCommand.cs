@@ -39,20 +39,25 @@ namespace CWDev.SLNTools
             public string[] Solutions = null;
         }
 
-        public override void Run(string[] args)
+        public override void Run(string[] args, MessageBoxErrorReporter reporter)
         {
             Arguments parsedArguments = new Arguments();
-            if (Parser.ParseArgumentsWithUsage(args, parsedArguments))
+            reporter.CommandUsage = Parser.ArgumentsUsage(parsedArguments.GetType());
+
+            if (Parser.ParseArguments(args, parsedArguments, reporter.Handler))
             {
                 if (parsedArguments.Solutions.Length < 2)
-                    throw new Exception("TODO");
+                {
+                    reporter.Handler("Two solution files should be provided.");
+                    return;
+                }
 
                 SolutionFile rootSolution = SolutionFile.FromFile(parsedArguments.Solutions[0]);
                 SolutionFile latestSolution = SolutionFile.FromFile(parsedArguments.Solutions[1]);
                 Difference difference = latestSolution.CompareTo(rootSolution);
                 if (difference == null)
                 {
-                    difference = new NodeDifference(new ElementIdentifier(""), OperationOnParent.Modified, new List<Difference>());
+                    difference = new NodeDifference(new ElementIdentifier("Solution File"), OperationOnParent.Modified, new List<Difference>());
                 }
                 using (CompareSolutionsForm form = new CompareSolutionsForm(difference))
                 {
