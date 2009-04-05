@@ -15,26 +15,20 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_0229C8FEFC003A8F2ADEA538936BA6CB"
+        "MsmKey" = "8:_49D82775B26134B1E7468B6CDCBD57E6"
         "OwnerKey" = "8:_4B4413AF76324B4D9B0B5D719480AF5A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_34BA170B2D5AEAEDE9E1459158D4F6C2"
-        "OwnerKey" = "8:_4B4413AF76324B4D9B0B5D719480AF5A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_34BA170B2D5AEAEDE9E1459158D4F6C2"
+        "MsmKey" = "8:_49D82775B26134B1E7468B6CDCBD57E6"
         "OwnerKey" = "8:_81160FBD3FBD479FB783F9D6730F0C32"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_34BA170B2D5AEAEDE9E1459158D4F6C2"
-        "OwnerKey" = "8:_0229C8FEFC003A8F2ADEA538936BA6CB"
+        "MsmKey" = "8:_49D82775B26134B1E7468B6CDCBD57E6"
+        "OwnerKey" = "8:_B3346A78DED845AB34B80BD19AB8345E"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -47,6 +41,12 @@
         {
         "MsmKey" = "8:_81160FBD3FBD479FB783F9D6730F0C32"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B3346A78DED845AB34B80BD19AB8345E"
+        "OwnerKey" = "8:_4B4413AF76324B4D9B0B5D719480AF5A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -64,18 +64,6 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_0229C8FEFC003A8F2ADEA538936BA6CB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_34BA170B2D5AEAEDE9E1459158D4F6C2"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_81160FBD3FBD479FB783F9D6730F0C32"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -83,6 +71,18 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_4B4413AF76324B4D9B0B5D719480AF5A"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_B3346A78DED845AB34B80BD19AB8345E"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_49D82775B26134B1E7468B6CDCBD57E6"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -190,20 +190,20 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_0229C8FEFC003A8F2ADEA538936BA6CB"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_49D82775B26134B1E7468B6CDCBD57E6"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:CWDev.SLNTools.UIKit.dll, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:CWDev.SLNTools.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_0229C8FEFC003A8F2ADEA538936BA6CB"
+                    "_49D82775B26134B1E7468B6CDCBD57E6"
                     {
-                    "Name" = "8:CWDev.SLNTools.UIKit.dll.dll"
+                    "Name" = "8:CWDev.SLNTools.Core.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:CWDev.SLNTools.UIKit.dll.dll"
+            "SourcePath" = "8:CWDev.SLNTools.Core.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_256EFD712D6B45DCB7AD7BF5C72114D7"
@@ -221,20 +221,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_34BA170B2D5AEAEDE9E1459158D4F6C2"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B3346A78DED845AB34B80BD19AB8345E"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:CWDev.SLNTools.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:CWDev.SLNTools.UIKit.dll, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_34BA170B2D5AEAEDE9E1459158D4F6C2"
+                    "_B3346A78DED845AB34B80BD19AB8345E"
                     {
-                    "Name" = "8:CWDev.SLNTools.Core.dll"
+                    "Name" = "8:CWDev.SLNTools.UIKit.dll.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:CWDev.SLNTools.Core.dll"
+            "SourcePath" = "8:CWDev.SLNTools.UIKit.dll.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_256EFD712D6B45DCB7AD7BF5C72114D7"
@@ -338,14 +338,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Tools for SLN File"
-        "ProductCode" = "8:{00B10AF0-840E-4601-96D6-14D4FEF13A9C}"
-        "PackageCode" = "8:{3846E13B-6AF0-4B21-BF6C-B8EB8A0A51B8}"
+        "ProductCode" = "8:{3CA80AAF-9564-4163-8398-323122220D20}"
+        "PackageCode" = "8:{1A5BFC7E-93D4-4917-A7F2-2857089998A7}"
         "UpgradeCode" = "8:{9A791ED6-C6EA-4234-84E2-9A08122BBC61}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:0.9.0"
+        "ProductVersion" = "8:0.9.1"
         "Manufacturer" = "8:CWDev"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
