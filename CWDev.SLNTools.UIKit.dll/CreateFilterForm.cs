@@ -111,28 +111,30 @@ namespace CWDev.SLNTools.UIKit
         {
             m_nbProjectsSelected = 0;
             int nbProjectsIncludedInFilteredSolution = 0;
-            SolutionFile filteredSolution = m_filterFile.Apply();
-
-            m_treeview.BeginUpdate();
-            foreach (TreeNode treeNode in m_allNodes)
+            if (m_filterFile != null)
             {
-                Project project = treeNode.Tag as Project;
-                if (filteredSolution.FindProjectByGuid(project.ProjectGuid) != null)
+                SolutionFile filteredSolution = m_filterFile.Apply();
+
+                m_treeview.BeginUpdate();
+                foreach (TreeNode treeNode in m_allNodes)
                 {
-                    nbProjectsIncludedInFilteredSolution++;
-                    treeNode.ForeColor = Color.Green;
-                }
-                else
-                {
-                    treeNode.ForeColor = Color.Red;
+                    Project project = treeNode.Tag as Project;
+                    if (filteredSolution.FindProjectByGuid(project.ProjectGuid) != null)
+                    {
+                        nbProjectsIncludedInFilteredSolution++;
+                        treeNode.ForeColor = Color.Green;
+                    }
+                    else
+                    {
+                        treeNode.ForeColor = Color.Red;
+                    }
+
+                    if (treeNode.Checked)
+                        m_nbProjectsSelected++;
                 }
 
-                if (treeNode.Checked)
-                    m_nbProjectsSelected++;
+                m_treeview.EndUpdate();
             }
-
-            m_treeview.EndUpdate();
-
             m_labelSelected.Text = string.Format(
                         "Checked = {0}, Included in filter = {1}/{2}",
                         m_nbProjectsSelected,
@@ -143,11 +145,11 @@ namespace CWDev.SLNTools.UIKit
         private void UpdateControls()
         {
             m_labelErrorMessage.Text = "";
-            m_menuitemSave.Enabled = false;
-            m_menuitemSaveAs.Enabled = false;
 
             if (m_filterFile != null)
             {
+                m_treeview.Enabled = true;
+                m_groupboxOptions.Enabled = true;
                 m_buttonSaveAndQuit.Enabled = (m_nbProjectsSelected > 0);
                 m_menuitemSave.Enabled = (m_filterFile.FilterFullPath != null) && (m_nbProjectsSelected > 0);
                 m_menuitemSaveAs.Enabled = (m_nbProjectsSelected > 0);
@@ -156,6 +158,14 @@ namespace CWDev.SLNTools.UIKit
                 {
                     m_labelErrorMessage.Text = "At least one project or solution folder need to be checked";
                 }
+            }
+            else
+            {
+                m_treeview.Enabled = false;
+                m_groupboxOptions.Enabled = false;
+                m_buttonSaveAndQuit.Enabled = false;
+                m_menuitemSave.Enabled = false;
+                m_menuitemSaveAs.Enabled = false;
             }
         }
 

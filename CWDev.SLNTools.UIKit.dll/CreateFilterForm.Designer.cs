@@ -30,7 +30,7 @@ namespace CWDev.SLNTools.UIKit
         {
             System.Windows.Forms.Label labelSourceSolution;
             System.Windows.Forms.Label labelSelectTheProjectsYouWishToKeep;
-            System.Windows.Forms.GroupBox groupBoxOptions;
+            this.m_groupboxOptions = new System.Windows.Forms.GroupBox();
             this.m_checkboxWatchForChangesOnFilteredSolution = new System.Windows.Forms.CheckBox();
             this.m_labelSelected = new System.Windows.Forms.Label();
             this.m_textboxSourceSolution = new System.Windows.Forms.TextBox();
@@ -47,8 +47,7 @@ namespace CWDev.SLNTools.UIKit
             this.m_buttonSaveAndQuit = new System.Windows.Forms.Button();
             labelSourceSolution = new System.Windows.Forms.Label();
             labelSelectTheProjectsYouWishToKeep = new System.Windows.Forms.Label();
-            groupBoxOptions = new System.Windows.Forms.GroupBox();
-            groupBoxOptions.SuspendLayout();
+            this.m_groupboxOptions.SuspendLayout();
             this.m_menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -70,17 +69,17 @@ namespace CWDev.SLNTools.UIKit
             labelSelectTheProjectsYouWishToKeep.TabIndex = 2;
             labelSelectTheProjectsYouWishToKeep.Text = "Select the &projects you wish to keep:";
             // 
-            // groupBoxOptions
+            // m_groupboxOptions
             // 
-            groupBoxOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.m_groupboxOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            groupBoxOptions.Controls.Add(this.m_checkboxWatchForChangesOnFilteredSolution);
-            groupBoxOptions.Location = new System.Drawing.Point(8, 157);
-            groupBoxOptions.Name = "groupBoxOptions";
-            groupBoxOptions.Size = new System.Drawing.Size(452, 47);
-            groupBoxOptions.TabIndex = 5;
-            groupBoxOptions.TabStop = false;
-            groupBoxOptions.Text = "Options (when the filter file is opened)";
+            this.m_groupboxOptions.Controls.Add(this.m_checkboxWatchForChangesOnFilteredSolution);
+            this.m_groupboxOptions.Location = new System.Drawing.Point(8, 157);
+            this.m_groupboxOptions.Name = "m_groupboxOptions";
+            this.m_groupboxOptions.Size = new System.Drawing.Size(452, 47);
+            this.m_groupboxOptions.TabIndex = 5;
+            this.m_groupboxOptions.TabStop = false;
+            this.m_groupboxOptions.Text = "Options (when the filter file is opened)";
             // 
             // m_checkboxWatchForChangesOnFilteredSolution
             // 
@@ -210,7 +209,7 @@ namespace CWDev.SLNTools.UIKit
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(472, 260);
-            this.Controls.Add(groupBoxOptions);
+            this.Controls.Add(this.m_groupboxOptions);
             this.Controls.Add(this.m_buttonSaveAndQuit);
             this.Controls.Add(this.m_treeview);
             this.Controls.Add(this.m_labelSelected);
@@ -223,8 +222,8 @@ namespace CWDev.SLNTools.UIKit
             this.MinimumSize = new System.Drawing.Size(480, 294);
             this.Name = "CreateFilterForm";
             this.Text = "Create Filter";
-            groupBoxOptions.ResumeLayout(false);
-            groupBoxOptions.PerformLayout();
+            this.m_groupboxOptions.ResumeLayout(false);
+            this.m_groupboxOptions.PerformLayout();
             this.m_menuStrip.ResumeLayout(false);
             this.m_menuStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -248,5 +247,6 @@ namespace CWDev.SLNTools.UIKit
         private System.Windows.Forms.TreeView m_treeview;
         private System.Windows.Forms.Button m_buttonSaveAndQuit;
         private System.Windows.Forms.CheckBox m_checkboxWatchForChangesOnFilteredSolution;
+        private System.Windows.Forms.GroupBox m_groupboxOptions;
     }
 }
