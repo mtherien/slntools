@@ -84,7 +84,7 @@ namespace CWDev.SLNTools.Core.Merge
 
         public override string ToString()
         {
-            return string.Format("{0} has been {1}", this.Identifier, this.OperationOnParent.ToString().ToLower());
+            return string.Format("{0} has been {1} in both branches.", this.Identifier, this.OperationOnParent.ToString().ToLower());
         }
     }
 }
