@@ -40,14 +40,7 @@ namespace CWDev.SLNTools.Core.Merge
             if (subdifferences == null)
                 throw new ArgumentNullException("subdifferences");
 
-            if (operationOnParent == OperationOnParent.Removed)
-            {
-                m_subdifferences = new ReadOnlyCollection<Difference>(new List<Difference>());
-            }
-            else
-            {
-                m_subdifferences = new ReadOnlyCollection<Difference>(new List<Difference>(subdifferences));
-            }
+            m_subdifferences = new ReadOnlyCollection<Difference>(new List<Difference>(subdifferences));
         }
 
         private ReadOnlyCollection<Difference> m_subdifferences;
@@ -56,12 +49,15 @@ namespace CWDev.SLNTools.Core.Merge
 
         public override Conflict CompareTo(Difference destinationDifference)
         {
+            if (destinationDifference == null)
+                throw new ArgumentNullException("destinationDifference");
+            if (!destinationDifference.Identifier.Equals(this.Identifier))
+                throw new Exception("Cannot compare differences that does not share the same identifier.");
+
             NodeDifference source = this;
             NodeDifference destination = destinationDifference as NodeDifference;
             if (destination == null)
-                throw new ArgumentNullException("destination");
-            if (!source.Identifier.Equals(destination.Identifier))
-                throw new Exception("Cannot compare differences that does not share the same identifier.");
+                throw new Exception("TODO wrong type destination");
 
             if (source.OperationOnParent != destination.OperationOnParent)
             {

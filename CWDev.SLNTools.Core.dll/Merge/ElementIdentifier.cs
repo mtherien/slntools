@@ -41,6 +41,11 @@ namespace CWDev.SLNTools.Core.Merge
         public string Name { get { return m_name; } }
         public string FriendlyName { get { return m_friendlyName; } }
 
+        public EmptyElement CreateEmptyElement()
+        {
+            return new EmptyElement(this);
+        }
+
         public override bool Equals(object obj)
         {
             ElementIdentifier objAsElementIdentifier = obj as ElementIdentifier;

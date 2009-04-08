@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="Filter\FilteredSolutionWatcher.cs" />
     <Compile Include="Merge\ConflictContext.cs" />
+    <Compile Include="Merge\EmptyElement.cs" />
     <Compile Include="PropertyLineList.cs" />
     <Compile Include="Merge\Conflict.cs" />
     <Compile Include="Merge\OperationOnParent.cs" />
@@ -68,7 +69,6 @@
     <Compile Include="Merge\ValueDifference.cs" />
     <Compile Include="Merge\ValueElement.cs" />
     <Compile Include="Merge\NodeElement.cs" />
-    <Compile Include="Merge\EmptyChildsElement.cs" />
     <Compile Include="Merge\ElementIdentifier.cs" />
     <Compile Include="Merge\TypeDifferenceConflict.cs" />
     <Compile Include="Merge\NodeConflict.cs" />

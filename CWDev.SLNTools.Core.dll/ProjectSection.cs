@@ -38,13 +38,8 @@ namespace CWDev.SLNTools.Core
         {
         }
 
-        public ProjectSection(ProjectSection original, IEnumerable<Difference> differences)
-            : base(original, differences)
-        {
-        }
-
-        public ProjectSection(string name, IEnumerable<Difference> differences)
-            : base(name, differences)
+        public ProjectSection(string name, NodeElement element)
+            : base(name, element)
         {
         }
     }

@@ -51,17 +51,21 @@ namespace CWDev.SLNTools
                     return;
                 }
 
-                SolutionFile latestSolutionInSourceBranch = SolutionFile.FromFile(parsedArguments.Solutions[0]);
-                SolutionFile latestSolutionInDestinationBranch = SolutionFile.FromFile(parsedArguments.Solutions[1]);
+                SolutionFile solutionInSourceBranch = SolutionFile.FromFile(parsedArguments.Solutions[0]);
+                SolutionFile solutionInDestinationBranch = SolutionFile.FromFile(parsedArguments.Solutions[1]);
                 SolutionFile commonAncestrorSolution = SolutionFile.FromFile(parsedArguments.Solutions[2]);
                 string mergedSolutionName = parsedArguments.Solutions[3];
+
+                NodeElement elementInSourceBranch = solutionInSourceBranch.GetElement();
+                NodeElement elementInDestinationBranch = solutionInDestinationBranch.GetElement();
+                NodeElement commonAncestrorElement = commonAncestrorSolution.GetElement();
 
                 NodeDifference differenceInSourceBranch;
                 NodeDifference differenceInDestinationBranch;
                 NodeConflict conflict = Conflict.Merge(
-                                commonAncestrorSolution.GetElement(), 
-                                latestSolutionInSourceBranch.GetElement(), 
-                                latestSolutionInDestinationBranch.GetElement(),
+                                commonAncestrorElement,
+                                elementInSourceBranch,
+                                elementInDestinationBranch,
                                 out differenceInSourceBranch,
                                 out differenceInDestinationBranch);
 
@@ -78,19 +82,19 @@ namespace CWDev.SLNTools
                                 resolverForm.ShowDialog();
                                 return resolverForm.Result;
                             },
-                            delegate(ConflictContext context, string latestValueInSourceBranch, string latestValueInDestinationBranch)
+                            delegate(ConflictContext context, string valueInSourceBranch, string valueInDestinationBranch)
                             {
                                 ValueConflictResolverForm resolverForm = new ValueConflictResolverForm(
                                             context,
-                                            latestValueInSourceBranch,
-                                            latestValueInDestinationBranch);
+                                            valueInSourceBranch,
+                                            valueInDestinationBranch);
                                 resolverForm.ShowDialog();
                                 return resolverForm.Result;
                             }))
                 {
                     if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
-                        SolutionFile mergedSolution = new SolutionFile(commonAncestrorSolution, form.Result);
+                        SolutionFile mergedSolution = new SolutionFile((NodeElement)commonAncestrorElement.Apply(form.Result));
                         mergedSolution.SaveAs(mergedSolutionName);
                     }
                 }

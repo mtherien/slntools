@@ -20,6 +20,8 @@
 
 #endregion
 
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace CWDev.SLNTools.Core.Merge
@@ -28,7 +30,22 @@ namespace CWDev.SLNTools.Core.Merge
     {
         public ElementHashList()
         {
+        }
 
+        public ElementHashList(IEnumerable<Element> original)
+        {
+            foreach (Element element in original)
+            {
+                this.Add(element);
+            }
+        }
+
+        public void Update(Element newElement)
+        {
+            Element oldElement = this[newElement.Identifier];
+            if (oldElement == null)
+                throw new Exception("TODO cant find item");
+            SetItem(IndexOf(oldElement), newElement);
         }
 
         protected override ElementIdentifier GetKeyForItem(Element item)
