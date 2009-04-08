@@ -82,27 +82,6 @@ namespace CWDev.SLNTools.Core
             }
         }
 
-        public Project(SolutionFile container, string projectGuid, IEnumerable<Difference> differences)
-        {
-            m_container = container;
-            m_projectGuid = projectGuid;
-            m_projectTypeGuid = "<undefined>";
-            m_projectName = "<undefined>";
-            m_relativePath = "<undefined>";
-            m_parentFolderGuid = null;
-            m_projectSections = new List<ProjectSection>();
-            m_versionControlLines = new PropertyLineList();
-            m_projectConfigurationPlatformsLines = new PropertyLineList();
-
-            ApplyDifferences(differences);
-        }
-
-        public Project(SolutionFile container, Project original, IEnumerable<Difference> differences)
-            : this(container, original)
-        {
-            ApplyDifferences(differences);
-        }
-
         private SolutionFile m_container;
         private string m_projectGuid;
         private string m_projectTypeGuid;
@@ -359,6 +338,73 @@ namespace CWDev.SLNTools.Core
         }
 
 
+        public Project(string projectGuid, NodeElement element)
+        {
+            m_container = null;
+            m_projectGuid = projectGuid;
+            m_projectTypeGuid = null;
+            m_projectName = null;
+            m_relativePath = null;
+            m_parentFolderGuid = null;
+            m_projectSections = new List<ProjectSection>();
+            m_versionControlLines = new PropertyLineList();
+            m_projectConfigurationPlatformsLines = new PropertyLineList();
+
+            foreach (Element child in element.Childs)
+            {
+                ElementIdentifier identifier = child.Identifier;
+                if (identifier.Name == "ProjectTypeGuid")
+                {
+                    m_projectTypeGuid = ((ValueElement)child).Value;
+                }
+                else if (identifier.Name == "ProjectName")
+                {
+                    m_projectName = ((ValueElement)child).Value;
+                }
+                else if (identifier.Name == "RelativePath")
+                {
+                    m_relativePath = ((ValueElement)child).Value;
+                }
+                else if (identifier.Name == "ParentFolder")
+                {
+                    m_parentFolderGuid = ((ValueElement)child).Value.Split('|')[1];
+                }
+                else if (identifier.Name.StartsWith("S_"))
+                {
+                    string sectionName = identifier.Name.Substring(2);
+                    m_projectSections.Add(
+                                new ProjectSection(
+                                    sectionName,
+                                    (NodeElement)child));
+                }
+                else if (identifier.Name.StartsWith("VCL_"))
+                {
+                    string name = identifier.Name.Substring(4);
+                    string value = ((ValueElement)child).Value;
+                    m_versionControlLines.Add(new PropertyLine(name, value));
+                }
+                else if (identifier.Name.StartsWith("PCPL_"))
+                {
+                    string name = identifier.Name.Substring(5);
+                    string value = ((ValueElement)child).Value;
+                    m_projectConfigurationPlatformsLines.Add(new PropertyLine(name, value));
+                }
+                else
+                {
+                    throw new Exception(string.Format("Invalid identifier '{0}'.", identifier.Name));
+                }
+            }
+
+            if (m_projectTypeGuid == null)
+                throw new Exception("TODO element doesn't containt ProjectTypeGuid");
+
+            if (m_projectName == null)
+                throw new Exception("TODO element doesn't containt ProjectName");
+
+            if (m_relativePath == null)
+                throw new Exception("TODO element doesn't containt RelativePath");
+        }
+
         public NodeElement GetElement(ElementIdentifier identifier)
         {
             ElementHashList elements = new ElementHashList();
@@ -403,103 +449,6 @@ namespace CWDev.SLNTools.Core
             return new NodeElement(
                             identifier,
                             elements);
-        }
-
-        private void ApplyDifferences(IEnumerable<Difference> differences)
-        {
-            foreach (Difference difference in differences)
-            {
-                ElementIdentifier identifier = difference.Identifier;
-                if (identifier.Name == "ProjectTypeGuid")
-                {
-                    if (difference.OperationOnParent == OperationOnParent.Removed)
-                        throw new Exception("Cannot remove the ProjectTypeGuid attribute of a project.");
-
-                    m_projectTypeGuid = ((ValueDifference)difference).NewValue;
-                }
-                else if (identifier.Name == "ProjectName")
-                {
-                    if (difference.OperationOnParent == OperationOnParent.Removed)
-                        throw new Exception("Cannot remove the ProjectName attribute of a project.");
-
-                    m_projectName = ((ValueDifference)difference).NewValue;
-                }
-                else if (identifier.Name == "RelativePath")
-                {
-                    if (difference.OperationOnParent == OperationOnParent.Removed)
-                        throw new Exception("Cannot remove the RelativePath attribute of a project.");
-
-                    m_relativePath = ((ValueDifference)difference).NewValue;
-                }
-                else if (identifier.Name == "ParentFolder")
-                {
-                    switch (difference.OperationOnParent)
-                    {
-                        case OperationOnParent.Added:
-                        case OperationOnParent.Modified:
-                            m_parentFolderGuid = ((ValueDifference)difference).NewValue.Split('|')[1];
-                            break;
-                        case OperationOnParent.Removed:
-                            m_parentFolderGuid = null;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else if (identifier.Name.StartsWith("S_"))
-                {
-                    string sectionName = identifier.Name.Substring(2);
-                    ReadOnlyCollection<Difference> subdifferences = ((NodeDifference)difference).Subdifferences;
-                    switch (difference.OperationOnParent)
-                    {
-                        case OperationOnParent.Added:
-                            m_projectSections.Add(
-                                        new ProjectSection(
-                                            sectionName,
-                                            subdifferences));
-                            break;
-                        case OperationOnParent.Modified:
-                            ProjectSection oldSection = FindProjectSection(sectionName);
-                            m_projectSections.Remove(oldSection);
-                            m_projectSections.Add(
-                                        new ProjectSection(
-                                            oldSection,
-                                            subdifferences));
-                            break;
-                        case OperationOnParent.Removed:
-                            m_projectSections.Remove(FindProjectSection(sectionName));
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException("difference.OperationOnParent", difference.OperationOnParent.ToString(), "Invalid value");
-                    }
-                }
-                else if (identifier.Name.StartsWith("VCL_"))
-                {
-                    string name = identifier.Name.Substring(4);
-                    string value = ((ValueDifference)difference).NewValue;
-                    m_versionControlLines.ModifyLine(name, value);
-                }
-                else if (identifier.Name.StartsWith("PCPL_"))
-                {
-                    string name = identifier.Name.Substring(5);
-                    string value = ((ValueDifference)difference).NewValue;
-                    m_projectConfigurationPlatformsLines.ModifyLine(name, value);
-                }
-                else
-                {
-                    throw new Exception(string.Format("Invalid identifier '{0}'.", identifier.Name));
-                }
-            }
-        }
-
-        private ProjectSection FindProjectSection(string sectionName)
-        {
-            foreach (ProjectSection section in m_projectSections)
-            {
-                if (section.Name == sectionName)
-                    return section;
-            }
-            return null;
         }
     }
 }

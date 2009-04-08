@@ -38,13 +38,8 @@ namespace CWDev.SLNTools.Core
         {
         }
 
-        public GlobalSection(GlobalSection original, IEnumerable<Difference> differences)
-            : base(original, differences)
-        {
-        }
-
-        public GlobalSection(string name, IEnumerable<Difference> differences)
-            : base(name, differences)
+        public GlobalSection(string name, NodeElement element)
+            : base(name, element)
         {
         }
     }

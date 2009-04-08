@@ -36,8 +36,8 @@ namespace CWDev.SLNTools.UIKit
     {
         public ValueConflictResolverForm(
                     ConflictContext context, 
-                    string latestValueInSourceBranch, 
-                    string latestValueInDestinationBranch)
+                    string valueInSourceBranch, 
+                    string valueInDestinationBranch)
         {
             InitializeComponent();
             FormPosition.LoadFromRegistry(this);
@@ -45,8 +45,8 @@ namespace CWDev.SLNTools.UIKit
             m_result = null;
 
             m_conflictcontextcontrol.Data = context;
-            m_textboxValueFromSourceBranch.Text = latestValueInSourceBranch;
-            m_textboxValueFromDestinationBranch.Text = latestValueInDestinationBranch;
+            m_textboxValueFromSourceBranch.Text = valueInSourceBranch;
+            m_textboxValueFromDestinationBranch.Text = valueInDestinationBranch;
             m_buttonAccept.Enabled = false;
         }
 

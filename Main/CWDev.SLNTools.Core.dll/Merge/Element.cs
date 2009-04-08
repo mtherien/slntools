@@ -38,7 +38,7 @@ namespace CWDev.SLNTools.Core.Merge
 
         public ElementIdentifier Identifier { get { return m_identifier; } }
 
-        public abstract Element CreateEmptyClone();
         public abstract Difference CompareTo(Element oldElement);
+        public abstract Element Apply(Difference difference);
     }
 }

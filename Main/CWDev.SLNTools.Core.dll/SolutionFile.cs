@@ -269,28 +269,26 @@ namespace CWDev.SLNTools.Core
                                     string.Format("GlobalSection \"{0}\"", globalSection.Name))));
             }
             return new NodeElement(
-                        new ElementIdentifier(""), 
+                        new ElementIdentifier("SolutionFile"), 
                         elements);
         }
 
-        public SolutionFile(SolutionFile original, IEnumerable<Difference> differences)
-            : this(original)
+        public SolutionFile(NodeElement element) 
+            : base()
         {
-            ApplyDifferences(differences);
-        }
+            m_solutionFullPath = null;
+            m_headers = new List<string>();
+            m_projectsInOrder = new List<Project>();
+            m_projectsByGuid = new Dictionary<string, Project>(StringComparer.OrdinalIgnoreCase);
+            m_globalSections = new List<GlobalSection>();
 
-        private void ApplyDifferences(IEnumerable<Difference> differences)
-        {
-            foreach (Difference difference in differences)
+            foreach (Element child in element.Childs)
             {
-                ElementIdentifier identifier = difference.Identifier;
+                ElementIdentifier identifier = child.Identifier;
                 if (identifier.Name.StartsWith("Header"))
                 {
-                    if (difference.OperationOnParent != OperationOnParent.Modified)
-                        throw new Exception(string.Format("The header of a solution cannot be {0}.", difference.OperationOnParent.ToString().ToLower()));
-
                     RemoveAllHeaderLine();
-                    foreach (string line in ((ValueDifference)difference).NewValue.Split('|'))
+                    foreach (string line in ((ValueElement) child).Value.Split('|'))
                     {
                         AddHeaderLine(line);
                     }
@@ -298,56 +296,12 @@ namespace CWDev.SLNTools.Core
                 else if (identifier.Name.StartsWith("P_"))
                 {
                     string projectGuid = identifier.Name.Substring(2);
-                    ReadOnlyCollection<Difference> subdifferences = ((NodeDifference)difference).Subdifferences;
-                    switch (difference.OperationOnParent)
-                    {
-                        case OperationOnParent.Added:
-                            AddOrUpdateProject(
-                                        new Project(
-                                            this,
-                                            projectGuid,
-                                            subdifferences));
-                            break;
-                        case OperationOnParent.Modified:
-                            Project oldProject = this.FindProjectByGuid(projectGuid);
-                            RemoveProject(oldProject);
-                            AddOrUpdateProject(
-                                        new Project(
-                                            this,
-                                            oldProject,
-                                            subdifferences));
-                            break;
-                        case OperationOnParent.Removed:
-                            RemoveProjectByGuid(projectGuid);
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException("difference.OperationOnParent", difference.OperationOnParent.ToString(), "Invalid value");
-                    }
+                    AddOrUpdateProject(new Project(projectGuid, (NodeElement)child));
                 }
                 else if (identifier.Name.StartsWith("GS_"))
                 {
                     string sectionName = identifier.Name.Substring(3);
-                    ReadOnlyCollection<Difference> subdifferences = ((NodeDifference)difference).Subdifferences;
-                    switch (difference.OperationOnParent)
-                    {
-                        case OperationOnParent.Added:
-                            AddOrUpdateGlobalSection(
-                                        new GlobalSection(
-                                            sectionName,
-                                            subdifferences));
-                            break;
-                        case OperationOnParent.Modified:
-                            AddOrUpdateGlobalSection(
-                                        new GlobalSection(
-                                            this.FindGlobalSectionByName(sectionName),
-                                            subdifferences));
-                            break;
-                        case OperationOnParent.Removed:
-                            RemoveGlobalSectionByName(sectionName);
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException("difference.OperationOnParent", difference.OperationOnParent.ToString(), "Invalid value");
-                    }
+                    AddOrUpdateGlobalSection(new GlobalSection(sectionName, (NodeElement)child));
                 }
                 else
                 {

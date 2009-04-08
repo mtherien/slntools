@@ -69,6 +69,7 @@ namespace CWDev.SLNTools.Core.Merge
                     m_acceptedSubdifferences.Add(resolvedDifference);
                 }
             }
+
             if (m_subconflicts.Count == 0)
             {
                 return new NodeDifference(

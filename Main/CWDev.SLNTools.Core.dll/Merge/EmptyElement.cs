@@ -21,24 +21,17 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 
 namespace CWDev.SLNTools.Core.Merge
 {
-    public class ValueElement : Element
+    public class EmptyElement
+        : Element
     {
-        public ValueElement(
-                    ElementIdentifier identifier, 
-                    string value)
+        public EmptyElement(ElementIdentifier identifier)
             : base(identifier)
         {
-            if (value == null)
-                throw new ArgumentNullException("value");
-            m_value = value;
         }
-
-        private string m_value;
-
-        public string Value { get { return m_value; } }
 
         public override Difference CompareTo(Element oldElement)
         {
@@ -47,33 +40,24 @@ namespace CWDev.SLNTools.Core.Merge
             if (!oldElement.Identifier.Equals(this.Identifier))
                 throw new Exception("Cannot compare elements that does not share the same identifier.");
 
-            if (oldElement is EmptyElement)
+            if (oldElement is ValueElement)
             {
                 return new ValueDifference(
-                            this.Identifier,
-                            OperationOnParent.Added,
-                            null,
-                            m_value);
+                            this.Identifier, 
+                            OperationOnParent.Removed, 
+                            ((ValueElement)oldElement).Value, 
+                            null);
             }
-            else if (oldElement is ValueElement)
+            else if (oldElement is NodeElement)
             {
-                string oldValue = ((ValueElement)oldElement).Value;
-                if (oldValue != m_value)
-                {
-                    return new ValueDifference(
-                                this.Identifier,
-                                OperationOnParent.Modified,
-                                oldValue,
-                                m_value);
-                }
-                else
-                {
-                    return null;
-                }
+                return new NodeDifference(
+                            this.Identifier,
+                            OperationOnParent.Removed,
+                            new List<Difference>());
             }
             else
             {
-                throw new Exception("TODO cannot compare value with node");
+                throw new Exception("TODO Invalid");
             }
         }
 
@@ -86,19 +70,21 @@ namespace CWDev.SLNTools.Core.Merge
 
             if (difference is ValueDifference)
             {
+                if (difference.OperationOnParent == OperationOnParent.Removed)
+                    throw new Exception("Cannot apply a 'remove' difference on a ValueElement.");
                 return new ValueElement(
-                            this.Identifier, 
+                            this.Identifier,
                             ((ValueDifference)difference).NewValue);
+            }
+            else if (difference is NodeDifference)
+            {
+                NodeElement emptyNodeElement = new NodeElement(this.Identifier, new ElementHashList());
+                return emptyNodeElement.Apply(difference);
             }
             else
             {
-                throw new ArgumentException("TODO cannot apply difference.GetType() on a ValueElement");
+                throw new Exception("TODO Invalid");
             }
-        }
-
-        public override string ToString()
-        {
-            return string.Format("{0} = {1}", this.Identifier, m_value);
         }
     }
 }

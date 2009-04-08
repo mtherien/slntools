@@ -50,6 +50,14 @@ namespace CWDev.SLNTools.UIKit
             m_conflict = conflict as NodeConflict;
             m_typeDifferenceConflictResolver = typeDifferenceConflictResolver;
             m_valueConflictResolver = valueConflictResolver;
+            if (m_conflict.Subconflicts.Count == 0)
+            {
+                m_result = (NodeDifference)m_conflict.Resolve(m_typeDifferenceConflictResolver, m_valueConflictResolver);
+            }
+            else
+            {
+                m_result = null;
+            }
 
             UpdateUI();
         }
@@ -57,6 +65,7 @@ namespace CWDev.SLNTools.UIKit
         private NodeConflict m_conflict;
         private TypeDifferenceConflictResolver m_typeDifferenceConflictResolver;
         private ValueConflictResolver m_valueConflictResolver;
+        private NodeDifference m_result;
 
         private void MergeSolutionsForm_Load(object sender, EventArgs e)
         {
@@ -69,31 +78,25 @@ namespace CWDev.SLNTools.UIKit
             m_splitContainerDifferencesFound.Panel2MinSize = 250;
         }
 
-        public IEnumerable<Difference> Result
+        public NodeDifference Result
         {
             get
             {
-                if (m_conflict.Subconflicts.Count == 0)
-                {
-                    return m_conflict.AcceptedSubdifferences;
-                }
-                else
-                {
-                    return null;
-                }
+                return m_result;
             }
         }
 
         private void UpdateUI()
         {
             m_conflictsControl.Data = m_conflict.Subconflicts;
+            m_buttonResolveAll.Enabled = (m_conflict.Subconflicts.Count != 0);
             m_acceptedDifferencesControl.Data = m_conflict.AcceptedSubdifferences;
             m_buttonSave.Enabled = (m_conflict.Subconflicts.Count == 0);
         }
 
         private void m_buttonResolveAll_Click(object sender, EventArgs e)
         {
-            m_conflict.Resolve(m_typeDifferenceConflictResolver, m_valueConflictResolver);
+            m_result = (NodeDifference) m_conflict.Resolve(m_typeDifferenceConflictResolver, m_valueConflictResolver);
             UpdateUI();
         }
 

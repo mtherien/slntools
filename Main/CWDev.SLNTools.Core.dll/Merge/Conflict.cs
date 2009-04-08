@@ -26,8 +26,8 @@ namespace CWDev.SLNTools.Core.Merge
 {
     public delegate string ValueConflictResolver(
                 ConflictContext context,
-                string latestValueInSourceBranch,
-                string latestValueInDestinationBranch);
+                string valueInSourceBranch,
+                string valueInDestinationBranch);
     public delegate Difference TypeDifferenceConflictResolver(
                 ConflictContext context,
                 Difference differenceInSourceBranch,
@@ -37,21 +37,21 @@ namespace CWDev.SLNTools.Core.Merge
     {
         public static NodeConflict Merge(
                     NodeElement commonAncestrorElement,
-                    NodeElement latestElementInSourceBranch,
-                    NodeElement latestElementInDestinationBranch,
+                    NodeElement elementInSourceBranch,
+                    NodeElement elementInDestinationBranch,
                     out NodeDifference differenceInSourceBranch,
                     out NodeDifference differenceInDestinationBranch)
         {
-            differenceInSourceBranch = (NodeDifference) latestElementInSourceBranch.CompareTo(commonAncestrorElement);
+            differenceInSourceBranch = (NodeDifference) elementInSourceBranch.CompareTo(commonAncestrorElement);
             if (differenceInSourceBranch == null)
             {
-                differenceInSourceBranch = new NodeDifference(new ElementIdentifier("Solution File"), OperationOnParent.Modified, new List<Difference>());
+                differenceInSourceBranch = new NodeDifference(new ElementIdentifier("SolutionFile"), OperationOnParent.Modified, new List<Difference>());
             }
 
-            differenceInDestinationBranch = (NodeDifference) latestElementInDestinationBranch.CompareTo(commonAncestrorElement);
+            differenceInDestinationBranch = (NodeDifference) elementInDestinationBranch.CompareTo(commonAncestrorElement);
             if (differenceInDestinationBranch == null)
             {
-                differenceInDestinationBranch = new NodeDifference(new ElementIdentifier("Solution File"), OperationOnParent.Modified, new List<Difference>());
+                differenceInDestinationBranch = new NodeDifference(new ElementIdentifier("SolutionFile"), OperationOnParent.Modified, new List<Difference>());
             }
 
             return (NodeConflict)differenceInSourceBranch.CompareTo(differenceInDestinationBranch);

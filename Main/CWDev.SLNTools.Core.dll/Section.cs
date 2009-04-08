@@ -46,21 +46,6 @@ namespace CWDev.SLNTools.Core
             m_propertyLines = new PropertyLineList(propertyLines);
         }
 
-        public Section(Section original, IEnumerable<Difference> differences)
-            : this(original)
-        {
-            ApplyDifferences(differences);
-        }
-
-        public Section(string name, IEnumerable<Difference> differences)
-        {
-            m_name = name;
-            m_sectionType = "<undefined>";
-            m_step = "<undefined>";
-            m_propertyLines = new PropertyLineList();
-            ApplyDifferences(differences);
-        }
-
         private string m_name;
         private string m_sectionType;
         private string m_step;
@@ -95,36 +80,40 @@ namespace CWDev.SLNTools.Core
                             elements);
         }
 
-        private void ApplyDifferences(IEnumerable<Difference> differences)
+        public Section(string name, NodeElement element)
         {
-            foreach (ValueDifference difference in differences)
+            m_name = name;
+            m_sectionType = null;
+            m_step = null;
+            m_propertyLines = new PropertyLineList();
+
+            foreach (Element child in element.Childs)
             {
-                ElementIdentifier identifier = difference.Identifier;
+                ElementIdentifier identifier = child.Identifier;
                 if (identifier.Name == "SectionType")
                 {
-                    if (difference.OperationOnParent == OperationOnParent.Removed)
-                        throw new Exception("Cannot remove the SectionType attribute of a section.");
-
-                    m_sectionType = difference.NewValue;
-                } 
+                    m_sectionType = ((ValueElement)child).Value;
+                }
                 else if (identifier.Name == "Step")
                 {
-                    if (difference.OperationOnParent == OperationOnParent.Removed)
-                        throw new Exception("Cannot remove the Step attribute of a section.");
-
-                    m_step = difference.NewValue;
+                    m_step = ((ValueElement)child).Value;
                 }
                 else if (identifier.Name.StartsWith("L_"))
                 {
-                    string name = identifier.Name.Substring(2);
-                    string value = difference.NewValue;
-                    m_propertyLines.ModifyLine(name, value);
+                    string lineName = identifier.Name.Substring(2);
+                    string lineValue = ((ValueElement)child).Value;
+                    m_propertyLines.Add(new PropertyLine(lineName, lineValue));
                 }
                 else
                 {
                     throw new Exception(string.Format("Invalid identifier '{0}'.", identifier.Name));
                 }
             }
+
+            if (m_sectionType == null)
+                throw new Exception("TODO element doesn't containt SectionType");
+            if (m_step == null)
+                throw new Exception("TODO element doesn't containt Step");
         }
     }
 }

@@ -89,7 +89,7 @@ namespace CWDev.SLNTools.Core.Filter
                         {
                             if (m_acceptDifferencesHandler(difference.Subdifferences))
                             {
-                                SolutionFile newOriginalSolution = new SolutionFile(m_filterFile.SourceSolution, difference.Subdifferences);
+                                SolutionFile newOriginalSolution = new SolutionFile((NodeElement)m_filterFile.SourceSolution.GetElement().Apply(difference));
                                 newOriginalSolution.Save();
                                 m_filteredSolution = newFilteredSolution;
                             }
