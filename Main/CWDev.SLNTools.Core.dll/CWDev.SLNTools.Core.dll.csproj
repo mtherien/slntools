@@ -62,7 +62,7 @@
     <Compile Include="Filter\FilteredSolutionWatcher.cs" />
     <Compile Include="Merge\ConflictContext.cs" />
     <Compile Include="Merge\EmptyElement.cs" />
-    <Compile Include="PropertyLineList.cs" />
+    <Compile Include="PropertyLineCollection.cs" />
     <Compile Include="Merge\Conflict.cs" />
     <Compile Include="Merge\OperationOnParent.cs" />
     <Compile Include="Merge\NodeDifference.cs" />
@@ -82,6 +82,7 @@
     <Compile Include="GlobalSection.cs" />
     <Compile Include="KnownProjectTypeGuid.cs" />
     <Compile Include="Filter\FilterFile.cs" />
+    <Compile Include="SolutionFileException.cs" />
     <Compile Include="SolutionFileWriter.cs" />
     <Compile Include="Section.cs" />
     <Compile Include="Project.cs" />
