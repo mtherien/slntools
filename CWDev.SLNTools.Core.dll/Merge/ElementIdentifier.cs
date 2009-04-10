@@ -20,6 +20,8 @@
 
 #endregion
 
+using System;
+
 namespace CWDev.SLNTools.Core.Merge
 {
     public class ElementIdentifier
@@ -52,12 +54,12 @@ namespace CWDev.SLNTools.Core.Merge
             if (objAsElementIdentifier == null)
                 return false;
 
-            return this.Name.Equals(objAsElementIdentifier.Name);
+            return (string.Compare(this.Name, objAsElementIdentifier.Name, StringComparison.InvariantCultureIgnoreCase) == 0);
         }
 
         public override int GetHashCode()
         {
-            return this.Name.GetHashCode();
+            return StringComparer.InvariantCultureIgnoreCase.GetHashCode(this.Name);
         }
 
         public override string ToString()

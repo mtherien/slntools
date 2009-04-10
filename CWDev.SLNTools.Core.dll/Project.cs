@@ -42,8 +42,8 @@ namespace CWDev.SLNTools.Core
             m_relativePath = original.RelativePath;
             m_parentFolderGuid = original.ParentFolderGuid;
             m_projectSections = new List<ProjectSection>(original.ProjectSections);
-            m_versionControlLines = new PropertyLineCollection(original.VersionControlLines);
-            m_projectConfigurationPlatformsLines = new PropertyLineCollection(original.ProjectConfigurationPlatformsLines);
+            m_versionControlLines = new PropertyLineHashList(original.VersionControlLines);
+            m_projectConfigurationPlatformsLines = new PropertyLineHashList(original.ProjectConfigurationPlatformsLines);
         }
 
         public Project(
@@ -70,12 +70,12 @@ namespace CWDev.SLNTools.Core
                     m_projectSections.Add(new ProjectSection(projectSection));
                 }
             }
-            m_versionControlLines = new PropertyLineCollection();
+            m_versionControlLines = new PropertyLineHashList();
             if (versionControlLines != null)
             {
                 m_versionControlLines.AddRange(versionControlLines);
             }
-            m_projectConfigurationPlatformsLines = new PropertyLineCollection();
+            m_projectConfigurationPlatformsLines = new PropertyLineHashList();
             if (projectConfigurationPlatformsLines != null)
             {
                 m_projectConfigurationPlatformsLines.AddRange(projectConfigurationPlatformsLines);
@@ -89,8 +89,8 @@ namespace CWDev.SLNTools.Core
         private string m_relativePath;
         private string m_parentFolderGuid;
         private List<ProjectSection> m_projectSections;
-        private PropertyLineCollection m_versionControlLines;
-        private PropertyLineCollection m_projectConfigurationPlatformsLines;
+        private PropertyLineHashList m_versionControlLines;
+        private PropertyLineHashList m_projectConfigurationPlatformsLines;
 
         public string ProjectGuid { get { return m_projectGuid; } }
         public string ProjectTypeGuid { get { return m_projectTypeGuid; } }
@@ -103,8 +103,8 @@ namespace CWDev.SLNTools.Core
             set { m_parentFolderGuid = value; }
         }
         public ReadOnlyCollection<ProjectSection> ProjectSections { get { return m_projectSections.AsReadOnly(); } }
-        public PropertyLineCollection VersionControlLines { get { return m_versionControlLines; } }
-        public PropertyLineCollection ProjectConfigurationPlatformsLines { get { return m_projectConfigurationPlatformsLines; } }
+        public PropertyLineHashList VersionControlLines { get { return m_versionControlLines; } }
+        public PropertyLineHashList ProjectConfigurationPlatformsLines { get { return m_projectConfigurationPlatformsLines; } }
 
         private Project FindProjectInContainer(string projectGuid, string errorMessageFormat, params object[] errorMessageParams)
         {
@@ -347,8 +347,8 @@ namespace CWDev.SLNTools.Core
             m_relativePath = null;
             m_parentFolderGuid = null;
             m_projectSections = new List<ProjectSection>();
-            m_versionControlLines = new PropertyLineCollection();
-            m_projectConfigurationPlatformsLines = new PropertyLineCollection();
+            m_versionControlLines = new PropertyLineHashList();
+            m_projectConfigurationPlatformsLines = new PropertyLineHashList();
 
             foreach (Element child in element.Childs)
             {

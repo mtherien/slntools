@@ -28,56 +28,59 @@ namespace CWDev.SLNTools.Core
 {
     using Merge;
 
-    public class PropertyLineCollection 
-        : KeyedCollection<string, PropertyLine>        
+    public class ProjectHashList 
+        : KeyedCollection<string, Project>        
     {
-        public PropertyLineCollection()
+        public ProjectHashList()
+            : base(StringComparer.InvariantCultureIgnoreCase)
         {
         }
 
-        public PropertyLineCollection(IEnumerable<PropertyLine> original)
+        public ProjectHashList(IEnumerable<Project> original)
+            : this()
         {
             AddRange(original);
         }
 
-        public ReadOnlyCollection<PropertyLine> AsReadOnly()
+        protected override string GetKeyForItem(Project item)
         {
-            return new List<PropertyLine>(this).AsReadOnly();
+            return item.ProjectGuid;
         }
 
-        public void AddRange(IEnumerable<PropertyLine> original)
+        public ReadOnlyCollection<Project> AsReadOnly()
         {
-            foreach (PropertyLine propertyLine in original)
+            return new List<Project>(this).AsReadOnly();
+        }
+
+        public void AddRange(IEnumerable<Project> original)
+        {
+            foreach (Project project in original)
             {
-                Add(propertyLine);
+                Add(project);
             }
         }
 
-        protected override string GetKeyForItem(PropertyLine item)
+        public void AddOrUpdate(Project item)
         {
-            return item.Name;
-        }
-
-        protected override void InsertItem(int index, PropertyLine item)
-        {
-            PropertyLine existingItem = (Contains(item.Name)) ? this[item.Name] : null;
-
-            if (existingItem == null)                
+            Project existingItem = (Contains(item.ProjectGuid)) ? this[item.ProjectGuid] : null;
+            if (existingItem == null)
             {
-                base.InsertItem(index, item);
-            }
-            else if (item.Value != existingItem.Value)
-            {
-                throw new SolutionFileException(
-                            string.Format("Trying to add a new property line '{0}={1}' when there is already a line with the same key and the value '{2}' in the collection.",
-                                item.Name,
-                                item.Value,
-                                existingItem.Value));
+                Add(item);
             }
             else
             {
-                // Nothing to do, the item provided is a duplicate of a line already present in the collection.
+                // If the item already exist in the list, we put the new version in the same spot.
+                SetItem(IndexOf(existingItem), item);
             }
+        }
+
+        public void Sort(Comparison<Project> comparer)
+        {
+            List<Project> tempList = new List<Project>(this);
+            tempList.Sort(comparer);
+            
+            Clear();
+            AddRange(tempList);
         }
     }
 }
