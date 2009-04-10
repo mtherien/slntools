@@ -23,6 +23,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace CWDev.SLNTools.Core
 {
@@ -35,7 +37,7 @@ namespace CWDev.SLNTools.Core
             m_name = original.Name;
             m_sectionType = original.SectionType;
             m_step = original.Step;
-            m_propertyLines = new PropertyLineList(original.PropertyLines);
+            m_propertyLines = new PropertyLineCollection(original.PropertyLines);
         }
 
         protected Section(string name, string sectionType, string step, IEnumerable<PropertyLine> propertyLines)
@@ -43,13 +45,13 @@ namespace CWDev.SLNTools.Core
             m_name = name;
             m_sectionType = sectionType;
             m_step = step;
-            m_propertyLines = new PropertyLineList(propertyLines);
+            m_propertyLines = new PropertyLineCollection(propertyLines);
         }
 
         private string m_name;
         private string m_sectionType;
         private string m_step;
-        private PropertyLineList m_propertyLines;
+        private PropertyLineCollection m_propertyLines;
 
         public string Name { get { return m_name; } }
         public string SectionType { get { return m_sectionType; } }
@@ -68,13 +70,13 @@ namespace CWDev.SLNTools.Core
             elements.Add(new ValueElement(new ElementIdentifier("Step"), this.Step));
             foreach (PropertyLine propertyLine in this.PropertyLines)
             {
-                elements.Add(
-                            new ValueElement(
+                    elements.Add(
+                                new ValueElement(
                                 new ElementIdentifier(
                                     "L_" + propertyLine.Name,
                                     @"Line\" + propertyLine.Name), 
-                                propertyLine.Value));
-            }
+                                    propertyLine.Value));
+                }
             return new NodeElement(
                             identifier,
                             elements);
@@ -85,7 +87,7 @@ namespace CWDev.SLNTools.Core
             m_name = name;
             m_sectionType = null;
             m_step = null;
-            m_propertyLines = new PropertyLineList();
+            m_propertyLines = new PropertyLineCollection();
 
             foreach (Element child in element.Childs)
             {
