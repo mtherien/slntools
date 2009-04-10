@@ -63,103 +63,118 @@ namespace CWDev.SLNTools.Core
             return string.Format("{0} '{1}'", this.SectionType, this.Name);
         }
 
-        public NodeElement GetElement(ElementIdentifier identifier)
+        #region public: Methods ToElement / FromElementToConstructorArgument
+
+        private const string TagSectionType = "SectionType";
+        private const string TagStep = "Step";
+        private const string TagPropertyLines = "L_";
+
+        public NodeElement ToElement(ElementIdentifier identifier)
         {
-            ElementHashList elements = new ElementHashList();
-            elements.Add(new ValueElement(new ElementIdentifier("SectionType"), this.SectionType));
-            elements.Add(new ValueElement(new ElementIdentifier("Step"), this.Step));
+            ElementHashList childs = new ElementHashList();
+            childs.Add(new ValueElement(new ElementIdentifier(TagSectionType), this.SectionType));
+            childs.Add(new ValueElement(new ElementIdentifier(TagStep), this.Step));
             foreach (PropertyLine propertyLine in this.PropertyLines)
             {
                 ElementIdentifier lineIdentifier = new ElementIdentifier(
-                            "L_" + propertyLine.Name,
+                            TagPropertyLines + propertyLine.Name,
                             @"Line\" + propertyLine.Name);
                 if ((m_name == "WebsiteProperties") && (propertyLine.Name == "ProjectReferences"))
                 {
-                    ElementHashList references = new ElementHashList();
-                    string pattern = "^\"((?<ReferenceGuid>[^|]+)\\|(?<ReferenceName>[^;]*)(;)?)*\"$";
-                    Match match = Regex.Match(propertyLine.Value, pattern);
-                    if (!match.Success)
-                    {
-                        throw new SolutionFileException(string.Format("Invalid format for a ProjectReferences line value.\nFound: {0}\nExpected: A line respecting the pattern '{1}'.",
-                                        propertyLine.Value,
-                                        pattern));
-                    }
-                    
-                    CaptureCollection capturesGuid = match.Groups["ReferenceGuid"].Captures;
-                    CaptureCollection capturesName = match.Groups["ReferenceName"].Captures;
-                    for (int i = 0; i < capturesGuid.Count; i++)
-                    {
-                        references.Add(
-                                    new ValueElement(
-                                        new ElementIdentifier(capturesGuid[i].Value),
-                                        capturesName[i].Value));
-                    }
-                    elements.Add(
-                                new NodeElement(
-                                    lineIdentifier,
-                                    references));
+                    childs.Add(new NodeElement(lineIdentifier, ConvertProjectReferencesValueToHashList(propertyLine.Value)));
                 }
                 else
                 {
-                    elements.Add(
-                                new ValueElement(
-                                    lineIdentifier,
-                                    propertyLine.Value));
+                    childs.Add(new ValueElement(lineIdentifier, propertyLine.Value));
                 }
             }
-            return new NodeElement(
-                            identifier,
-                            elements);
+            return new NodeElement(identifier, childs);
         }
 
-        public Section(string name, NodeElement element)
+        protected static void FromElementToConstructorArgument(
+                    string name, 
+                    NodeElement element,
+                    out string sectionType,
+                    out string step,
+                    out PropertyLineHashList propertyLines)
         {
-            m_name = name;
-            m_sectionType = null;
-            m_step = null;
-            m_propertyLines = new PropertyLineHashList();
+            sectionType = null;
+            step = null;
+            propertyLines = new PropertyLineHashList();
 
             foreach (Element child in element.Childs)
             {
                 ElementIdentifier identifier = child.Identifier;
-                if (identifier.Name == "SectionType")
+                if (identifier.Name == TagSectionType)
                 {
-                    m_sectionType = ((ValueElement)child).Value;
+                    sectionType = ((ValueElement)child).Value;
                 }
-                else if (identifier.Name == "Step")
+                else if (identifier.Name == TagStep)
                 {
-                    m_step = ((ValueElement)child).Value;
+                    step = ((ValueElement)child).Value;
                 }
-                else if (identifier.Name.StartsWith("L_"))
+                else if (identifier.Name.StartsWith(TagPropertyLines))
                 {
-                    string lineName = identifier.Name.Substring(2);
-                    if ((m_name == "WebsiteProperties") && (lineName == "ProjectReferences"))
+                    string lineName = identifier.Name.Substring(TagPropertyLines.Length);
+                    string lineValue;
+                    if ((name == "WebsiteProperties") && (lineName == "ProjectReferences"))
                     {
-                        StringBuilder lineValue = new StringBuilder();
-                        lineValue.Append("\"");
-                        foreach (ValueElement reference in ((NodeElement)child).Childs)
-                        {
-                            lineValue.AppendFormat("{0}|{1};", reference.Identifier.Name, reference.Value);
-                        }
-                        lineValue.Append("\"");
-                        m_propertyLines.Add(new PropertyLine(lineName, lineValue.ToString()));
+                        lineValue = ConvertHashListToProjectReferencesValue(((NodeElement)child).Childs);
                     }
                     else
                     {
-                        string lineValue = ((ValueElement)child).Value;
-                        m_propertyLines.Add(new PropertyLine(lineName, lineValue));
+                        lineValue = ((ValueElement)child).Value;
                     }
+                    propertyLines.Add(new PropertyLine(lineName, lineValue));
                 }
                 else
                 {
-                    throw new Exception(string.Format("Invalid identifier '{0}'.", identifier.Name));
+                    throw new SolutionFileException(string.Format("Invalid identifier '{0}'.", identifier.Name));
                 }
             }
 
-            if (m_sectionType == null)
-                throw new Exception("TODO element doesn't containt SectionType");
-            if (m_step == null)
-                throw new Exception("TODO element doesn't containt Step");
+            if (sectionType == null)
+                throw new SolutionFileException(string.Format("Missing subelement '{0}' in a section element.", TagSectionType));
+            if (step == null)
+                throw new SolutionFileException(string.Format("Missing subelement '{0}' in a section element.", TagStep));
         }
+
+        private static ElementHashList ConvertProjectReferencesValueToHashList(string value)
+        {
+            ElementHashList references = new ElementHashList();
+            string pattern = "^\"((?<ReferenceGuid>[^|]+)\\|(?<ReferenceName>[^;]*)(;)?)*\"$";
+            Match match = Regex.Match(value, pattern);
+            if (!match.Success)
+            {
+                throw new SolutionFileException(string.Format("Invalid format for a ProjectReferences line value.\nFound: {0}\nExpected: A value respecting the pattern '{1}'.",
+                                value,
+                                pattern));
+            }
+
+            CaptureCollection capturesGuid = match.Groups["ReferenceGuid"].Captures;
+            CaptureCollection capturesName = match.Groups["ReferenceName"].Captures;
+            for (int i = 0; i < capturesGuid.Count; i++)
+            {
+                references.Add(
+                            new ValueElement(
+                                new ElementIdentifier(capturesGuid[i].Value),
+                                capturesName[i].Value));
+            }
+            return references;
+        }
+
+        private static string ConvertHashListToProjectReferencesValue(IEnumerable<Element> childs)
+        {
+            StringBuilder lineValue = new StringBuilder();
+            lineValue.Append("\"");
+            foreach (ValueElement reference in childs)
+            {
+                lineValue.AppendFormat("{0}|{1};", reference.Identifier.Name, reference.Value);
+            }
+            lineValue.Append("\"");
+            return lineValue.ToString();
+        }
+
+        #endregion
     }
 }

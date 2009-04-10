@@ -110,6 +110,7 @@ namespace CWDev.SLNTools
                         KnownProjectTypeGuid.SolutionFolder,
                         "-OriginalSolution-",
                         "-OriginalSolution-",
+                        null, 
                         new ProjectSection[]
                                 {
                                     new ProjectSection(

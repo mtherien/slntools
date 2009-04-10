@@ -125,12 +125,7 @@ namespace CWDev.SLNTools.Core.Filter
 
         public SolutionFile ApplyOn(SolutionFile original)
         {
-            SolutionFile filteredSolutionFile = new SolutionFile(
-                        this.DestinationSolutionFullPath, 
-                        original.Headers, 
-                        original.GlobalSections);
-
-            List<Project> includedProjects = new List<Project>();
+            ProjectHashList includedProjects = new ProjectHashList();
             foreach (string projectFullName in this.ProjectsToKeep)
             {
                 Project projectToKeep = original.FindProjectByFullName(projectFullName);
@@ -140,15 +135,15 @@ namespace CWDev.SLNTools.Core.Filter
                     AddRecursiveDependenciesToList(includedProjects, descendant);
                 }
             }
-            foreach (Project project in includedProjects)
-            {
-                filteredSolutionFile.AddOrUpdateProject(project);
-            }
 
-            return filteredSolutionFile;
+            return new SolutionFile(
+                        this.DestinationSolutionFullPath, 
+                        original.Headers,
+                        includedProjects,
+                        original.GlobalSections);
         }
 
-        private void AddRecursiveDependenciesToList(List<Project> includedProjects, Project project)
+        private void AddRecursiveDependenciesToList(ProjectHashList includedProjects, Project project)
         {
             if (includedProjects.Contains(project))
                 return;

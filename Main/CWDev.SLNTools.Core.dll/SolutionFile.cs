@@ -56,21 +56,24 @@ namespace CWDev.SLNTools.Core
             m_solutionFullPath = null;
             m_headers = new List<string>();
             m_projects = new ProjectHashList();
-            m_globalSections = new List<GlobalSection>();
+            m_globalSections = new SectionHashList<GlobalSection>();
         }
 
         public SolutionFile(SolutionFile original)
-                    : this(original.SolutionFullPath, original.Headers, original.GlobalSections)
+                    : this(original.SolutionFullPath, original.Headers, original.ProjectsInOrders, original.GlobalSections)
         {
-            m_projects = new ProjectHashList(original.ProjectsInOrders);
         }
 
-        public SolutionFile(string fullpath, ReadOnlyCollection<string> headers, IEnumerable<GlobalSection> globalSections)
+        public SolutionFile(string fullpath, IEnumerable<string> headers, IEnumerable<Project> projects, IEnumerable<GlobalSection> globalSections)
         {
             m_solutionFullPath = fullpath;
             m_headers = new List<string>(headers);
             m_projects = new ProjectHashList();
-            m_globalSections = new List<GlobalSection>();
+            foreach (Project project in projects)
+            {
+                AddOrUpdateProject(project);
+            }
+            m_globalSections = new SectionHashList<GlobalSection>();
             foreach (GlobalSection globalSection in globalSections)
             {
                 AddOrUpdateGlobalSection(globalSection);
@@ -80,7 +83,7 @@ namespace CWDev.SLNTools.Core
         private string m_solutionFullPath;
         private List<string> m_headers;
         private ProjectHashList m_projects;
-        private List<GlobalSection> m_globalSections;
+        private SectionHashList<GlobalSection> m_globalSections;
 
         public string SolutionFullPath
         { 
@@ -89,19 +92,20 @@ namespace CWDev.SLNTools.Core
         }
         public string SolutionPath { get { return Path.GetDirectoryName(m_solutionFullPath); } }
 
+        public ReadOnlyCollection<string> Headers { get { return m_headers.AsReadOnly(); } }
+
+        public void AddHeaderLine(string line)
+        {
+            m_headers.Add(line);
+        }
+
+        public void RemoveAllHeaderLine()
+        {
+            m_headers.Clear();
+        }
+
         public ReadOnlyCollection<Project> ProjectsInOrders { get { return m_projects.AsReadOnly(); } }
 
-        public Project AddOrUpdateProject(
-                    string projectGuid, 
-                    string projectTypeGuid, 
-                    string projectName, 
-                    string relativePath, 
-                    IEnumerable<ProjectSection> projectSections,
-                    IEnumerable<PropertyLine> versionControlLines,
-                    IEnumerable<PropertyLine> projectConfigurationPlatformsLines)
-        {
-            return AddOrUpdateProject(new Project(this, projectGuid, projectTypeGuid, projectName, relativePath, projectSections, versionControlLines, projectConfigurationPlatformsLines));
-        }
         public Project AddOrUpdateProject(Project newProject)
         {
             Project clone = new Project(this, newProject);
@@ -159,38 +163,11 @@ namespace CWDev.SLNTools.Core
             }
         }
 
-        public ReadOnlyCollection<string> Headers { get { return m_headers.AsReadOnly(); } }
-
-        public void AddHeaderLine(string line)
-        {
-            m_headers.Add(line);
-        }
-
-        public void RemoveAllHeaderLine()
-        {
-            m_headers.Clear();
-        }
-
         public ReadOnlyCollection<GlobalSection> GlobalSections { get { return m_globalSections.AsReadOnly(); } }
 
-        public GlobalSection AddGlobalSection(string name, string sectionType, string step, List<PropertyLine> propertyLines)
-        {
-            GlobalSection newSection = new GlobalSection(name, sectionType, step, propertyLines);
-            m_globalSections.Add(newSection);
-            return newSection;
-        }
         public void AddOrUpdateGlobalSection(GlobalSection newGlobalSection)
         {
-            for (int i = 0; i < m_globalSections.Count; i++)
-            {
-                if (m_globalSections[i].Name == newGlobalSection.Name)
-                {
-                    m_globalSections[i] = newGlobalSection;
-                    return;
-                }
-            }
-
-            m_globalSections.Add(newGlobalSection);
+            m_globalSections.AddOrUpdate(newGlobalSection);
         }
         public void RemoveGlobalSection(GlobalSection oldGlobalSection)
         {
@@ -202,10 +179,7 @@ namespace CWDev.SLNTools.Core
         }
         public GlobalSection FindGlobalSectionByName(string name)
         {
-            return m_globalSections.Find(delegate(GlobalSection globalSection)
-                        {
-                            return (globalSection.Name == name);
-                        });
+            return (m_globalSections.Contains(name)) ? m_globalSections[name] : null;
         }
 
         public void Save()
@@ -221,75 +195,77 @@ namespace CWDev.SLNTools.Core
             }
         }
 
-
         public NodeDifference CompareTo(SolutionFile oldSolution)
         {
-            return (NodeDifference) this.GetElement().CompareTo(oldSolution.GetElement());
+            return (NodeDifference) this.ToElement().CompareTo(oldSolution.ToElement());
         }
 
-        public NodeElement GetElement()
+        #region Methods ToElement / FromElement
+
+        private const string TagHeader = "Header";
+        private const string TagProject = "P_";
+        private const string TagGlobalSection = "GS_";
+
+        public NodeElement ToElement()
         {
-            ElementHashList elements = new ElementHashList();
-            elements.Add(
+            ElementHashList childs = new ElementHashList();
+            childs.Add(
                         new ValueElement(
-                            new ElementIdentifier("Header"),
+                            new ElementIdentifier(TagHeader),
                             String.Join("|", m_headers.ToArray())));
 
             foreach (Project project in this.ProjectsInOrders)
             {
-                elements.Add(
-                            project.GetElement(
+                childs.Add(
+                            project.ToElement(
                                 new ElementIdentifier(
-                                    "P_" + project.ProjectGuid,
+                                    TagProject + project.ProjectGuid,
                                     string.Format("Project \"{0}\"", project.ProjectFullName))));
             }
             foreach (GlobalSection globalSection in this.GlobalSections)
             {
-                elements.Add(
-                            globalSection.GetElement(
+                childs.Add(
+                            globalSection.ToElement(
                                 new ElementIdentifier(
-                                    "GS_" + globalSection.Name,
+                                    TagGlobalSection + globalSection.Name,
                                     string.Format("GlobalSection \"{0}\"", globalSection.Name))));
             }
             return new NodeElement(
-                        new ElementIdentifier("SolutionFile"), 
-                        elements);
+                        new ElementIdentifier("SolutionFile"),
+                        childs);
         }
 
-        public SolutionFile(NodeElement element) 
-            : base()
+        public static SolutionFile FromElement(NodeElement element)
         {
-            m_solutionFullPath = null;
-            m_headers = new List<string>();
-            m_projects = new ProjectHashList();
-            m_globalSections = new List<GlobalSection>();
+            string[] headers = new string[0];
+            ProjectHashList projects = new ProjectHashList();
+            SectionHashList<GlobalSection> globalSections = new SectionHashList<GlobalSection>();
 
             foreach (Element child in element.Childs)
             {
                 ElementIdentifier identifier = child.Identifier;
-                if (identifier.Name.StartsWith("Header"))
+                if (identifier.Name.StartsWith(TagHeader))
                 {
-                    RemoveAllHeaderLine();
-                    foreach (string line in ((ValueElement) child).Value.Split('|'))
-                    {
-                        AddHeaderLine(line);
-                    }
+                    headers = ((ValueElement)child).Value.Split('|');
                 }
-                else if (identifier.Name.StartsWith("P_"))
+                else if (identifier.Name.StartsWith(TagProject))
                 {
-                    string projectGuid = identifier.Name.Substring(2);
-                    AddOrUpdateProject(new Project(projectGuid, (NodeElement)child));
+                    string projectGuid = identifier.Name.Substring(TagProject.Length);
+                    projects.Add(Project.FromElement(projectGuid, (NodeElement)child));
                 }
-                else if (identifier.Name.StartsWith("GS_"))
+                else if (identifier.Name.StartsWith(TagGlobalSection))
                 {
-                    string sectionName = identifier.Name.Substring(3);
-                    AddOrUpdateGlobalSection(new GlobalSection(sectionName, (NodeElement)child));
+                    string sectionName = identifier.Name.Substring(TagGlobalSection.Length);
+                    globalSections.Add(GlobalSection.FromElement(sectionName, (NodeElement)child));
                 }
                 else
                 {
                     throw new Exception(string.Format("Invalid identifier '{0}'.", identifier.Name));
                 }
             }
+            return new SolutionFile(null, headers, projects, globalSections);
         }
+
+        #endregion
     }
 }

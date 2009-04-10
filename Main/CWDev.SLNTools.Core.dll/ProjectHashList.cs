@@ -52,17 +52,20 @@ namespace CWDev.SLNTools.Core
             return new List<Project>(this).AsReadOnly();
         }
 
-        public void AddRange(IEnumerable<Project> original)
+        public void AddRange(IEnumerable<Project> projects)
         {
-            foreach (Project project in original)
+            if (projects != null)
             {
-                Add(project);
+                foreach (Project project in projects)
+                {
+                    Add(project);
+                }
             }
         }
 
         public void AddOrUpdate(Project item)
         {
-            Project existingItem = (Contains(item.ProjectGuid)) ? this[item.ProjectGuid] : null;
+            Project existingItem = (Contains(GetKeyForItem(item))) ? this[GetKeyForItem(item)] : null;
             if (existingItem == null)
             {
                 Add(item);

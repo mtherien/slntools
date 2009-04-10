@@ -148,7 +148,17 @@ namespace CWDev.SLNTools.Core
                 projectSections.Add(ReadProjectSection(line));
             }
 
-            m_solutionFile.AddOrUpdateProject(projectGuid, projectTypeGuid, projectName, relativePath, projectSections, null, null);
+            m_solutionFile.AddOrUpdateProject(
+                        new Project(
+                            null, 
+                            projectGuid, 
+                            projectTypeGuid, 
+                            projectName, 
+                            relativePath, 
+                            null, 
+                            projectSections, 
+                            null, 
+                            null));
         }
 
         private void ReadGlobal()
@@ -224,13 +234,18 @@ namespace CWDev.SLNTools.Core
                     break;
 
                 default:
-                    if (name.EndsWith("Control", StringComparison.Ordinal))
+                    if (name.EndsWith("Control", StringComparison.InvariantCultureIgnoreCase))
                     {
                         HandleVersionControlLines(name, type, step, propertyLines);
                     }
                     else
                     {
-                        m_solutionFile.AddGlobalSection(name, type, step, propertyLines);
+                        m_solutionFile.AddOrUpdateGlobalSection(
+                                    new GlobalSection(
+                                        name, 
+                                        type, 
+                                        step, 
+                                        propertyLines));
                     }
                     break;
             }
@@ -245,7 +260,12 @@ namespace CWDev.SLNTools.Core
                 Project left = FindProjectByGuid(propertyLine.Name, currentLineNumber);
                 left.ParentFolderGuid = propertyLine.Value;
             }
-            m_solutionFile.AddGlobalSection(name, type, step, new List<PropertyLine>());
+            m_solutionFile.AddOrUpdateGlobalSection(
+                        new GlobalSection(
+                            name, 
+                            type, 
+                            step, 
+                            new List<PropertyLine>()));
         }
 
         private static readonly string ms_patternParseProjectConfigurationPlatformsName = @"^(?<GUID>\{[-0-9a-zA-Z]+\})\.(?<DESCRIPTION>.*)$";
@@ -276,7 +296,12 @@ namespace CWDev.SLNTools.Core
                                     ms_patternParseProjectConfigurationPlatformsName));
                 }
             }
-            m_solutionFile.AddGlobalSection(name, type, step, new List<PropertyLine>());
+            m_solutionFile.AddOrUpdateGlobalSection(
+                        new GlobalSection(
+                            name, 
+                            type, 
+                            step, 
+                            new List<PropertyLine>()));
         }
 
         private static readonly Regex ms_regexParseVersionControlName = new Regex(@"^(?<NAME_WITHOUT_INDEX>[a-zA-Z]*)(?<INDEX>[1-9][0-9]*)$");
@@ -349,13 +374,15 @@ namespace CWDev.SLNTools.Core
                                     uniqueName));
                 }
 
-                foreach (PropertyLine propertyLine in propertiesForIndex)
-                {
-                    relatedProject.VersionControlLines.Add(propertyLine);
-                }
+                relatedProject.VersionControlLines.AddRange(propertiesForIndex);
             }
 
-            m_solutionFile.AddGlobalSection(name, type, step, othersVersionControlLines);
+            m_solutionFile.AddOrUpdateGlobalSection(
+                    new GlobalSection(
+                        name, 
+                        type, 
+                        step, 
+                        othersVersionControlLines));
         }
 
         private static readonly string ms_patternParsePropertyLine = @"^(?<PROPERTYNAME>[^=]*)\s*=\s*(?<PROPERTYVALUE>[^=]*)$";
