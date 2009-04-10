@@ -24,14 +24,29 @@ namespace CWDev.SLNTools.Core
 {
     public class PropertyLine
     {
-        public PropertyLine(string name, string value)
+        public PropertyLine(PropertyLine original)
+            : this(original.Name, original.Value)
         {
-            this.Name = name;
-            this.Value = value;
         }
 
-        public readonly string Name;
-        public readonly string Value;
+        public PropertyLine(string name, string value)
+        {
+            m_name = name;
+            m_value = value;
+        }
+
+        private string m_name;
+        private string m_value;
+
+        public string Name 
+        { 
+            get { return m_name; } 
+        }
+        public string Value
+        {
+            get { return m_value; }
+            set { m_value = value; }
+        }
 
         public override string ToString()
         {

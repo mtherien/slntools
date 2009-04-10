@@ -44,7 +44,7 @@ namespace CWDev.SLNTools.UIKit
         {
             if (form == null)
             {
-                throw new ArgumentException("The form cannot be null");
+                throw new ArgumentNullException("form");
             }
 
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey(SUBKEY))
@@ -80,7 +80,7 @@ namespace CWDev.SLNTools.UIKit
         {
             if (form == null)
             {
-                throw new ArgumentException("The form cannot be null");
+                throw new ArgumentNullException("form");
             }
 
             // open key

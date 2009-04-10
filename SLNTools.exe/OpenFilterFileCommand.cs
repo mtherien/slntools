@@ -58,7 +58,7 @@ namespace CWDev.SLNTools
                 // If we have to checkout the original solution file later on, its easier with that link.
                 SolutionFile filteredSolution = filterFile.Apply();
                 Project originalSolutionProject = CreateOriginalSolutionProject(filterFile.SourceSolutionFullPath);
-                filteredSolution.AddOrUpdateProject(originalSolutionProject);
+                filteredSolution.Projects.Add(originalSolutionProject);
                 filteredSolution.Save();
 
                 filterFile.StartFilteredSolutionWatcher(
@@ -111,9 +111,9 @@ namespace CWDev.SLNTools
                         "-OriginalSolution-",
                         "-OriginalSolution-",
                         null, 
-                        new ProjectSection[]
+                        new Section[]
                                 {
-                                    new ProjectSection(
+                                    new Section(
                                         "SolutionItems",
                                         "ProjectSection",
                                         "preProject",

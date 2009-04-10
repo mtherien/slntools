@@ -119,7 +119,7 @@ namespace CWDev.SLNTools.UIKit
                 foreach (TreeNode treeNode in m_allNodes)
                 {
                     Project project = treeNode.Tag as Project;
-                    if (filteredSolution.FindProjectByGuid(project.ProjectGuid) != null)
+                    if (filteredSolution.Projects.FindByGuid(project.ProjectGuid) != null)
                     {
                         nbProjectsIncludedInFilteredSolution++;
                         treeNode.ForeColor = Color.Green;

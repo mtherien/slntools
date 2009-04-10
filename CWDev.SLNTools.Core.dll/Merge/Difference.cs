@@ -33,7 +33,7 @@ namespace CWDev.SLNTools.Core.Merge
             if (identifier == null)
                 throw new ArgumentNullException("identifier");
             if (! Enum.IsDefined(operationOnParent.GetType(), operationOnParent))
-                throw new ArgumentOutOfRangeException("operationOnParent", operationOnParent.ToString(), "Invalid value");
+                throw new ArgumentOutOfRangeException("operationOnParent", operationOnParent, "Invalid value");
             m_identifier = identifier;
             m_operationOnParent = operationOnParent;
         }

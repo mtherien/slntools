@@ -26,55 +26,82 @@ using System.Collections.ObjectModel;
 
 namespace CWDev.SLNTools.Core
 {
-    using Merge;
-
     public class ProjectHashList 
         : KeyedCollection<string, Project>        
     {
-        public ProjectHashList()
+        public ProjectHashList(SolutionFile container)
             : base(StringComparer.InvariantCultureIgnoreCase)
         {
+            if (container == null)
+                throw new ArgumentNullException("container");
+
+            m_container = container;
         }
 
-        public ProjectHashList(IEnumerable<Project> original)
-            : this()
+        public ProjectHashList(SolutionFile container, IEnumerable<Project> items)
+            : this(container)
         {
-            AddRange(original);
+            AddRange(items);
         }
+
+        private SolutionFile m_container;
 
         protected override string GetKeyForItem(Project item)
         {
             return item.ProjectGuid;
         }
 
-        public ReadOnlyCollection<Project> AsReadOnly()
+        protected override void InsertItem(int index, Project item)
         {
-            return new List<Project>(this).AsReadOnly();
+            // Add a clone of the item instead of the item itself
+            base.InsertItem(index, new Project(m_container, item));
         }
 
-        public void AddRange(IEnumerable<Project> projects)
+        protected override void SetItem(int index, Project item)
         {
-            if (projects != null)
+            // Add a clone of the item instead of the item itself
+            base.SetItem(index, new Project(m_container, item));
+        }
+
+        public SolutionFile Container 
+        { 
+            get { return m_container; } 
+        }
+
+        public void AddRange(IEnumerable<Project> items)
+        {
+            if (items != null)
             {
-                foreach (Project project in projects)
+                foreach (Project item in items)
                 {
-                    Add(project);
+                    Add(item);
                 }
             }
         }
 
-        public void AddOrUpdate(Project item)
+        public Project FindByGuid(string guid)
         {
-            Project existingItem = (Contains(GetKeyForItem(item))) ? this[GetKeyForItem(item)] : null;
-            if (existingItem == null)
+            return (this.Contains(guid)) ? this[guid] : null;
+        }
+
+        public Project FindByFullName(string projectFullName)
+        {
+            foreach (Project item in this)
             {
-                Add(item);
+                if (string.Compare(item.ProjectFullName, projectFullName, StringComparison.InvariantCultureIgnoreCase) == 0)
+                {
+                    return item;
+                }
             }
-            else
-            {
-                // If the item already exist in the list, we put the new version in the same spot.
-                SetItem(IndexOf(existingItem), item);
-            }
+            return null;
+        }
+
+        public void Sort()
+        {
+            Sort(delegate(Project p1, Project p2)
+                        {
+                            return StringComparer.InvariantCultureIgnoreCase.Compare(p1.ProjectFullName, p2.ProjectFullName);
+                        });
         }
 
         public void Sort(Comparison<Project> comparer)

@@ -125,14 +125,21 @@ namespace CWDev.SLNTools.Core.Filter
 
         public SolutionFile ApplyOn(SolutionFile original)
         {
-            ProjectHashList includedProjects = new ProjectHashList();
+            List<Project> includedProjects = new List<Project>();
             foreach (string projectFullName in this.ProjectsToKeep)
             {
-                Project projectToKeep = original.FindProjectByFullName(projectFullName);
-                AddRecursiveDependenciesToList(includedProjects, projectToKeep);
-                foreach (Project descendant in projectToKeep.AllDescendants)
+                Project projectToKeep = original.Projects.FindByFullName(projectFullName);
+                if (projectToKeep != null)
                 {
-                    AddRecursiveDependenciesToList(includedProjects, descendant);
+                    AddRecursiveDependenciesToList(includedProjects, projectToKeep);
+                    foreach (Project descendant in projectToKeep.AllDescendants)
+                    {
+                        AddRecursiveDependenciesToList(includedProjects, descendant);
+                    }
+                }
+                else
+                {
+                    // TODO MessageBox Found project X in filter but doesn't exist in original solution
                 }
             }
 
@@ -143,7 +150,7 @@ namespace CWDev.SLNTools.Core.Filter
                         original.GlobalSections);
         }
 
-        private void AddRecursiveDependenciesToList(ProjectHashList includedProjects, Project project)
+        private void AddRecursiveDependenciesToList(List<Project> includedProjects, Project project)
         {
             if (includedProjects.Contains(project))
                 return;

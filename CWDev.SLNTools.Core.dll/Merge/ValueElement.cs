@@ -45,7 +45,7 @@ namespace CWDev.SLNTools.Core.Merge
             if (oldElement == null)
                 throw new ArgumentNullException("oldElement");
             if (!oldElement.Identifier.Equals(this.Identifier))
-                throw new Exception("Cannot compare elements that does not share the same identifier.");
+                throw new MergeException("Cannot compare elements that does not share the same identifier.");
 
             if (oldElement is EmptyElement)
             {
@@ -73,7 +73,7 @@ namespace CWDev.SLNTools.Core.Merge
             }
             else
             {
-                throw new Exception("TODO cannot compare value with node");
+                throw new MergeException(string.Format("Cannot compare a {0} to a {1}.", oldElement.GetType().Name, this.GetType().Name));
             }
         }
 
@@ -82,7 +82,7 @@ namespace CWDev.SLNTools.Core.Merge
             if (difference == null)
                 throw new ArgumentNullException("difference");
             if (!difference.Identifier.Equals(this.Identifier))
-                throw new Exception("Cannot apply a difference that does not share the same identifier with the element.");
+                throw new MergeException("Cannot apply a difference that does not share the same identifier with the element.");
 
             if (difference is ValueDifference)
             {
@@ -92,7 +92,7 @@ namespace CWDev.SLNTools.Core.Merge
             }
             else
             {
-                throw new ArgumentException("TODO cannot apply difference.GetType() on a ValueElement");
+                throw new MergeException(string.Format("Cannot apply a {0} on a {1}.", difference.GetType().Name, this.GetType().Name));
             }
         }
 

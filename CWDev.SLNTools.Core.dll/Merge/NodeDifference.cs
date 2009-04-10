@@ -52,12 +52,12 @@ namespace CWDev.SLNTools.Core.Merge
             if (destinationDifference == null)
                 throw new ArgumentNullException("destinationDifference");
             if (!destinationDifference.Identifier.Equals(this.Identifier))
-                throw new Exception("Cannot compare differences that does not share the same identifier.");
+                throw new MergeException("Cannot compare differences that does not share the same identifier.");
 
             NodeDifference source = this;
             NodeDifference destination = destinationDifference as NodeDifference;
             if (destination == null)
-                throw new Exception("TODO wrong type destination");
+                throw new MergeException(string.Format("Cannot compare a {0} to a {1}.", destinationDifference.GetType().Name, this.GetType().Name));
 
             if (source.OperationOnParent != destination.OperationOnParent)
             {
