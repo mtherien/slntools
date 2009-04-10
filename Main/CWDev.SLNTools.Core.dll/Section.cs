@@ -37,7 +37,7 @@ namespace CWDev.SLNTools.Core
             m_name = original.Name;
             m_sectionType = original.SectionType;
             m_step = original.Step;
-            m_propertyLines = new PropertyLineCollection(original.PropertyLines);
+            m_propertyLines = new PropertyLineHashList(original.PropertyLines);
         }
 
         protected Section(string name, string sectionType, string step, IEnumerable<PropertyLine> propertyLines)
@@ -45,13 +45,13 @@ namespace CWDev.SLNTools.Core
             m_name = name;
             m_sectionType = sectionType;
             m_step = step;
-            m_propertyLines = new PropertyLineCollection(propertyLines);
+            m_propertyLines = new PropertyLineHashList(propertyLines);
         }
 
         private string m_name;
         private string m_sectionType;
         private string m_step;
-        private PropertyLineCollection m_propertyLines;
+        private PropertyLineHashList m_propertyLines;
 
         public string Name { get { return m_name; } }
         public string SectionType { get { return m_sectionType; } }
@@ -117,7 +117,7 @@ namespace CWDev.SLNTools.Core
             m_name = name;
             m_sectionType = null;
             m_step = null;
-            m_propertyLines = new PropertyLineCollection();
+            m_propertyLines = new PropertyLineHashList();
 
             foreach (Element child in element.Childs)
             {

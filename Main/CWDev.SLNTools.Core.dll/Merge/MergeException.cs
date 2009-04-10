@@ -22,17 +22,17 @@
 
 using System;
 
-namespace CWDev.SLNTools.Core
+namespace CWDev.SLNTools.Core.Merge
 {
-    class SolutionFileException
+    class MergeException
         : Exception
     {
-        public SolutionFileException(string message)
+        public MergeException(string message)
             : base(message)
         {
         }
 
-        public SolutionFileException(string message, Exception innerException)
+        public MergeException(string message, Exception innerException)
             : base(message, innerException)
         {
         }

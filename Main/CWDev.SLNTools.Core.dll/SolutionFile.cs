@@ -55,26 +55,21 @@ namespace CWDev.SLNTools.Core
         {
             m_solutionFullPath = null;
             m_headers = new List<string>();
-            m_projectsInOrder = new List<Project>();
-            m_projectsByGuid = new Dictionary<string, Project>(StringComparer.OrdinalIgnoreCase);
+            m_projects = new ProjectHashList();
             m_globalSections = new List<GlobalSection>();
         }
 
         public SolutionFile(SolutionFile original)
                     : this(original.SolutionFullPath, original.Headers, original.GlobalSections)
         {
-            foreach (Project project in original.ProjectsInOrders)
-            {
-                AddOrUpdateProject(project);
-            }
+            m_projects = new ProjectHashList(original.ProjectsInOrders);
         }
 
         public SolutionFile(string fullpath, ReadOnlyCollection<string> headers, IEnumerable<GlobalSection> globalSections)
         {
             m_solutionFullPath = fullpath;
             m_headers = new List<string>(headers);
-            m_projectsInOrder = new List<Project>();
-            m_projectsByGuid = new Dictionary<string, Project>(StringComparer.OrdinalIgnoreCase);
+            m_projects = new ProjectHashList();
             m_globalSections = new List<GlobalSection>();
             foreach (GlobalSection globalSection in globalSections)
             {
@@ -84,8 +79,7 @@ namespace CWDev.SLNTools.Core
 
         private string m_solutionFullPath;
         private List<string> m_headers;
-        private List<Project> m_projectsInOrder;
-        private Dictionary<string, Project> m_projectsByGuid;
+        private ProjectHashList m_projects;
         private List<GlobalSection> m_globalSections;
 
         public string SolutionFullPath
@@ -95,7 +89,7 @@ namespace CWDev.SLNTools.Core
         }
         public string SolutionPath { get { return Path.GetDirectoryName(m_solutionFullPath); } }
 
-        public ReadOnlyCollection<Project> ProjectsInOrders { get { return m_projectsInOrder.AsReadOnly(); } }
+        public ReadOnlyCollection<Project> ProjectsInOrders { get { return m_projects.AsReadOnly(); } }
 
         public Project AddOrUpdateProject(
                     string projectGuid, 
@@ -111,27 +105,14 @@ namespace CWDev.SLNTools.Core
         public Project AddOrUpdateProject(Project newProject)
         {
             Project clone = new Project(this, newProject);
-
-            for (int i = 0; i < m_projectsInOrder.Count; i++)
-            {
-                if (m_projectsInOrder[i].ProjectGuid == newProject.ProjectGuid)
-                {
-                    m_projectsByGuid[clone.ProjectGuid] = clone;
-                    m_projectsInOrder[i] = clone;
-                    return clone;
-                }
-            }
-
-            m_projectsByGuid.Add(clone.ProjectGuid, clone);
-            m_projectsInOrder.Add(clone);
+            m_projects.AddOrUpdate(clone);
             return clone;
         }
         public void RemoveProject(Project oldProject)
         {
             if (oldProject != null)
             {
-                m_projectsInOrder.Remove(oldProject);
-                m_projectsByGuid.Remove(oldProject.ProjectGuid);
+                m_projects.Remove(oldProject);
             }
         }
         public void RemoveProjectByGuid(string guid)
@@ -147,26 +128,28 @@ namespace CWDev.SLNTools.Core
         }
         public void SortProjects(Comparison<Project> comparer)
         {
-            m_projectsInOrder.Sort(comparer);
+            m_projects.Sort(comparer);
         }
         public Project FindProjectByGuid(string guid)
         {
-            Project project = null;
-            m_projectsByGuid.TryGetValue(guid, out project);
-            return project;
+            return (m_projects.Contains(guid)) ? m_projects[guid] : null;
         }
         public Project FindProjectByFullName(string projectFullName)
         {
-            return m_projectsInOrder.Find(delegate(Project project)
-                        {
-                            return (project.ProjectFullName == projectFullName);
-                        });
+            foreach (Project project in m_projects)
+            {
+                if (string.Compare(project.ProjectFullName, projectFullName, StringComparison.InvariantCultureIgnoreCase) == 0)
+                {
+                    return project;
+                }
+            }
+            return null;
         }
         public IEnumerable<Project> Childs
         {
             get
             {
-                foreach (Project project in m_projectsInOrder)
+                foreach (Project project in m_projects)
                 {
                     if (project.ParentFolder == null)
                     {
@@ -278,8 +261,7 @@ namespace CWDev.SLNTools.Core
         {
             m_solutionFullPath = null;
             m_headers = new List<string>();
-            m_projectsInOrder = new List<Project>();
-            m_projectsByGuid = new Dictionary<string, Project>(StringComparer.OrdinalIgnoreCase);
+            m_projects = new ProjectHashList();
             m_globalSections = new List<GlobalSection>();
 
             foreach (Element child in element.Childs)

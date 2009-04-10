@@ -123,7 +123,7 @@ namespace CWDev.SLNTools.Core.Merge
                             mergedChilds.Add(subdifference.Identifier.CreateEmptyElement().Apply(subdifference));
                             break;
                         case OperationOnParent.Modified:
-                            mergedChilds.Update(mergedChilds[subdifference.Identifier].Apply(subdifference));
+                            mergedChilds.AddOrUpdate(mergedChilds[subdifference.Identifier].Apply(subdifference));
                             break;
                         case OperationOnParent.Removed:
                             mergedChilds.Remove(subdifference.Identifier);

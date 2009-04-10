@@ -40,12 +40,18 @@ namespace CWDev.SLNTools.Core.Merge
             }
         }
 
-        public void Update(Element newElement)
+        public void AddOrUpdate(Element item)
         {
-            Element oldElement = this[newElement.Identifier];
-            if (oldElement == null)
-                throw new Exception("TODO cant find item");
-            SetItem(IndexOf(oldElement), newElement);
+            Element existingItem = (Contains(item.Identifier)) ? this[item.Identifier] : null;
+            if (existingItem == null)
+            {
+                Add(item);
+            }
+            else
+            {
+                // If the item already exist in the list, we put the new version in the same spot.
+                SetItem(IndexOf(existingItem), item);
+            }
         }
 
         protected override ElementIdentifier GetKeyForItem(Element item)

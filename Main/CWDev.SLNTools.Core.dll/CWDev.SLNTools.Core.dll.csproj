@@ -59,10 +59,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Merge\MergeException.cs" />
+    <Compile Include="ProjectHashList.cs" />
     <Compile Include="Filter\FilteredSolutionWatcher.cs" />
     <Compile Include="Merge\ConflictContext.cs" />
     <Compile Include="Merge\EmptyElement.cs" />
-    <Compile Include="PropertyLineCollection.cs" />
+    <Compile Include="PropertyLineHashList.cs" />
     <Compile Include="Merge\Conflict.cs" />
     <Compile Include="Merge\OperationOnParent.cs" />
     <Compile Include="Merge\NodeDifference.cs" />
