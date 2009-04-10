@@ -70,13 +70,43 @@ namespace CWDev.SLNTools.Core
             elements.Add(new ValueElement(new ElementIdentifier("Step"), this.Step));
             foreach (PropertyLine propertyLine in this.PropertyLines)
             {
+                ElementIdentifier lineIdentifier = new ElementIdentifier(
+                            "L_" + propertyLine.Name,
+                            @"Line\" + propertyLine.Name);
+                if ((m_name == "WebsiteProperties") && (propertyLine.Name == "ProjectReferences"))
+                {
+                    ElementHashList references = new ElementHashList();
+                    string pattern = "^\"((?<ReferenceGuid>[^|]+)\\|(?<ReferenceName>[^;]*)(;)?)*\"$";
+                    Match match = Regex.Match(propertyLine.Value, pattern);
+                    if (!match.Success)
+                    {
+                        throw new SolutionFileException(string.Format("Invalid format for a ProjectReferences line value.\nFound: {0}\nExpected: A line respecting the pattern '{1}'.",
+                                        propertyLine.Value,
+                                        pattern));
+                    }
+                    
+                    CaptureCollection capturesGuid = match.Groups["ReferenceGuid"].Captures;
+                    CaptureCollection capturesName = match.Groups["ReferenceName"].Captures;
+                    for (int i = 0; i < capturesGuid.Count; i++)
+                    {
+                        references.Add(
+                                    new ValueElement(
+                                        new ElementIdentifier(capturesGuid[i].Value),
+                                        capturesName[i].Value));
+                    }
+                    elements.Add(
+                                new NodeElement(
+                                    lineIdentifier,
+                                    references));
+                }
+                else
+                {
                     elements.Add(
                                 new ValueElement(
-                                new ElementIdentifier(
-                                    "L_" + propertyLine.Name,
-                                    @"Line\" + propertyLine.Name), 
+                                    lineIdentifier,
                                     propertyLine.Value));
                 }
+            }
             return new NodeElement(
                             identifier,
                             elements);
@@ -103,8 +133,22 @@ namespace CWDev.SLNTools.Core
                 else if (identifier.Name.StartsWith("L_"))
                 {
                     string lineName = identifier.Name.Substring(2);
-                    string lineValue = ((ValueElement)child).Value;
-                    m_propertyLines.Add(new PropertyLine(lineName, lineValue));
+                    if ((m_name == "WebsiteProperties") && (lineName == "ProjectReferences"))
+                    {
+                        StringBuilder lineValue = new StringBuilder();
+                        lineValue.Append("\"");
+                        foreach (ValueElement reference in ((NodeElement)child).Childs)
+                        {
+                            lineValue.AppendFormat("{0}|{1};", reference.Identifier.Name, reference.Value);
+                        }
+                        lineValue.Append("\"");
+                        m_propertyLines.Add(new PropertyLine(lineName, lineValue.ToString()));
+                    }
+                    else
+                    {
+                        string lineValue = ((ValueElement)child).Value;
+                        m_propertyLines.Add(new PropertyLine(lineName, lineValue));
+                    }
                 }
                 else
                 {
