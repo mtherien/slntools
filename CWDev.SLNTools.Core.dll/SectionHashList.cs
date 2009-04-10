@@ -1,4 +1,4 @@
-﻿#region License
+#region License
 
 // SLNTools
 // Copyright (c) 2009 
@@ -24,30 +24,49 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-namespace CWDev.SLNTools.Core.Merge
+namespace CWDev.SLNTools.Core
 {
-    public class ElementHashList : KeyedCollection<ElementIdentifier, Element>
+    using Merge;
+
+    public class SectionHashList<T> 
+        : KeyedCollection<string, T>
+        where T : Section
     {
-        public ElementHashList()
+        public SectionHashList()
+            : base(StringComparer.InvariantCultureIgnoreCase)
         {
         }
 
-        public ElementHashList(IEnumerable<Element> original)
+        public SectionHashList(IEnumerable<T> original)
+            : this()
         {
-            foreach (Element element in original)
+            AddRange(original);
+        }
+
+        protected override string GetKeyForItem(T item)
+        {
+            return item.Name;
+        }
+
+        public ReadOnlyCollection<T> AsReadOnly()
+        {
+            return new List<T>(this).AsReadOnly();
+        }
+
+        public void AddRange(IEnumerable<T> sections)
+        {
+            if (sections != null)
             {
-                this.Add(element);
+                foreach (T section in sections)
+                {
+                    Add(section);
+                }
             }
         }
 
-        protected override ElementIdentifier GetKeyForItem(Element item)
+        public void AddOrUpdate(T item)
         {
-            return item.Identifier;
-        }
-
-        public void AddOrUpdate(Element item)
-        {
-            Element existingItem = (Contains(GetKeyForItem(item))) ? this[GetKeyForItem(item)] : null;
+            T existingItem = (Contains(GetKeyForItem(item))) ? this[GetKeyForItem(item)] : null;
             if (existingItem == null)
             {
                 Add(item);

@@ -34,16 +34,17 @@ namespace CWDev.SLNTools.Core
     public class Project
     {
         public Project(SolutionFile container, Project original)
+            : this(
+                    container,
+                    original.ProjectGuid,
+                    original.ProjectTypeGuid,
+                    original.ProjectName,
+                    original.RelativePath,
+                    original.ParentFolderGuid,
+                    original.ProjectSections,
+                    original.VersionControlLines,
+                    original.ProjectConfigurationPlatformsLines)
         {
-            m_container = container;
-            m_projectGuid = original.ProjectGuid;
-            m_projectTypeGuid = original.ProjectTypeGuid;
-            m_projectName = original.ProjectName;
-            m_relativePath = original.RelativePath;
-            m_parentFolderGuid = original.ParentFolderGuid;
-            m_projectSections = new List<ProjectSection>(original.ProjectSections);
-            m_versionControlLines = new PropertyLineHashList(original.VersionControlLines);
-            m_projectConfigurationPlatformsLines = new PropertyLineHashList(original.ProjectConfigurationPlatformsLines);
         }
 
         public Project(
@@ -51,7 +52,8 @@ namespace CWDev.SLNTools.Core
                     string projectGuid, 
                     string projectTypeGuid, 
                     string projectName, 
-                    string relativePath, 
+                    string relativePath,
+                    string parentFolderGuid,
                     IEnumerable<ProjectSection> projectSections,
                     IEnumerable<PropertyLine> versionControlLines,
                     IEnumerable<PropertyLine> projectConfigurationPlatformsLines)
@@ -61,8 +63,8 @@ namespace CWDev.SLNTools.Core
             m_projectTypeGuid = projectTypeGuid;
             m_projectName = projectName;
             m_relativePath = relativePath;
-            m_parentFolderGuid = null;
-            m_projectSections = new List<ProjectSection>();
+            m_parentFolderGuid = parentFolderGuid;
+            m_projectSections = new SectionHashList<ProjectSection>();
             if (projectSections != null)
             {
                 foreach (ProjectSection projectSection in projectSections)
@@ -70,16 +72,8 @@ namespace CWDev.SLNTools.Core
                     m_projectSections.Add(new ProjectSection(projectSection));
                 }
             }
-            m_versionControlLines = new PropertyLineHashList();
-            if (versionControlLines != null)
-            {
-                m_versionControlLines.AddRange(versionControlLines);
-            }
-            m_projectConfigurationPlatformsLines = new PropertyLineHashList();
-            if (projectConfigurationPlatformsLines != null)
-            {
-                m_projectConfigurationPlatformsLines.AddRange(projectConfigurationPlatformsLines);
-            }
+            m_versionControlLines = new PropertyLineHashList(versionControlLines);
+            m_projectConfigurationPlatformsLines = new PropertyLineHashList(projectConfigurationPlatformsLines);
         }
 
         private SolutionFile m_container;
@@ -88,7 +82,7 @@ namespace CWDev.SLNTools.Core
         private string m_projectName;
         private string m_relativePath;
         private string m_parentFolderGuid;
-        private List<ProjectSection> m_projectSections;
+        private SectionHashList<ProjectSection> m_projectSections;
         private PropertyLineHashList m_versionControlLines;
         private PropertyLineHashList m_projectConfigurationPlatformsLines;
 
@@ -182,13 +176,9 @@ namespace CWDev.SLNTools.Core
                     yield return this.ParentFolder;
                 }
 
-                ProjectSection projectDependenciesSection = m_projectSections.Find(delegate(ProjectSection section)
-                            {
-                                return (section.Name == "ProjectDependencies");
-                            });
-                if (projectDependenciesSection != null)
+                if (m_projectSections.Contains("ProjectDependencies"))
                 {
-                    foreach (PropertyLine propertyLine in projectDependenciesSection.PropertyLines)
+                    foreach (PropertyLine propertyLine in m_projectSections["ProjectDependencies"].PropertyLines)
                     {
                         string dependencyGuid = propertyLine.Name;
                         yield return FindProjectInContainer(
@@ -293,11 +283,7 @@ namespace CWDev.SLNTools.Core
                         break;
 
                     case KnownProjectTypeGuid.WebProject:
-                        ProjectSection websitePropertiesSection = m_projectSections.Find(delegate(ProjectSection section)
-                                    {
-                                        return (section.Name == "WebsiteProperties");
-                                    });
-                        foreach (PropertyLine propertyLine in websitePropertiesSection.PropertyLines)
+                        foreach (PropertyLine propertyLine in m_projectSections["WebsiteProperties"].PropertyLines)
                         {
                             if (string.Compare(propertyLine.Name, "ProjectReferences", StringComparison.OrdinalIgnoreCase) == 0)
                             {
@@ -337,84 +323,26 @@ namespace CWDev.SLNTools.Core
             return string.Format("Project '{0}'", this.ProjectFullName);
         }
 
+        #region public: Methods ToElement / FromElement
 
-        public Project(string projectGuid, NodeElement element)
-        {
-            m_container = null;
-            m_projectGuid = projectGuid;
-            m_projectTypeGuid = null;
-            m_projectName = null;
-            m_relativePath = null;
-            m_parentFolderGuid = null;
-            m_projectSections = new List<ProjectSection>();
-            m_versionControlLines = new PropertyLineHashList();
-            m_projectConfigurationPlatformsLines = new PropertyLineHashList();
+        private const string TagProjectTypeGuid = "ProjectTypeGuid";
+        private const string TagProjectName = "ProjectName";
+        private const string TagRelativePath = "RelativePath";
+        private const string TagParentFolder = "ParentFolder";
+        private const string TagProjectSection = "S_";
+        private const string TagVersionControlLines = "VCL_";
+        private const string TagProjectConfigurationPlatformsLines = "PCPL_";
 
-            foreach (Element child in element.Childs)
-            {
-                ElementIdentifier identifier = child.Identifier;
-                if (identifier.Name == "ProjectTypeGuid")
-                {
-                    m_projectTypeGuid = ((ValueElement)child).Value;
-                }
-                else if (identifier.Name == "ProjectName")
-                {
-                    m_projectName = ((ValueElement)child).Value;
-                }
-                else if (identifier.Name == "RelativePath")
-                {
-                    m_relativePath = ((ValueElement)child).Value;
-                }
-                else if (identifier.Name == "ParentFolder")
-                {
-                    m_parentFolderGuid = ((ValueElement)child).Value.Split('|')[1];
-                }
-                else if (identifier.Name.StartsWith("S_"))
-                {
-                    string sectionName = identifier.Name.Substring(2);
-                    m_projectSections.Add(
-                                new ProjectSection(
-                                    sectionName,
-                                    (NodeElement)child));
-                }
-                else if (identifier.Name.StartsWith("VCL_"))
-                {
-                    string name = identifier.Name.Substring(4);
-                    string value = ((ValueElement)child).Value;
-                    m_versionControlLines.Add(new PropertyLine(name, value));
-                }
-                else if (identifier.Name.StartsWith("PCPL_"))
-                {
-                    string name = identifier.Name.Substring(5);
-                    string value = ((ValueElement)child).Value;
-                    m_projectConfigurationPlatformsLines.Add(new PropertyLine(name, value));
-                }
-                else
-                {
-                    throw new Exception(string.Format("Invalid identifier '{0}'.", identifier.Name));
-                }
-            }
-
-            if (m_projectTypeGuid == null)
-                throw new Exception("TODO element doesn't containt ProjectTypeGuid");
-
-            if (m_projectName == null)
-                throw new Exception("TODO element doesn't containt ProjectName");
-
-            if (m_relativePath == null)
-                throw new Exception("TODO element doesn't containt RelativePath");
-        }
-
-        public NodeElement GetElement(ElementIdentifier identifier)
+        public NodeElement ToElement(ElementIdentifier identifier)
         {
             ElementHashList elements = new ElementHashList();
-            elements.Add(new ValueElement(new ElementIdentifier("ProjectTypeGuid"), this.ProjectTypeGuid));
-            elements.Add(new ValueElement(new ElementIdentifier("ProjectName"), this.ProjectName));
-            elements.Add(new ValueElement(new ElementIdentifier("RelativePath"), this.RelativePath));
+            elements.Add(new ValueElement(new ElementIdentifier(TagProjectTypeGuid), this.ProjectTypeGuid));
+            elements.Add(new ValueElement(new ElementIdentifier(TagProjectName), this.ProjectName));
+            elements.Add(new ValueElement(new ElementIdentifier(TagRelativePath), this.RelativePath));
             if (this.ParentFolder != null)
             {
                 elements.Add(new ValueElement(
-                            new ElementIdentifier("ParentFolder"),
+                            new ElementIdentifier(TagParentFolder),
                             string.Format("{0}|{1}",
                                 this.ParentFolder.ProjectFullName,
                                 this.ParentFolder.ProjectGuid)));
@@ -423,9 +351,9 @@ namespace CWDev.SLNTools.Core
             foreach (ProjectSection projectSection in this.ProjectSections)
             {
                 elements.Add(
-                            projectSection.GetElement(
+                            projectSection.ToElement(
                                 new ElementIdentifier(
-                                    "S_" + projectSection.Name,
+                                    TagProjectSection + projectSection.Name,
                                     string.Format("{0} \"{1}\"", projectSection.SectionType, projectSection.Name))));
             }
             foreach (PropertyLine propertyLine in this.VersionControlLines)
@@ -433,8 +361,8 @@ namespace CWDev.SLNTools.Core
                 elements.Add(
                             new ValueElement(
                                 new ElementIdentifier(
-                                    "VCL_" + propertyLine.Name,
-                                    @"VersionControlLine\" + propertyLine.Name), 
+                                    TagVersionControlLines + propertyLine.Name,
+                                    @"VersionControlLine\" + propertyLine.Name),
                                 propertyLine.Value));
             }
             foreach (PropertyLine propertyLine in this.ProjectConfigurationPlatformsLines)
@@ -442,7 +370,7 @@ namespace CWDev.SLNTools.Core
                 elements.Add(
                             new ValueElement(
                                 new ElementIdentifier(
-                                    "PCPL_" + propertyLine.Name,
+                                    TagProjectConfigurationPlatformsLines + propertyLine.Name,
                                     @"ProjectConfigurationPlatformsLine\" + propertyLine.Name),
                                 propertyLine.Value));
             }
@@ -450,5 +378,81 @@ namespace CWDev.SLNTools.Core
                             identifier,
                             elements);
         }
+
+        public static Project FromElement(string projectGuid, NodeElement element)
+        {
+            string projectTypeGuid = null;
+            string projectName = null;
+            string relativePath = null;
+            string parentFolderGuid = null;
+            SectionHashList<ProjectSection> projectSections = new SectionHashList<ProjectSection>();
+            PropertyLineHashList versionControlLines = new PropertyLineHashList();
+            PropertyLineHashList projectConfigurationPlatformsLines = new PropertyLineHashList();
+
+            foreach (Element child in element.Childs)
+            {
+                ElementIdentifier identifier = child.Identifier;
+                if (identifier.Name == TagProjectTypeGuid)
+                {
+                    projectTypeGuid = ((ValueElement)child).Value;
+                }
+                else if (identifier.Name == TagProjectName)
+                {
+                    projectName = ((ValueElement)child).Value;
+                }
+                else if (identifier.Name == TagRelativePath)
+                {
+                    relativePath = ((ValueElement)child).Value;
+                }
+                else if (identifier.Name == TagParentFolder)
+                {
+                    parentFolderGuid = ((ValueElement)child).Value.Split('|')[1];
+                }
+                else if (identifier.Name.StartsWith(TagProjectSection))
+                {
+                    string sectionName = identifier.Name.Substring(TagProjectSection.Length);
+                    projectSections.Add(
+                                ProjectSection.FromElement(
+                                    sectionName,
+                                    (NodeElement)child));
+                }
+                else if (identifier.Name.StartsWith(TagVersionControlLines))
+                {
+                    string name = identifier.Name.Substring(TagVersionControlLines.Length);
+                    string value = ((ValueElement)child).Value;
+                    versionControlLines.Add(new PropertyLine(name, value));
+                }
+                else if (identifier.Name.StartsWith(TagProjectConfigurationPlatformsLines))
+                {
+                    string name = identifier.Name.Substring(TagProjectConfigurationPlatformsLines.Length);
+                    string value = ((ValueElement)child).Value;
+                    projectConfigurationPlatformsLines.Add(new PropertyLine(name, value));
+                }
+                else
+                {
+                    throw new Exception(string.Format("Invalid identifier '{0}'.", identifier.Name));
+                }
+            }
+
+            if (projectTypeGuid == null)
+                throw new SolutionFileException(string.Format("Missing subelement '{0}' in a section element.", TagProjectTypeGuid));
+            if (projectName == null)
+                throw new SolutionFileException(string.Format("Missing subelement '{0}' in a section element.", TagProjectName));
+            if (relativePath == null)
+                throw new SolutionFileException(string.Format("Missing subelement '{0}' in a section element.", TagRelativePath));
+
+            return new Project(
+                        null,
+                        projectGuid,
+                        projectTypeGuid,
+                        projectName,
+                        relativePath,
+                        parentFolderGuid,
+                        projectSections,
+                        versionControlLines,
+                        projectConfigurationPlatformsLines);
+        }
+
+        #endregion
     }
 }

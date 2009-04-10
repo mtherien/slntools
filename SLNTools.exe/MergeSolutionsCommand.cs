@@ -56,9 +56,9 @@ namespace CWDev.SLNTools
                 SolutionFile commonAncestrorSolution = SolutionFile.FromFile(parsedArguments.Solutions[2]);
                 string mergedSolutionName = parsedArguments.Solutions[3];
 
-                NodeElement elementInSourceBranch = solutionInSourceBranch.GetElement();
-                NodeElement elementInDestinationBranch = solutionInDestinationBranch.GetElement();
-                NodeElement commonAncestrorElement = commonAncestrorSolution.GetElement();
+                NodeElement elementInSourceBranch = solutionInSourceBranch.ToElement();
+                NodeElement elementInDestinationBranch = solutionInDestinationBranch.ToElement();
+                NodeElement commonAncestrorElement = commonAncestrorSolution.ToElement();
 
                 NodeDifference differenceInSourceBranch;
                 NodeDifference differenceInDestinationBranch;
@@ -94,7 +94,8 @@ namespace CWDev.SLNTools
                 {
                     if (form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
-                        SolutionFile mergedSolution = new SolutionFile((NodeElement)commonAncestrorElement.Apply(form.Result));
+                        NodeElement mergedElement = (NodeElement)commonAncestrorElement.Apply(form.Result);
+                        SolutionFile mergedSolution = SolutionFile.FromElement(mergedElement);
                         mergedSolution.SaveAs(mergedSolutionName);
                     }
                 }

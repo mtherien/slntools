@@ -38,9 +38,17 @@ namespace CWDev.SLNTools.Core
         {
         }
 
-        public GlobalSection(string name, NodeElement element)
-            : base(name, element)
+        #region public: Methods FromElement
+
+        public static GlobalSection FromElement(string name, NodeElement element)
         {
+            string sectionType;
+            string step;
+            PropertyLineHashList propertyLines;
+            FromElementToConstructorArgument(name, element, out sectionType, out step, out propertyLines);
+            return new GlobalSection(name, sectionType, step, propertyLines);
         }
+
+        #endregion
     }
 }

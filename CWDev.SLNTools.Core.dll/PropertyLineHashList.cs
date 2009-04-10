@@ -45,11 +45,14 @@ namespace CWDev.SLNTools.Core
             return new List<PropertyLine>(this).AsReadOnly();
         }
 
-        public void AddRange(IEnumerable<PropertyLine> original)
+        public void AddRange(IEnumerable<PropertyLine> lines)
         {
-            foreach (PropertyLine propertyLine in original)
+            if (lines != null)
             {
-                Add(propertyLine);
+                foreach (PropertyLine propertyLine in lines)
+                {
+                    Add(propertyLine);
+                }
             }
         }
 

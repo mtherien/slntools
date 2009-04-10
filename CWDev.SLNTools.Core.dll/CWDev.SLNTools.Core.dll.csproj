@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SectionHashList.cs" />
     <Compile Include="Merge\MergeException.cs" />
     <Compile Include="ProjectHashList.cs" />
     <Compile Include="Filter\FilteredSolutionWatcher.cs" />
