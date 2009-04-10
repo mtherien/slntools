@@ -20,14 +20,11 @@
 
 #endregion
 
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace CWDev.SLNTools.Core
 {
-    using Merge;
-
     public class PropertyLineHashList 
         : KeyedCollection<string, PropertyLine>        
     {
@@ -35,25 +32,9 @@ namespace CWDev.SLNTools.Core
         {
         }
 
-        public PropertyLineHashList(IEnumerable<PropertyLine> original)
+        public PropertyLineHashList(IEnumerable<PropertyLine> items)
         {
-            AddRange(original);
-        }
-
-        public ReadOnlyCollection<PropertyLine> AsReadOnly()
-        {
-            return new List<PropertyLine>(this).AsReadOnly();
-        }
-
-        public void AddRange(IEnumerable<PropertyLine> lines)
-        {
-            if (lines != null)
-            {
-                foreach (PropertyLine propertyLine in lines)
-                {
-                    Add(propertyLine);
-                }
-            }
+            AddRange(items);
         }
 
         protected override string GetKeyForItem(PropertyLine item)
@@ -63,11 +44,12 @@ namespace CWDev.SLNTools.Core
 
         protected override void InsertItem(int index, PropertyLine item)
         {
-            PropertyLine existingItem = (Contains(item.Name)) ? this[item.Name] : null;
+            PropertyLine existingItem = (Contains(GetKeyForItem(item))) ? this[GetKeyForItem(item)] : null;
 
             if (existingItem == null)                
             {
-                base.InsertItem(index, item);
+                // Add a clone of the item instead of the item itself
+                base.InsertItem(index, new PropertyLine(item));
             }
             else if (item.Value != existingItem.Value)
             {
@@ -79,7 +61,24 @@ namespace CWDev.SLNTools.Core
             }
             else
             {
-                // Nothing to do, the item provided is a duplicate of a line already present in the collection.
+                // Nothing to do, the item provided is a duplicate of an item already present in the collection.
+            }
+        }
+
+        protected override void SetItem(int index, PropertyLine item)
+        {
+            // Add a clone of the item instead of the item itself
+            base.SetItem(index, new PropertyLine(item));
+        }
+
+        public void AddRange(IEnumerable<PropertyLine> items)
+        {
+            if (items != null)
+            {
+                foreach (PropertyLine item in items)
+                {
+                    Add(item);
+                }
             }
         }
     }

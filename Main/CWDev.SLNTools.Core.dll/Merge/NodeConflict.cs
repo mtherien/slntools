@@ -36,11 +36,11 @@ namespace CWDev.SLNTools.Core.Merge
             : base(identifier)
         {
             if (!Enum.IsDefined(operationOnParent.GetType(), operationOnParent))
-                throw new ArgumentOutOfRangeException("operationOnParent", operationOnParent.ToString(), "Invalid value");
+                throw new ArgumentOutOfRangeException("operationOnParent", operationOnParent, "Invalid value");
             if (acceptedSubdifferences == null)
-                throw new NullReferenceException("acceptedSubdifferences");
+                throw new ArgumentNullException("acceptedSubdifferences");
             if (subconflicts == null)
-                throw new NullReferenceException("subconflicts");
+                throw new ArgumentNullException("subconflicts");
 
             m_operationOnParent = operationOnParent;
             m_acceptedSubdifferences = new List<Difference>(acceptedSubdifferences);

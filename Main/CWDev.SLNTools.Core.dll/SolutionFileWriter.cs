@@ -73,14 +73,14 @@ namespace CWDev.SLNTools.Core
 
         private void WriteProjects(SolutionFile solutionFile)
         {
-            foreach (Project project in solutionFile.ProjectsInOrders)
+            foreach (Project project in solutionFile.Projects)
             {
                 m_writer.WriteLine("Project(\"{0}\") = \"{1}\", \"{2}\", \"{3}\"",
                             project.ProjectTypeGuid,
                             project.ProjectName,
                             project.RelativePath,
                             project.ProjectGuid);
-                foreach (ProjectSection projectSection in project.ProjectSections)
+                foreach (Section projectSection in project.ProjectSections)
                 {
                     WriteSection(projectSection, projectSection.PropertyLines);
                 }
@@ -97,13 +97,13 @@ namespace CWDev.SLNTools.Core
 
         private void WriteGlobalSections(SolutionFile solutionFile)
         {
-            foreach (GlobalSection globalSection in solutionFile.GlobalSections)
+            foreach (Section globalSection in solutionFile.GlobalSections)
             {
                 List<PropertyLine> propertyLines = new List<PropertyLine>(globalSection.PropertyLines);
                 switch (globalSection.Name)
                 {
                     case "NestedProjects":
-                        foreach (Project project in solutionFile.ProjectsInOrders)
+                        foreach (Project project in solutionFile.Projects)
                         {
                             if (project.ParentFolderGuid != null)
                             {
@@ -113,23 +113,23 @@ namespace CWDev.SLNTools.Core
                         break;
 
                     case "ProjectConfigurationPlatforms":
-                        foreach (Project project in solutionFile.ProjectsInOrders)
+                        foreach (Project project in solutionFile.Projects)
                         {
                             foreach (PropertyLine propertyLine in project.ProjectConfigurationPlatformsLines)
                             {
                                 propertyLines.Add(
                                             new PropertyLine(
-                                                project.ProjectGuid + "." + propertyLine.Name,
+                                                string.Format("{0}.{1}", project.ProjectGuid, propertyLine.Name),
                                                 propertyLine.Value));
                             }
                         }
                         break;
 
                     default:
-                        if (globalSection.Name.EndsWith("Control", StringComparison.Ordinal))
+                        if (globalSection.Name.EndsWith("Control", StringComparison.InvariantCultureIgnoreCase))
                         {
                             int index = 1;
-                            foreach (Project project in solutionFile.ProjectsInOrders)
+                            foreach (Project project in solutionFile.Projects)
                             {
                                 if (project.VersionControlLines.Count > 0)
                                 {

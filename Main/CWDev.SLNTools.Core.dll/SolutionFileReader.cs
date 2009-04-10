@@ -66,11 +66,11 @@ namespace CWDev.SLNTools.Core
                 ReadHeader();
                 for (string line = ReadLine(); line != null; line = ReadLine())
                 {
-                    if (line.StartsWith("Project(", StringComparison.Ordinal))
+                    if (line.StartsWith("Project(", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        ReadProject(line);
+                        m_solutionFile.Projects.Add(ReadProject(line));
                     }
-                    else if (String.Compare(line, "Global", StringComparison.Ordinal) == 0)
+                    else if (String.Compare(line, "Global", StringComparison.InvariantCultureIgnoreCase) == 0)
                     {
                         ReadGlobal();
                         // TODO valide end of file
@@ -78,7 +78,7 @@ namespace CWDev.SLNTools.Core
                     }
                     else
                     {
-                        throw new IOException(string.Format("Invalid line read on line #{0}.\nFound: {1}\nExpected: A line beginning with 'Project(' or 'Global'.",
+                        throw new SolutionFileException(string.Format("Invalid line read on line #{0}.\nFound: {1}\nExpected: A line beginning with 'Project(' or 'Global'.",
                                         m_currentLineNumber, 
                                         line));
                     }
@@ -92,7 +92,7 @@ namespace CWDev.SLNTools.Core
             string line = m_reader.ReadLine();
             if (line == null)
             {
-                throw new IOException(string.Format("Unexpected end of file encounted while reading the solution file."));
+                throw new SolutionFileException("Unexpected end of file encounted while reading the solution file.");
             }
 
             m_currentLineNumber++;
@@ -101,10 +101,10 @@ namespace CWDev.SLNTools.Core
 
         private Project FindProjectByGuid(string guid, int lineNumber)
         {
-            Project p = m_solutionFile.FindProjectByGuid(guid);
+            Project p = m_solutionFile.Projects.FindByGuid(guid);
             if (p == null)
             {
-                throw new IOException(string.Format("Invalid guid found on line #{0}.\nFound: {1}\nExpected: A guid from one of the projects in the solution.",
+                throw new SolutionFileException(string.Format("Invalid guid found on line #{0}.\nFound: {1}\nExpected: A guid from one of the projects in the solution.",
                                 lineNumber,
                                 guid));
             }
@@ -116,8 +116,8 @@ namespace CWDev.SLNTools.Core
             for (int i = 1; i <= 3; i++)
             {
                 string line = ReadLine();
-                m_solutionFile.AddHeaderLine(line);
-                if (line.StartsWith("#", StringComparison.Ordinal))
+                m_solutionFile.Headers.Add(line);
+                if (line.StartsWith("#"))
                 {
                     return;
                 }
@@ -127,12 +127,12 @@ namespace CWDev.SLNTools.Core
         private static readonly string ms_patternParseProject = "^Project\\(\"(?<PROJECTTYPEGUID>.*)\"\\)\\s*=\\s*\"(?<PROJECTNAME>.*)\"\\s*,\\s*\"(?<RELATIVEPATH>.*)\"\\s*,\\s*\"(?<PROJECTGUID>.*)\"$";
         private static readonly Regex ms_regexParseProject = new Regex(ms_patternParseProject);
 
-        private void ReadProject(string firstLine)
+        private Project ReadProject(string firstLine)
         {
             Match match = ms_regexParseProject.Match(firstLine);
             if (!match.Success)
             {
-                throw new IOException(string.Format("Invalid format for a project on line #{0}.\nFound: {1}\nExpected: A line starting with 'Global' or respecting the pattern '{2}'.",
+                throw new SolutionFileException(string.Format("Invalid format for a project on line #{0}.\nFound: {1}\nExpected: A line starting with 'Global' or respecting the pattern '{2}'.",
                                 m_currentLineNumber,
                                 firstLine,
                                 ms_patternParseProject));
@@ -142,23 +142,23 @@ namespace CWDev.SLNTools.Core
             string projectName = match.Groups["PROJECTNAME"].Value.Trim();
             string relativePath = match.Groups["RELATIVEPATH"].Value.Trim();
             string projectGuid = match.Groups["PROJECTGUID"].Value.Trim();
-            List<ProjectSection> projectSections = new List<ProjectSection>();
+
+            List<Section> projectSections = new List<Section>();
             for (string line = ReadLine(); !line.StartsWith("EndProject"); line = ReadLine())
             {
                 projectSections.Add(ReadProjectSection(line));
             }
 
-            m_solutionFile.AddOrUpdateProject(
-                        new Project(
-                            null, 
-                            projectGuid, 
-                            projectTypeGuid, 
-                            projectName, 
-                            relativePath, 
-                            null, 
-                            projectSections, 
-                            null, 
-                            null));
+            return new Project(
+                        null,
+                        projectGuid,
+                        projectTypeGuid,
+                        projectName,
+                        relativePath,
+                        null,
+                        projectSections,
+                        null,
+                        null);
         }
 
         private void ReadGlobal()
@@ -172,12 +172,12 @@ namespace CWDev.SLNTools.Core
         private static readonly string ms_patternParseProjectSection = @"^(?<TYPE>ProjectSection)\((?<NAME>.*)\) = (?<STEP>.*)$";
         private static readonly Regex ms_regexParseProjectSection = new Regex(ms_patternParseProjectSection);
 
-        private ProjectSection ReadProjectSection(string firstLine)
+        private Section ReadProjectSection(string firstLine)
         {
             Match match = ms_regexParseProjectSection.Match(firstLine);
             if (!match.Success)
             {
-                throw new IOException(string.Format("Invalid format for a project section on line #{0}.\nFound: {1}\nExpected: A line starting with 'EndProject' or respecting the pattern '{2}'.",
+                throw new SolutionFileException(string.Format("Invalid format for a project section on line #{0}.\nFound: {1}\nExpected: A line starting with 'EndProject' or respecting the pattern '{2}'.",
                                 m_currentLineNumber,
                                 firstLine,
                                 ms_patternParseProjectSection));
@@ -188,13 +188,12 @@ namespace CWDev.SLNTools.Core
             string step = match.Groups["STEP"].Value.Trim();
 
             List<PropertyLine> propertyLines = new List<PropertyLine>();
-            int startLineNumber = m_currentLineNumber;
             string endOfSectionToken = "End" + type;
-            for (string line = ReadLine(); !line.StartsWith(endOfSectionToken, StringComparison.Ordinal); line = ReadLine())
+            for (string line = ReadLine(); !line.StartsWith(endOfSectionToken, StringComparison.InvariantCultureIgnoreCase); line = ReadLine())
             {
                 propertyLines.Add(ReadPropertyLine(line, endOfSectionToken));
             }
-            return new ProjectSection(name, type, step, propertyLines);
+            return new Section(name, type, step, propertyLines);
         }
 
         private static readonly string ms_patternParseGlobalSection = @"^(?<TYPE>GlobalSection)\((?<NAME>.*)\) = (?<STEP>.*)$";
@@ -205,7 +204,7 @@ namespace CWDev.SLNTools.Core
             Match match = ms_regexParseGlobalSection.Match(firstLine);
             if (! match.Success)
             {
-                throw new IOException(string.Format("Invalid format for a global section on line #{0}.\nFound: {1}\nExpected: A line starting with 'EndGlobal' or respecting the pattern '{2}'.",
+                throw new SolutionFileException(string.Format("Invalid format for a global section on line #{0}.\nFound: {1}\nExpected: A line starting with 'EndGlobal' or respecting the pattern '{2}'.",
                                 m_currentLineNumber,
                                 firstLine,
                                 ms_patternParseGlobalSection));
@@ -218,7 +217,7 @@ namespace CWDev.SLNTools.Core
             List<PropertyLine> propertyLines = new List<PropertyLine>();
             int startLineNumber = m_currentLineNumber;
             string endOfSectionToken = "End" + type;
-            for (string line = ReadLine(); !line.StartsWith(endOfSectionToken, StringComparison.Ordinal); line = ReadLine())
+            for (string line = ReadLine(); !line.StartsWith(endOfSectionToken, StringComparison.InvariantCultureIgnoreCase); line = ReadLine())
             {
                 propertyLines.Add(ReadPropertyLine(line, endOfSectionToken));
             }
@@ -240,8 +239,8 @@ namespace CWDev.SLNTools.Core
                     }
                     else
                     {
-                        m_solutionFile.AddOrUpdateGlobalSection(
-                                    new GlobalSection(
+                        m_solutionFile.GlobalSections.Add(
+                                    new Section(
                                         name, 
                                         type, 
                                         step, 
@@ -260,12 +259,12 @@ namespace CWDev.SLNTools.Core
                 Project left = FindProjectByGuid(propertyLine.Name, currentLineNumber);
                 left.ParentFolderGuid = propertyLine.Value;
             }
-            m_solutionFile.AddOrUpdateGlobalSection(
-                        new GlobalSection(
+            m_solutionFile.GlobalSections.Add(
+                        new Section(
                             name, 
                             type, 
                             step, 
-                            new List<PropertyLine>()));
+                            null));
         }
 
         private static readonly string ms_patternParseProjectConfigurationPlatformsName = @"^(?<GUID>\{[-0-9a-zA-Z]+\})\.(?<DESCRIPTION>.*)$";
@@ -278,30 +277,28 @@ namespace CWDev.SLNTools.Core
             {
                 currentLineNumber++;
                 Match match = ms_regexParseProjectConfigurationPlatformsName.Match(propertyLine.Name);
-                if (match.Success)
+                if (! match.Success)
                 {
-                    string projectGuid = match.Groups["GUID"].Value;
-                    string description = match.Groups["DESCRIPTION"].Value;
-                    Project left = FindProjectByGuid(projectGuid, currentLineNumber);
-                    left.ProjectConfigurationPlatformsLines.Add(
-                                new PropertyLine(
-                                    description,
-                                    propertyLine.Value));
-                }
-                else 
-                {
-                    throw new IOException(string.Format("Invalid format for a project configuration name on line #{0}.\nFound: {1}\nExpected: A line respecting the pattern '{2}'.",
+                    throw new SolutionFileException(string.Format("Invalid format for a project configuration name on line #{0}.\nFound: {1}\nExpected: A line respecting the pattern '{2}'.",
                                     m_currentLineNumber,
                                     propertyLine.Name,
                                     ms_patternParseProjectConfigurationPlatformsName));
                 }
+
+                string projectGuid = match.Groups["GUID"].Value;
+                string description = match.Groups["DESCRIPTION"].Value;
+                Project left = FindProjectByGuid(projectGuid, currentLineNumber);
+                left.ProjectConfigurationPlatformsLines.Add(
+                            new PropertyLine(
+                                description,
+                                propertyLine.Value));
             }
-            m_solutionFile.AddOrUpdateGlobalSection(
-                        new GlobalSection(
+            m_solutionFile.GlobalSections.Add(
+                        new Section(
                             name, 
                             type, 
                             step, 
-                            new List<PropertyLine>()));
+                            null));
         }
 
         private static readonly Regex ms_regexParseVersionControlName = new Regex(@"^(?<NAME_WITHOUT_INDEX>[a-zA-Z]*)(?<INDEX>[1-9][0-9]*)$");
@@ -346,7 +343,7 @@ namespace CWDev.SLNTools.Core
                             });
                 if (uniqueNameProperty == null)
                 {
-                    throw new IOException(string.Format("Missing property 'SccProjectUniqueName' for the element #{0} in the global section '{1}'.\nFound: Nothing.\nExpected: A property with the name 'SccProjectUniqueName{0}'.",
+                    throw new SolutionFileException(string.Format("Missing property 'SccProjectUniqueName' for the element #{0} in the global section '{1}'.\nFound: Nothing.\nExpected: A property with the name 'SccProjectUniqueName{0}'.",
                                     index,
                                     name));
                 }
@@ -359,7 +356,7 @@ namespace CWDev.SLNTools.Core
                 uniqueName = uniqueName.Replace(@"\\", @"\");
 
                 Project relatedProject = null;
-                foreach (Project project in m_solutionFile.ProjectsInOrders)
+                foreach (Project project in m_solutionFile.Projects)
                 {
                     if (string.Compare(project.RelativePath, uniqueName, StringComparison.InvariantCultureIgnoreCase) == 0)
                     {
@@ -368,7 +365,7 @@ namespace CWDev.SLNTools.Core
                 }
                 if (relatedProject == null)
                 {
-                    throw new IOException(string.Format("Invalid value for the property 'SccProjectUniqueName{0}' of the global section '{1}'.\nFound: {2}\nExpected: A value equal to the field 'RelativePath' of one of the projects in the solution.",
+                    throw new SolutionFileException(string.Format("Invalid value for the property 'SccProjectUniqueName{0}' of the global section '{1}'.\nFound: {2}\nExpected: A value equal to the field 'RelativePath' of one of the projects in the solution.",
                                     index,
                                     name,
                                     uniqueName));
@@ -377,8 +374,8 @@ namespace CWDev.SLNTools.Core
                 relatedProject.VersionControlLines.AddRange(propertiesForIndex);
             }
 
-            m_solutionFile.AddOrUpdateGlobalSection(
-                    new GlobalSection(
+            m_solutionFile.GlobalSections.Add(
+                    new Section(
                         name, 
                         type, 
                         step, 
@@ -393,7 +390,7 @@ namespace CWDev.SLNTools.Core
             Match match = ms_regexParsePropertyLine.Match(line);
             if (!match.Success)
             {
-                throw new IOException(string.Format("Invalid format for a property on line #{0}.\nFound: {1}\nExpected: A line starting with '{2}' or respecting the pattern '{3}'.",
+                throw new SolutionFileException(string.Format("Invalid format for a property on line #{0}.\nFound: {1}\nExpected: A line starting with '{2}' or respecting the pattern '{3}'.",
                                 m_currentLineNumber,
                                 line,
                                 endOfSectionToken,

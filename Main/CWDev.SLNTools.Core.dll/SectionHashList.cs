@@ -26,55 +26,45 @@ using System.Collections.ObjectModel;
 
 namespace CWDev.SLNTools.Core
 {
-    using Merge;
-
-    public class SectionHashList<T> 
-        : KeyedCollection<string, T>
-        where T : Section
+    public class SectionHashList 
+        : KeyedCollection<string, Section>
     {
         public SectionHashList()
             : base(StringComparer.InvariantCultureIgnoreCase)
         {
         }
 
-        public SectionHashList(IEnumerable<T> original)
+        public SectionHashList(IEnumerable<Section> items)
             : this()
         {
-            AddRange(original);
+            AddRange(items);
         }
 
-        protected override string GetKeyForItem(T item)
+        protected override string GetKeyForItem(Section item)
         {
             return item.Name;
         }
 
-        public ReadOnlyCollection<T> AsReadOnly()
+        protected override void InsertItem(int index, Section item)
         {
-            return new List<T>(this).AsReadOnly();
+            // Add a clone of the item instead of the item itself
+            base.InsertItem(index, new Section(item));
         }
 
-        public void AddRange(IEnumerable<T> sections)
+        protected override void SetItem(int index, Section item)
         {
-            if (sections != null)
+            // Add a clone of the item instead of the item itself
+            base.SetItem(index, new Section(item));
+        }
+
+        public void AddRange(IEnumerable<Section> items)
+        {
+            if (items != null)
             {
-                foreach (T section in sections)
+                foreach (Section item in items)
                 {
-                    Add(section);
+                    Add(item);
                 }
-            }
-        }
-
-        public void AddOrUpdate(T item)
-        {
-            T existingItem = (Contains(GetKeyForItem(item))) ? this[GetKeyForItem(item)] : null;
-            if (existingItem == null)
-            {
-                Add(item);
-            }
-            else
-            {
-                // If the item already exist in the list, we put the new version in the same spot.
-                SetItem(IndexOf(existingItem), item);
             }
         }
     }

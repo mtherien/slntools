@@ -34,7 +34,7 @@ namespace CWDev.SLNTools.Core.Merge
             : base(identifier, operationOnParent)
         {
             if (oldValue == newValue)
-                throw new Exception("Cannot create a ValueDifference were 'oldValue == newValue'.");
+                throw new MergeException("Cannot create a ValueDifference were 'oldValue == newValue'.");
 
             m_oldValue = oldValue;
             m_newValue = newValue;
@@ -48,14 +48,17 @@ namespace CWDev.SLNTools.Core.Merge
 
         public override Conflict CompareTo(Difference destinationDifference)
         {
+            if (destinationDifference == null)
+                throw new ArgumentNullException("destinationDifference");
+            if (!destinationDifference.Identifier.Equals(this.Identifier))
+                throw new MergeException("Cannot compare differences that does not share the same identifier.");
+
             ValueDifference source = this;
             ValueDifference destination = destinationDifference as ValueDifference;
             if (destination == null)
-                throw new ArgumentNullException("destination");
-            if (!source.Identifier.Equals(destination.Identifier))
-                throw new Exception("Cannot compare differences that does not share the same identifier.");
+                throw new MergeException(string.Format("Cannot compare a {0} to a {1}.", destinationDifference.GetType().Name, this.GetType().Name));
             if (source.OldValue != destination.OldValue)
-                throw new Exception("Cannot compare value differences that does not share the same 'OldValue'.");
+                throw new MergeException("Cannot compare value differences that does not share the same 'OldValue'.");
 
             if (source.OperationOnParent != destination.OperationOnParent)
             {

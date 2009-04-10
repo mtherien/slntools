@@ -20,9 +20,7 @@
 
 #endregion
 
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -30,17 +28,14 @@ namespace CWDev.SLNTools.Core
 {
     using Merge;
 
-    public abstract class Section
+    public class Section
     {
-        protected Section(Section original)
+        public Section(Section original)
+            : this(original.Name, original.SectionType, original.Step, original.PropertyLines)
         {
-            m_name = original.Name;
-            m_sectionType = original.SectionType;
-            m_step = original.Step;
-            m_propertyLines = new PropertyLineHashList(original.PropertyLines);
         }
 
-        protected Section(string name, string sectionType, string step, IEnumerable<PropertyLine> propertyLines)
+        public Section(string name, string sectionType, string step, IEnumerable<PropertyLine> propertyLines)
         {
             m_name = name;
             m_sectionType = sectionType;
@@ -53,17 +48,31 @@ namespace CWDev.SLNTools.Core
         private string m_step;
         private PropertyLineHashList m_propertyLines;
 
-        public string Name { get { return m_name; } }
-        public string SectionType { get { return m_sectionType; } }
-        public string Step { get { return m_step; } }
-        public ReadOnlyCollection<PropertyLine> PropertyLines { get { return m_propertyLines.AsReadOnly(); } }
+        public string Name 
+        { 
+            get { return m_name; } 
+        }
+        public string SectionType
+        {
+            get { return m_sectionType; }
+            set { m_sectionType = value; }
+        }
+        public string Step
+        {
+            get { return m_step; }
+            set { m_step = value; }
+        }
+        public PropertyLineHashList PropertyLines 
+        { 
+            get { return m_propertyLines; } 
+        }
 
         public override string ToString()
         {
             return string.Format("{0} '{1}'", this.SectionType, this.Name);
         }
 
-        #region public: Methods ToElement / FromElementToConstructorArgument
+        #region public: Methods ToElement / FromElement
 
         private const string TagSectionType = "SectionType";
         private const string TagStep = "Step";
@@ -91,16 +100,13 @@ namespace CWDev.SLNTools.Core
             return new NodeElement(identifier, childs);
         }
 
-        protected static void FromElementToConstructorArgument(
+        public static Section FromElement(
                     string name, 
-                    NodeElement element,
-                    out string sectionType,
-                    out string step,
-                    out PropertyLineHashList propertyLines)
+                    NodeElement element)
         {
-            sectionType = null;
-            step = null;
-            propertyLines = new PropertyLineHashList();
+            string sectionType = null;
+            string step = null;
+            List<PropertyLine> propertyLines = new List<PropertyLine>();
 
             foreach (Element child in element.Childs)
             {
@@ -137,6 +143,8 @@ namespace CWDev.SLNTools.Core
                 throw new SolutionFileException(string.Format("Missing subelement '{0}' in a section element.", TagSectionType));
             if (step == null)
                 throw new SolutionFileException(string.Format("Missing subelement '{0}' in a section element.", TagStep));
+
+            return new Section(name, sectionType, step, propertyLines);
         }
 
         private static ElementHashList ConvertProjectReferencesValueToHashList(string value)

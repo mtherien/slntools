@@ -51,7 +51,7 @@
   <Class Name="CWDev.SLNTools.Core.Merge.ElementHashList">
     <Position X="0.5" Y="8" Width="2.75" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAgCAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Merge\ElementHashList.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -157,22 +157,22 @@
       <FileName>Merge\OperationOnParent.cs</FileName>
     </TypeIdentifier>
   </Enum>
-  <Delegate Name="CWDev.SLNTools.Core.Merge.ValueConflictResolver" Collapsed="true">
-    <Position X="5.25" Y="17.25" Width="1.5" />
+  <Delegate Name="CWDev.SLNTools.Core.Merge.ValueConflictResolver">
+    <Position X="5.25" Y="17.25" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAABAAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
       <FileName>Merge\Conflict.cs</FileName>
     </TypeIdentifier>
   </Delegate>
-  <Delegate Name="CWDev.SLNTools.Core.Merge.TypeDifferenceConflictResolver" Collapsed="true">
-    <Position X="8.25" Y="17.25" Width="1.5" />
+  <Delegate Name="CWDev.SLNTools.Core.Merge.TypeDifferenceConflictResolver">
+    <Position X="7.75" Y="17.25" Width="2.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
       <FileName>Merge\Conflict.cs</FileName>
     </TypeIdentifier>
   </Delegate>
-  <Delegate Name="CWDev.SLNTools.Core.Merge.ShouldBeRemovedHandler" Collapsed="true">
-    <Position X="6.5" Y="17.25" Width="1.5" />
+  <Delegate Name="CWDev.SLNTools.Core.Merge.ShouldBeRemovedHandler">
+    <Position X="10.75" Y="17.25" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Merge\NodeDifference.cs</FileName>

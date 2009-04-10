@@ -22,7 +22,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 
 namespace CWDev.SLNTools.Core
@@ -31,6 +30,8 @@ namespace CWDev.SLNTools.Core
 
     public class SolutionFile
     {
+        #region public static: Methods FromFile / FromStream
+
         public static SolutionFile FromFile(string solutionFullPath)
         {
             using (SolutionFileReader reader = new SolutionFileReader(solutionFullPath))
@@ -51,103 +52,50 @@ namespace CWDev.SLNTools.Core
             }
         }
 
+        #endregion
+
         public SolutionFile()
         {
             m_solutionFullPath = null;
             m_headers = new List<string>();
-            m_projects = new ProjectHashList();
-            m_globalSections = new SectionHashList<GlobalSection>();
+            m_projects = new ProjectHashList(this);
+            m_globalSections = new SectionHashList();
         }
 
         public SolutionFile(SolutionFile original)
-                    : this(original.SolutionFullPath, original.Headers, original.ProjectsInOrders, original.GlobalSections)
+                    : this(original.SolutionFullPath, original.Headers, original.Projects, original.GlobalSections)
         {
         }
 
-        public SolutionFile(string fullpath, IEnumerable<string> headers, IEnumerable<Project> projects, IEnumerable<GlobalSection> globalSections)
+        public SolutionFile(string fullpath, IEnumerable<string> headers, IEnumerable<Project> projects, IEnumerable<Section> globalSections)
         {
             m_solutionFullPath = fullpath;
             m_headers = new List<string>(headers);
-            m_projects = new ProjectHashList();
-            foreach (Project project in projects)
-            {
-                AddOrUpdateProject(project);
-            }
-            m_globalSections = new SectionHashList<GlobalSection>();
-            foreach (GlobalSection globalSection in globalSections)
-            {
-                AddOrUpdateGlobalSection(globalSection);
-            }
+            m_projects = new ProjectHashList(this, projects);
+            m_globalSections = new SectionHashList(globalSections);
         }
 
         private string m_solutionFullPath;
         private List<string> m_headers;
         private ProjectHashList m_projects;
-        private SectionHashList<GlobalSection> m_globalSections;
+        private SectionHashList m_globalSections;
 
         public string SolutionFullPath
         { 
             get { return m_solutionFullPath; }
             set { m_solutionFullPath = value; }
         }
-        public string SolutionPath { get { return Path.GetDirectoryName(m_solutionFullPath); } }
-
-        public ReadOnlyCollection<string> Headers { get { return m_headers.AsReadOnly(); } }
-
-        public void AddHeaderLine(string line)
-        {
-            m_headers.Add(line);
-        }
-
-        public void RemoveAllHeaderLine()
-        {
-            m_headers.Clear();
-        }
-
-        public ReadOnlyCollection<Project> ProjectsInOrders { get { return m_projects.AsReadOnly(); } }
-
-        public Project AddOrUpdateProject(Project newProject)
-        {
-            Project clone = new Project(this, newProject);
-            m_projects.AddOrUpdate(clone);
-            return clone;
-        }
-        public void RemoveProject(Project oldProject)
-        {
-            if (oldProject != null)
-            {
-                m_projects.Remove(oldProject);
-            }
-        }
-        public void RemoveProjectByGuid(string guid)
-        {
-            RemoveProject(FindProjectByGuid(guid));
-        }
-        public void SortProjects()
+        public List<string> Headers 
         { 
-            SortProjects(delegate(Project p1, Project p2)
-                        {
-                            return string.Compare(p1.ProjectFullName, p2.ProjectFullName);
-                        });
+            get { return m_headers; } 
         }
-        public void SortProjects(Comparison<Project> comparer)
-        {
-            m_projects.Sort(comparer);
+        public ProjectHashList Projects 
+        { 
+            get { return m_projects; } 
         }
-        public Project FindProjectByGuid(string guid)
-        {
-            return (m_projects.Contains(guid)) ? m_projects[guid] : null;
-        }
-        public Project FindProjectByFullName(string projectFullName)
-        {
-            foreach (Project project in m_projects)
-            {
-                if (string.Compare(project.ProjectFullName, projectFullName, StringComparison.InvariantCultureIgnoreCase) == 0)
-                {
-                    return project;
-                }
-            }
-            return null;
+        public SectionHashList GlobalSections 
+        { 
+            get { return m_globalSections; } 
         }
         public IEnumerable<Project> Childs
         {
@@ -161,25 +109,6 @@ namespace CWDev.SLNTools.Core
                     }
                 }
             }
-        }
-
-        public ReadOnlyCollection<GlobalSection> GlobalSections { get { return m_globalSections.AsReadOnly(); } }
-
-        public void AddOrUpdateGlobalSection(GlobalSection newGlobalSection)
-        {
-            m_globalSections.AddOrUpdate(newGlobalSection);
-        }
-        public void RemoveGlobalSection(GlobalSection oldGlobalSection)
-        {
-            m_globalSections.Remove(oldGlobalSection);
-        }
-        public void RemoveGlobalSectionByName(string name)
-        {
-            m_globalSections.Remove(FindGlobalSectionByName(name));
-        }
-        public GlobalSection FindGlobalSectionByName(string name)
-        {
-            return (m_globalSections.Contains(name)) ? m_globalSections[name] : null;
         }
 
         public void Save()
@@ -214,7 +143,7 @@ namespace CWDev.SLNTools.Core
                             new ElementIdentifier(TagHeader),
                             String.Join("|", m_headers.ToArray())));
 
-            foreach (Project project in this.ProjectsInOrders)
+            foreach (Project project in this.Projects)
             {
                 childs.Add(
                             project.ToElement(
@@ -222,7 +151,7 @@ namespace CWDev.SLNTools.Core
                                     TagProject + project.ProjectGuid,
                                     string.Format("Project \"{0}\"", project.ProjectFullName))));
             }
-            foreach (GlobalSection globalSection in this.GlobalSections)
+            foreach (Section globalSection in this.GlobalSections)
             {
                 childs.Add(
                             globalSection.ToElement(
@@ -238,8 +167,8 @@ namespace CWDev.SLNTools.Core
         public static SolutionFile FromElement(NodeElement element)
         {
             string[] headers = new string[0];
-            ProjectHashList projects = new ProjectHashList();
-            SectionHashList<GlobalSection> globalSections = new SectionHashList<GlobalSection>();
+            List<Project> projects = new List<Project>();
+            List<Section> globalSections = new List<Section>();
 
             foreach (Element child in element.Childs)
             {
@@ -256,11 +185,11 @@ namespace CWDev.SLNTools.Core
                 else if (identifier.Name.StartsWith(TagGlobalSection))
                 {
                     string sectionName = identifier.Name.Substring(TagGlobalSection.Length);
-                    globalSections.Add(GlobalSection.FromElement(sectionName, (NodeElement)child));
+                    globalSections.Add(Section.FromElement(sectionName, (NodeElement)child));
                 }
                 else
                 {
-                    throw new Exception(string.Format("Invalid identifier '{0}'.", identifier.Name));
+                    throw new SolutionFileException(string.Format("Invalid identifier '{0}'.", identifier.Name));
                 }
             }
             return new SolutionFile(null, headers, projects, globalSections);

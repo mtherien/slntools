@@ -80,9 +80,6 @@
     <Compile Include="Merge\Element.cs" />
     <Compile Include="Merge\ElementHashList.cs" />
     <Compile Include="Merge\Difference.cs" />
-    <Compile Include="MissingProjectException.cs" />
-    <Compile Include="ProjectSection.cs" />
-    <Compile Include="GlobalSection.cs" />
     <Compile Include="KnownProjectTypeGuid.cs" />
     <Compile Include="Filter\FilterFile.cs" />
     <Compile Include="SolutionFileException.cs" />
