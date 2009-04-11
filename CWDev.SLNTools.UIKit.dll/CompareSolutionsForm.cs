@@ -30,12 +30,12 @@ namespace CWDev.SLNTools.UIKit
 
     public partial class CompareSolutionsForm : Form
     {
-        public CompareSolutionsForm(Difference difference)
+        public CompareSolutionsForm(NodeDifference difference)
         {
             InitializeComponent();
             FormPosition.LoadFromRegistry(this);
 
-            m_differences.Data = ((NodeDifference)difference).Subdifferences;
+            m_differences.Data = difference;
         }
 
         // TODO add button to send the file to Default comparer defined in Visual Studio (i.e. *.*)

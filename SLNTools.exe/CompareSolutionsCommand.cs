@@ -54,10 +54,10 @@ namespace CWDev.SLNTools
 
                 SolutionFile oldSolution = SolutionFile.FromFile(parsedArguments.Solutions[0]);
                 SolutionFile newSolution = SolutionFile.FromFile(parsedArguments.Solutions[1]);
-                Difference difference = newSolution.CompareTo(oldSolution);
+                NodeDifference difference = newSolution.CompareTo(oldSolution);
                 if (difference == null)
                 {
-                    difference = new NodeDifference(new ElementIdentifier("SolutionFile"), OperationOnParent.Modified, new List<Difference>());
+                    difference = new NodeDifference(new ElementIdentifier("SolutionFile"), OperationOnParent.Modified, null);
                 }
                 using (CompareSolutionsForm form = new CompareSolutionsForm(difference))
                 {

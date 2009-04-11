@@ -37,15 +37,15 @@ namespace CWDev.SLNTools.Core.Merge
                     IEnumerable<Difference> subdifferences)
             : base(identifier, operationOnParent)
         {
-            if (subdifferences == null)
-                throw new ArgumentNullException("subdifferences");
-
-            m_subdifferences = new ReadOnlyCollection<Difference>(new List<Difference>(subdifferences));
+            m_subdifferences = new DifferenceHashList(subdifferences);
         }
 
-        private ReadOnlyCollection<Difference> m_subdifferences;
+        private DifferenceHashList m_subdifferences;
 
-        public ReadOnlyCollection<Difference> Subdifferences { get { return m_subdifferences; } }
+        public DifferenceHashList Subdifferences
+        { 
+            get { return m_subdifferences; } 
+        }
 
         public override Conflict CompareTo(Difference destinationDifference)
         {
@@ -116,7 +116,7 @@ namespace CWDev.SLNTools.Core.Merge
 
         public void Remove(ShouldBeRemovedHandler shouldBeRemovedHandler)
         {
-            List<Difference> filteredSubdifferences = new List<Difference>();
+            DifferenceHashList filteredSubdifferences = new DifferenceHashList();
             foreach (Difference subdifference in m_subdifferences)
             {
                 if (shouldBeRemovedHandler(subdifference))
@@ -138,7 +138,7 @@ namespace CWDev.SLNTools.Core.Merge
                     filteredSubdifferences.Add(subdifference);
                 }
             }
-            m_subdifferences = filteredSubdifferences.AsReadOnly();
+            m_subdifferences = filteredSubdifferences;
         }
 
         public override string ToString()

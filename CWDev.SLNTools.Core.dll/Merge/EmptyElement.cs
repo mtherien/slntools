@@ -53,7 +53,7 @@ namespace CWDev.SLNTools.Core.Merge
                 return new NodeDifference(
                             this.Identifier,
                             OperationOnParent.Removed,
-                            new List<Difference>());
+                            null);
             }
             else
             {

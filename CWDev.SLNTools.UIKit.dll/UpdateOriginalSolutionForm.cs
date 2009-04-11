@@ -35,12 +35,12 @@ namespace CWDev.SLNTools.UIKit
 
     public partial class UpdateOriginalSolutionForm : Form
     {
-        public UpdateOriginalSolutionForm(IEnumerable<Difference> differences, string originalSolutionFullPath)
+        public UpdateOriginalSolutionForm(NodeDifference difference, string originalSolutionFullPath)
         {
             InitializeComponent();
             FormPosition.LoadFromRegistry(this);
 
-            m_differencesInFilteredSolution.Data = differences;
+            m_differencesInFilteredSolution.Data = difference;
             m_originalSolutionFullPath = originalSolutionFullPath;
             UpdateState();
 
