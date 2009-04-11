@@ -87,7 +87,7 @@ namespace CWDev.SLNTools.Core.Filter
                         });
                         if (difference.Subdifferences.Count > 0)
                         {
-                            if (m_acceptDifferencesHandler(difference.Subdifferences))
+                            if (m_acceptDifferencesHandler(difference))
                             {
                                 SolutionFile newOriginalSolution = SolutionFile.FromElement((NodeElement)m_filterFile.SourceSolution.ToElement().Apply(difference));
                                 newOriginalSolution.Save();

@@ -21,6 +21,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
@@ -63,11 +64,11 @@ namespace CWDev.SLNTools
 
                 filterFile.StartFilteredSolutionWatcher(
                             filteredSolution,
-                            delegate(ReadOnlyCollection<Difference> differences)
+                            delegate(NodeDifference difference)
                             {
                                 using (TopMostFormFix fix = new TopMostFormFix())
                                 {
-                                    using (UpdateOriginalSolutionForm form = new UpdateOriginalSolutionForm(differences, filterFile.SourceSolutionFullPath))
+                                    using (UpdateOriginalSolutionForm form = new UpdateOriginalSolutionForm(difference, filterFile.SourceSolutionFullPath))
                                     {
                                         return (form.ShowDialog() == DialogResult.Yes);
                                     }

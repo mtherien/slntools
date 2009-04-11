@@ -45,13 +45,13 @@ namespace CWDev.SLNTools.Core.Merge
             differenceInSourceBranch = (NodeDifference) elementInSourceBranch.CompareTo(commonAncestrorElement);
             if (differenceInSourceBranch == null)
             {
-                differenceInSourceBranch = new NodeDifference(new ElementIdentifier("SolutionFile"), OperationOnParent.Modified, new List<Difference>());
+                differenceInSourceBranch = new NodeDifference(new ElementIdentifier("SolutionFile"), OperationOnParent.Modified, null);
             }
 
             differenceInDestinationBranch = (NodeDifference) elementInDestinationBranch.CompareTo(commonAncestrorElement);
             if (differenceInDestinationBranch == null)
             {
-                differenceInDestinationBranch = new NodeDifference(new ElementIdentifier("SolutionFile"), OperationOnParent.Modified, new List<Difference>());
+                differenceInDestinationBranch = new NodeDifference(new ElementIdentifier("SolutionFile"), OperationOnParent.Modified, null);
             }
 
             return (NodeConflict)differenceInSourceBranch.CompareTo(differenceInDestinationBranch);

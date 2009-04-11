@@ -29,7 +29,7 @@ namespace CWDev.SLNTools.Core.Filter
 {
     using Merge;
 
-    public delegate bool AcceptDifferencesHandler(ReadOnlyCollection<Difference> differences);
+    public delegate bool AcceptDifferencesHandler(NodeDifference difference);
 
     public class FilterFile
     {

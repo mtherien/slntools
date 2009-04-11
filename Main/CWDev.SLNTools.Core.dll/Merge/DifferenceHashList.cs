@@ -20,6 +20,7 @@
 
 #endregion
 
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace CWDev.SLNTools.Core.Merge
@@ -28,12 +29,27 @@ namespace CWDev.SLNTools.Core.Merge
     {
         public DifferenceHashList()
         {
+        }
 
+        public DifferenceHashList(IEnumerable<Difference> items)
+        {
+            AddRange(items);
         }
 
         protected override ElementIdentifier GetKeyForItem(Difference item)
         {
             return item.Identifier;
+        }
+
+        public void AddRange(IEnumerable<Difference> items)
+        {
+            if (items != null)
+            {
+                foreach (Difference item in items)
+                {
+                    Add(item);
+                }
+            }
         }
     }
 }

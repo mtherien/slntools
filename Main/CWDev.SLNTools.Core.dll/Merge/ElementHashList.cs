@@ -32,17 +32,25 @@ namespace CWDev.SLNTools.Core.Merge
         {
         }
 
-        public ElementHashList(IEnumerable<Element> original)
+        public ElementHashList(IEnumerable<Element> items)
         {
-            foreach (Element element in original)
-            {
-                this.Add(element);
-            }
+            AddRange(items);
         }
 
         protected override ElementIdentifier GetKeyForItem(Element item)
         {
             return item.Identifier;
+        }
+
+        public void AddRange(IEnumerable<Element> items)
+        {
+            if (items != null)
+            {
+                foreach (Element item in items)
+                {
+                    Add(item);
+                }
+            }
         }
 
         public void AddOrUpdate(Element item)

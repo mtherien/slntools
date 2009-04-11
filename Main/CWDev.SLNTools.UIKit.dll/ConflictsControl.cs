@@ -29,14 +29,14 @@ namespace CWDev.SLNTools.UIKit
 
     public partial class ConflictsControl : TreeView
     {
-        public IEnumerable<Conflict> Data
+        public NodeConflict Data
         {
             set
             {
                 this.Nodes.Clear();
                 if (value != null)
                 {
-                    foreach (Conflict conflict in value)
+                    foreach (Conflict conflict in value.Subconflicts)
                     {
                         TreeNode node = this.Nodes.Add(conflict.ToString());
                         FillConflictNode(node, conflict);

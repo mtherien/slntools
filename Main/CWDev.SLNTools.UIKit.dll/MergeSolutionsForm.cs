@@ -45,8 +45,8 @@ namespace CWDev.SLNTools.UIKit
             InitializeComponent();
             FormPosition.LoadFromRegistry(this);
 
-            m_differencesInSourceBranchControl.Data = differenceInSourceBranch.Subdifferences;
-            m_differencesInDestinationBranchControl.Data = differenceInDestinationBranch.Subdifferences;
+            m_differencesInSourceBranchControl.Data = differenceInSourceBranch;
+            m_differencesInDestinationBranchControl.Data = differenceInDestinationBranch;
             m_conflict = conflict as NodeConflict;
             m_typeDifferenceConflictResolver = typeDifferenceConflictResolver;
             m_valueConflictResolver = valueConflictResolver;
@@ -88,9 +88,9 @@ namespace CWDev.SLNTools.UIKit
 
         private void UpdateUI()
         {
-            m_conflictsControl.Data = m_conflict.Subconflicts;
+            m_conflictsControl.Data = m_conflict;
             m_buttonResolveAll.Enabled = (m_conflict.Subconflicts.Count != 0);
-            m_acceptedDifferencesControl.Data = m_conflict.AcceptedSubdifferences;
+            m_acceptedDifferencesControl.Data = new NodeDifference(new ElementIdentifier("SolutionFile"), OperationOnParent.Modified, m_conflict.AcceptedSubdifferences);
             m_buttonSave.Enabled = (m_conflict.Subconflicts.Count == 0);
         }
 

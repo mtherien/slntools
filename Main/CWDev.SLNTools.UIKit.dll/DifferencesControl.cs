@@ -29,14 +29,14 @@ namespace CWDev.SLNTools.UIKit
 
     public partial class DifferencesControl : TreeView
     {
-        public IEnumerable<Difference> Data
+        public NodeDifference Data
         {
             set
             {
                 this.Nodes.Clear();
                 if (value != null)
                 {
-                    foreach (Difference difference in value)
+                    foreach (Difference difference in value.Subdifferences)
                     {
                         TreeNode node = this.Nodes.Add(difference.ToString());
                         FillNode(node, difference);
