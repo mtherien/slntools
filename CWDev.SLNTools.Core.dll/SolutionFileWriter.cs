@@ -42,7 +42,7 @@ namespace CWDev.SLNTools.Core
 
         #region IDisposable Members
 
-        void IDisposable.Dispose()
+        public sealed void IDisposable.Dispose()
         {
             if (m_writer != null)
             {
