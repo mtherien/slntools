@@ -78,7 +78,7 @@ namespace CWDev.SLNTools.Core.Merge
             }
             else if (difference is NodeDifference)
             {
-                NodeElement emptyNodeElement = new NodeElement(this.Identifier, new ElementHashList());
+                NodeElement emptyNodeElement = new NodeElement(this.Identifier, null);
                 return emptyNodeElement.Apply(difference);
             }
             else

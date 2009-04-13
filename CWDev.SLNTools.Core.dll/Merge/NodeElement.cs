@@ -29,13 +29,10 @@ namespace CWDev.SLNTools.Core.Merge
     {
         public NodeElement(
                     ElementIdentifier identifier,
-                    ElementHashList childs)
+                    IEnumerable<Element> childs)
             : base(identifier)
         {
-            if (childs == null)
-                throw new ArgumentNullException("childs");
-
-            m_childs = childs;
+            m_childs = new ElementHashList(childs);
         }
 
         private ElementHashList m_childs;
