@@ -80,7 +80,7 @@ namespace CWDev.SLNTools.Core
 
         public NodeElement ToElement(ElementIdentifier identifier)
         {
-            ElementHashList childs = new ElementHashList();
+            List<Element> childs = new List<Element>();
             childs.Add(new ValueElement(new ElementIdentifier(TagSectionType), this.SectionType));
             childs.Add(new ValueElement(new ElementIdentifier(TagStep), this.Step));
             foreach (PropertyLine propertyLine in this.PropertyLines)
@@ -147,9 +147,9 @@ namespace CWDev.SLNTools.Core
             return new Section(name, sectionType, step, propertyLines);
         }
 
-        private static ElementHashList ConvertProjectReferencesValueToHashList(string value)
+        private static List<Element> ConvertProjectReferencesValueToHashList(string value)
         {
-            ElementHashList references = new ElementHashList();
+            List<Element> references = new List<Element>();
             string pattern = "^\"((?<ReferenceGuid>[^|]+)\\|(?<ReferenceName>[^;]*)(;)?)*\"$";
             Match match = Regex.Match(value, pattern);
             if (!match.Success)

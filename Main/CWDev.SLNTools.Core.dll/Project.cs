@@ -354,7 +354,7 @@ namespace CWDev.SLNTools.Core
 
         public NodeElement ToElement(ElementIdentifier identifier)
         {
-            ElementHashList childs = new ElementHashList();
+            List<Element> childs = new List<Element>();
             childs.Add(new ValueElement(new ElementIdentifier(TagProjectTypeGuid), this.ProjectTypeGuid));
             childs.Add(new ValueElement(new ElementIdentifier(TagProjectName), this.ProjectName));
             childs.Add(new ValueElement(new ElementIdentifier(TagRelativePath), this.RelativePath));

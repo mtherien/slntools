@@ -38,6 +38,15 @@ namespace CWDev.SLNTools.Core.Merge
         public static NodeConflict Merge(
                     NodeElement commonAncestrorElement,
                     NodeElement elementInSourceBranch,
+                    NodeElement elementInDestinationBranch)
+        {
+            NodeDifference ignoreA, ignoreB;
+            return Merge(commonAncestrorElement, elementInSourceBranch, elementInDestinationBranch, out ignoreA, out ignoreB);
+        }
+
+        public static NodeConflict Merge(
+                    NodeElement commonAncestrorElement,
+                    NodeElement elementInSourceBranch,
                     NodeElement elementInDestinationBranch,
                     out NodeDifference differenceInSourceBranch,
                     out NodeDifference differenceInDestinationBranch)

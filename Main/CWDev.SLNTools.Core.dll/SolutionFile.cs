@@ -129,6 +129,46 @@ namespace CWDev.SLNTools.Core
             return (NodeDifference) this.ToElement().CompareTo(oldSolution.ToElement());
         }
 
+        public NodeConflict Validate(out List<string> messages)
+        {
+            // TODO Finish this.
+            messages = new List<string>();
+
+            Dictionary<string, Project> projectsByFullName = new Dictionary<string, Project>(StringComparer.InvariantCultureIgnoreCase);
+            List<Difference> acceptedDifferences = new List<Difference>();
+            List<Conflict> conflicts = new List<Conflict>();
+            foreach (Project project in m_projects)
+            {
+                Project otherProject;
+                if (projectsByFullName.TryGetValue(project.ProjectFullName, out otherProject))
+                {
+                    acceptedDifferences.Add(
+                                new NodeDifference(
+                                    new ElementIdentifier(
+                                        TagProject + project.ProjectGuid,
+                                        string.Format("Project \"{0}\" [{1}]", project.ProjectFullName, project.ProjectGuid)), 
+                                    OperationOnParent.Removed, 
+                                    null));
+
+                    ElementIdentifier otherProjectIdentifier = new ElementIdentifier(
+                                        TagProject + otherProject.ProjectGuid,
+                                        string.Format("Project \"{0}\" [{1}]", otherProject.ProjectFullName, otherProject.ProjectGuid));
+
+                    conflicts.Add(
+                                Conflict.Merge(
+                                    new NodeElement(otherProjectIdentifier, null),
+                                    otherProject.ToElement(otherProjectIdentifier),
+                                    project.ToElement(otherProjectIdentifier)));
+                }
+                else
+                {
+                    projectsByFullName.Add(project.ProjectFullName, project);
+                } 
+            }
+
+            return new NodeConflict(new ElementIdentifier("SolutionFile"), OperationOnParent.Modified, acceptedDifferences, conflicts);
+        }
+
         #region Methods ToElement / FromElement
 
         private const string TagHeader = "Header";
@@ -137,7 +177,7 @@ namespace CWDev.SLNTools.Core
 
         public NodeElement ToElement()
         {
-            ElementHashList childs = new ElementHashList();
+            List<Element> childs = new List<Element>();
             childs.Add(
                         new ValueElement(
                             new ElementIdentifier(TagHeader),
