@@ -22,7 +22,7 @@
 
 namespace CWDev.SLNTools.Core
 {
-    public class KnownProjectTypeGuid
+    public static class KnownProjectTypeGuid
     {
         public const string VisualBasic = "{F184B08F-C81C-45F6-A57F-5ABD9991F28F}";
         public const string CSharp = "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}";
