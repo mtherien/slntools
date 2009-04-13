@@ -59,6 +59,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\AssemblyInfoCommon.cs">
+      <Link>Properties\AssemblyInfoCommon.cs</Link>
+    </Compile>
     <Compile Include="SectionHashList.cs" />
     <Compile Include="Merge\MergeException.cs" />
     <Compile Include="ProjectHashList.cs" />
