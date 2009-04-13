@@ -47,7 +47,7 @@ namespace CWDev.SLNTools.Core
 
         #region IDisposable Members
 
-        public sealed void Dispose()
+        public void Dispose()
         {
             if (m_reader != null)
             {
