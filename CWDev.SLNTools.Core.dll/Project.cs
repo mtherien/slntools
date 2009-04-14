@@ -292,34 +292,29 @@ namespace CWDev.SLNTools.Core
                         break;
 
                     case KnownProjectTypeGuid.WebProject:
-                        foreach (PropertyLine propertyLine in m_projectSections["WebsiteProperties"].PropertyLines)
-                        {
-                            if (string.Compare(propertyLine.Name, "ProjectReferences", StringComparison.InvariantCultureIgnoreCase) == 0)
-                            {
-                                // Format is: "({GUID}|ProjectName;)*"
-                                // Example: "{GUID}|Infra.dll;{GUID2}|Services.dll;"
-                                string value = propertyLine.Value;
-                                if (value.StartsWith("\""))
-                                    value = value.Substring(1);
-                                if (value.EndsWith("\""))
-                                    value = value.Substring(0, value.Length - 1);
+                        // Format is: "({GUID}|ProjectName;)*"
+                        // Example: "{GUID}|Infra.dll;{GUID2}|Services.dll;"
+                        PropertyLine propertyLine = m_projectSections["WebsiteProperties"].PropertyLines["ProjectReferences"];
+                        string value = propertyLine.Value;
+                        if (value.StartsWith("\""))
+                            value = value.Substring(1);
+                        if (value.EndsWith("\""))
+                            value = value.Substring(0, value.Length - 1);
 
-                                foreach (string dependency in value.Split(';'))
-                                {
-                                    if (dependency.Trim().Length > 0)
-                                    {
-                                        string[] parts = dependency.Split('|');
-                                        string dependencyGuid = parts[0];
-                                        string dependencyName = parts[1]; // TODO handle null
-                                        yield return FindProjectInContainer(
-                                                    dependencyGuid,
-                                                    "Cannot find one of the dependency of project '{0}'.\nProject guid: {1}\nDependency guid: {2}\nDependency name: {3}\nReference found in: ProjectReferences line in WebsiteProperties section of the solution file",
-                                                    m_projectName,
-                                                    m_projectGuid,
-                                                    dependencyGuid,
-                                                    dependencyName);
-                                    }
-                                }
+                        foreach (string dependency in value.Split(';'))
+                        {
+                            if (dependency.Trim().Length > 0)
+                            {
+                                string[] parts = dependency.Split('|');
+                                string dependencyGuid = parts[0];
+                                string dependencyName = parts[1]; // TODO handle null
+                                yield return FindProjectInContainer(
+                                            dependencyGuid,
+                                            "Cannot find one of the dependency of project '{0}'.\nProject guid: {1}\nDependency guid: {2}\nDependency name: {3}\nReference found in: ProjectReferences line in WebsiteProperties section of the solution file",
+                                            m_projectName,
+                                            m_projectGuid,
+                                            dependencyGuid,
+                                            dependencyName);
                             }
                         }
                         break;
