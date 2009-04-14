@@ -61,7 +61,7 @@ namespace CWDev.SLNTools.Core.Merge
 
             if (source.OperationOnParent != destination.OperationOnParent)
             {
-                return new TypeDifferenceConflict(
+                return new OperationTypeConflict(
                             source,
                             destination);
             }
@@ -83,6 +83,7 @@ namespace CWDev.SLNTools.Core.Merge
                     }
                     else
                     {
+                        // There is a difference in both branch for the same identifier, see if there is a conflict or not
                         Difference destinationSubdifference = acceptedSubdifferences[sourceSubdifference.Identifier];
                         Conflict conflict = sourceSubdifference.CompareTo(destinationSubdifference);
                         if (conflict != null)

@@ -24,9 +24,9 @@ using System.Collections.Generic;
 
 namespace CWDev.SLNTools.Core.Merge
 {
-    public class TypeDifferenceConflict : Conflict
+    public class OperationTypeConflict : Conflict
     {
-        public TypeDifferenceConflict(
+        public OperationTypeConflict(
                     Difference differenceInSourceBranch,
                     Difference differenceInDestinationBranch)
             : base(differenceInSourceBranch.Identifier)
@@ -43,10 +43,10 @@ namespace CWDev.SLNTools.Core.Merge
 
         public override Difference Resolve(
                     ConflictContext context,
-                    TypeDifferenceConflictResolver typeDifferenceConflictResolver,
+                    OperationTypeConflictResolver operationTypeConflictResolver,
                     ValueConflictResolver valueConflictResolver)
         {
-            return typeDifferenceConflictResolver(context.CreateSubcontext(this), m_differenceInSourceBranch, m_differenceInDestinationBranch);
+            return operationTypeConflictResolver(context.CreateSubcontext(this), m_differenceInSourceBranch, m_differenceInDestinationBranch);
         }
 
         public override string ToString()

@@ -1,6 +1,6 @@
 ﻿namespace CWDev.SLNTools.UIKit
 {
-    partial class TypeDifferenceConflictResolverForm
+    partial class OperationTypeConflictResolverForm
     {
         /// <summary>
         /// Required designer variable.
@@ -117,7 +117,7 @@
             this.m_conflictcontextcontrol.Size = new System.Drawing.Size(442, 64);
             this.m_conflictcontextcontrol.TabIndex = 0;
             // 
-            // TypeDifferenceConflictResolverForm
+            // OperationTypeConflictResolverForm
             // 
             this.AcceptButton = this.m_buttonAccept;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -134,8 +134,8 @@
             this.Controls.Add(this.m_radioKeepSource);
             this.MaximumSize = new System.Drawing.Size(10000, 10000);
             this.MinimumSize = new System.Drawing.Size(470, 210);
-            this.Name = "TypeDifferenceConflictResolverForm";
-            this.Text = "Type difference conflict";
+            this.Name = "OperationTypeConflictResolverForm";
+            this.Text = "Operation type conflict";
             this.ResumeLayout(false);
             this.PerformLayout();
 

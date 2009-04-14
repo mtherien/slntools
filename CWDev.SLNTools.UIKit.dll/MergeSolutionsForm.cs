@@ -39,7 +39,7 @@ namespace CWDev.SLNTools.UIKit
                 NodeDifference differenceInSourceBranch,
                 NodeDifference differenceInDestinationBranch,
                 Conflict conflict,
-                TypeDifferenceConflictResolver typeDifferenceConflictResolver,
+                OperationTypeConflictResolver operationTypeConflictResolver,
                 ValueConflictResolver valueConflictResolver)
         {
             InitializeComponent();
@@ -48,11 +48,11 @@ namespace CWDev.SLNTools.UIKit
             m_differencesInSourceBranchControl.Data = differenceInSourceBranch;
             m_differencesInDestinationBranchControl.Data = differenceInDestinationBranch;
             m_conflict = conflict as NodeConflict;
-            m_typeDifferenceConflictResolver = typeDifferenceConflictResolver;
+            m_operationTypeConflictResolver = operationTypeConflictResolver;
             m_valueConflictResolver = valueConflictResolver;
             if (m_conflict.Subconflicts.Count == 0)
             {
-                m_result = (NodeDifference)m_conflict.Resolve(m_typeDifferenceConflictResolver, m_valueConflictResolver);
+                m_result = (NodeDifference)m_conflict.Resolve(m_operationTypeConflictResolver, m_valueConflictResolver);
             }
             else
             {
@@ -63,7 +63,7 @@ namespace CWDev.SLNTools.UIKit
         }
 
         private NodeConflict m_conflict;
-        private TypeDifferenceConflictResolver m_typeDifferenceConflictResolver;
+        private OperationTypeConflictResolver m_operationTypeConflictResolver;
         private ValueConflictResolver m_valueConflictResolver;
         private NodeDifference m_result;
 
@@ -96,7 +96,7 @@ namespace CWDev.SLNTools.UIKit
 
         private void m_buttonResolveAll_Click(object sender, EventArgs e)
         {
-            m_result = (NodeDifference) m_conflict.Resolve(m_typeDifferenceConflictResolver, m_valueConflictResolver);
+            m_result = (NodeDifference)m_conflict.Resolve(m_operationTypeConflictResolver, m_valueConflictResolver);
             UpdateUI();
         }
 

@@ -75,7 +75,7 @@ namespace CWDev.SLNTools
                             conflict,
                             delegate(ConflictContext context, Difference differenceTypeInSourceBranch, Difference differenceTypeInDestinationBranch)
                             {
-                                TypeDifferenceConflictResolverForm resolverForm = new TypeDifferenceConflictResolverForm(
+                                OperationTypeConflictResolverForm resolverForm = new OperationTypeConflictResolverForm(
                                             context,
                                             differenceTypeInSourceBranch,
                                             differenceTypeInDestinationBranch);

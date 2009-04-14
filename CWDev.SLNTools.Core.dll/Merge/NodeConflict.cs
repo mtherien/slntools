@@ -43,26 +43,26 @@ namespace CWDev.SLNTools.Core.Merge
                 throw new ArgumentNullException("subconflicts");
 
             m_operationOnParent = operationOnParent;
-            m_acceptedSubdifferences = new List<Difference>(acceptedSubdifferences);
+            m_acceptedSubdifferences = new DifferenceHashList(acceptedSubdifferences);
             m_subconflicts = new List<Conflict>(subconflicts);
         }
 
         private OperationOnParent m_operationOnParent;
-        private List<Difference> m_acceptedSubdifferences;
+        private DifferenceHashList m_acceptedSubdifferences;
         private List<Conflict> m_subconflicts;
 
         public OperationOnParent OperationOnParent { get { return m_operationOnParent; } }
-        public ReadOnlyCollection<Difference> AcceptedSubdifferences { get { return m_acceptedSubdifferences.AsReadOnly(); } }
+        public DifferenceHashList AcceptedSubdifferences { get { return m_acceptedSubdifferences; } }
         public ReadOnlyCollection<Conflict> Subconflicts { get { return m_subconflicts.AsReadOnly(); } }
 
         public override Difference Resolve(
                     ConflictContext context,
-                    TypeDifferenceConflictResolver typeDifferenceConflictResolver,
+                    OperationTypeConflictResolver operationTypeConflictResolver,
                     ValueConflictResolver valueConflictResolver)
         {
             foreach (Conflict subconflict in new List<Conflict>(m_subconflicts)) // Iterate on a copy of the list to be able to modify the original list in the loop
             {
-                Difference resolvedDifference = subconflict.Resolve(context.CreateSubcontext(this), typeDifferenceConflictResolver, valueConflictResolver);
+                Difference resolvedDifference = subconflict.Resolve(context.CreateSubcontext(this), operationTypeConflictResolver, valueConflictResolver);
                 if (resolvedDifference != null)
                 {
                     m_subconflicts.Remove(subconflict);

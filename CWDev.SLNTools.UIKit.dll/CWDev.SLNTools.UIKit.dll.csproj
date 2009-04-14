@@ -75,11 +75,11 @@
     <Compile Include="FormPosition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TopMostFormFix.cs" />
-    <Compile Include="TypeDifferenceConflictResolverForm.cs">
+    <Compile Include="OperationTypeConflictResolverForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="TypeDifferenceConflictResolverForm.Designer.cs">
-      <DependentUpon>TypeDifferenceConflictResolverForm.cs</DependentUpon>
+    <Compile Include="OperationTypeConflictResolverForm.Designer.cs">
+      <DependentUpon>OperationTypeConflictResolverForm.cs</DependentUpon>
     </Compile>
     <Compile Include="UpdateOriginalSolutionForm.cs">
       <SubType>Form</SubType>
@@ -107,8 +107,8 @@
       <DependentUpon>MergeSolutionsForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="TypeDifferenceConflictResolverForm.resx">
-      <DependentUpon>TypeDifferenceConflictResolverForm.cs</DependentUpon>
+    <EmbeddedResource Include="OperationTypeConflictResolverForm.resx">
+      <DependentUpon>OperationTypeConflictResolverForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UpdateOriginalSolutionForm.resx">
       <DependentUpon>UpdateOriginalSolutionForm.cs</DependentUpon>

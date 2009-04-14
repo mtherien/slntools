@@ -55,7 +55,7 @@ namespace CWDev.SLNTools.Core.Merge
 
         public override Difference Resolve(
                     ConflictContext context,
-                    TypeDifferenceConflictResolver typeDifferenceConflictResolver,
+                    OperationTypeConflictResolver operationTypeConflictResolver,
                     ValueConflictResolver valueConflictResolver)
         {
             string resolvedValue = valueConflictResolver(context.CreateSubcontext(this), m_newValueInSourceBranch, m_newValueInDestinationBranch);

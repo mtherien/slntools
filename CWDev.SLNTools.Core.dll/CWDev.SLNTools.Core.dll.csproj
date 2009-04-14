@@ -76,7 +76,7 @@
     <Compile Include="Merge\ValueElement.cs" />
     <Compile Include="Merge\NodeElement.cs" />
     <Compile Include="Merge\ElementIdentifier.cs" />
-    <Compile Include="Merge\TypeDifferenceConflict.cs" />
+    <Compile Include="Merge\OperationTypeConflict.cs" />
     <Compile Include="Merge\NodeConflict.cs" />
     <Compile Include="Merge\ValueConflict.cs" />
     <Compile Include="Merge\DifferenceHashList.cs" />
