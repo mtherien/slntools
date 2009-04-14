@@ -32,9 +32,9 @@ namespace CWDev.SLNTools.UIKit
 {
     using Core.Merge;
 
-    public partial class TypeDifferenceConflictResolverForm : Form
+    public partial class OperationTypeConflictResolverForm : Form
     {
-        public TypeDifferenceConflictResolverForm(
+        public OperationTypeConflictResolverForm(
                     ConflictContext context,
                     Difference differenceTypeInSourceBranch, 
                     Difference differenceTypeInDestinationBranch)

@@ -28,7 +28,7 @@ namespace CWDev.SLNTools.Core.Merge
                 ConflictContext context,
                 string valueInSourceBranch,
                 string valueInDestinationBranch);
-    public delegate Difference TypeDifferenceConflictResolver(
+    public delegate Difference OperationTypeConflictResolver(
                 ConflictContext context,
                 Difference differenceInSourceBranch,
                 Difference differenceInDestinationBranch);
@@ -76,15 +76,15 @@ namespace CWDev.SLNTools.Core.Merge
         public ElementIdentifier Identifier { get { return m_identifier; } }
 
         public Difference Resolve(
-                    TypeDifferenceConflictResolver typeDifferenceConflictResolver,
+                    OperationTypeConflictResolver operationTypeConflictResolver,
                     ValueConflictResolver valueConflictResolver)
         {
-            return Resolve(new ConflictContext(), typeDifferenceConflictResolver, valueConflictResolver);
+            return Resolve(new ConflictContext(), operationTypeConflictResolver, valueConflictResolver);
         }
 
         public abstract Difference Resolve(
                         ConflictContext context,
-                        TypeDifferenceConflictResolver typeDifferenceConflictResolver,
+                        OperationTypeConflictResolver operationTypeConflictResolver,
                         ValueConflictResolver valueConflictResolver);
     }
 }

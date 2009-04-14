@@ -62,7 +62,7 @@ namespace CWDev.SLNTools.Core.Merge
 
             if (source.OperationOnParent != destination.OperationOnParent)
             {
-                return new TypeDifferenceConflict(
+                return new OperationTypeConflict(
                             source, 
                             destination);
             }
