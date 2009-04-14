@@ -20,6 +20,7 @@
 
 #endregion
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -29,10 +30,12 @@ namespace CWDev.SLNTools.Core
         : KeyedCollection<string, PropertyLine>        
     {
         public PropertyLineHashList()
+            : base(StringComparer.InvariantCultureIgnoreCase)
         {
         }
 
         public PropertyLineHashList(IEnumerable<PropertyLine> items)
+            : this()
         {
             AddRange(items);
         }
