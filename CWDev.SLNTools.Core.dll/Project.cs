@@ -252,9 +252,16 @@ namespace CWDev.SLNTools.Core
                         foreach (XmlNode xmlNode in docVisualC.SelectNodes(@"//ProjectReference"))
                         {
                             string dependencyGuid = xmlNode.Attributes["ReferencedProjectIdentifier"].Value; // TODO handle null
-                            string dependencyRelativePathToProject = xmlNode.Attributes["RelativePathToProject"].Value;
-                            if (dependencyRelativePathToProject == null)
+                            string dependencyRelativePathToProject;
+                            XmlNode relativePathToProjectNode = xmlNode.Attributes["RelativePathToProject"];
+                            if (relativePathToProjectNode != null)
+                            {
+                                dependencyRelativePathToProject = relativePathToProjectNode.Value;
+                            }
+                            else
+                            {
                                 dependencyRelativePathToProject = "???";
+                            }
                             yield return FindProjectInContainer(
                                         dependencyGuid,
                                         "Cannot find one of the dependency of project '{0}'.\nProject guid: {1}\nDependency guid: {2}\nDependency relative path: '{3}'\nReference found in: ProjectReference node of file '{4}'",
