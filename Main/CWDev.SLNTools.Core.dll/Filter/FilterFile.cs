@@ -35,7 +35,7 @@ namespace CWDev.SLNTools.Core.Filter
     {
         public static FilterFile FromFile(string filterFullPath)
         {
-            using (FileStream stream = new FileStream(filterFullPath, FileMode.Open))
+            using (FileStream stream = new FileStream(filterFullPath, FileMode.Open, FileAccess.Read))
             {
                 return FromStream(filterFullPath, stream);
             }
