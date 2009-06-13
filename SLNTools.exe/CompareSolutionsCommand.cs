@@ -35,7 +35,7 @@ namespace CWDev.SLNTools
     {
         private class Arguments
         {
-            [DefaultArgument(ArgumentType.MultipleUnique)]
+            [DefaultArgument(ArgumentType.Multiple)]
             public string[] Solutions = null;
         }
 
