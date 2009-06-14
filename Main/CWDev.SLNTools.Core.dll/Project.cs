@@ -366,9 +366,7 @@ namespace CWDev.SLNTools.Core
             {
                 childs.Add(new ValueElement(
                             new ElementIdentifier(TagParentFolder),
-                            string.Format("{0}|{1}",
-                                this.ParentFolder.ProjectFullName,
-                                this.ParentFolder.ProjectGuid)));
+                            this.ParentFolder.ProjectFullName));
             }
 
             foreach (Section projectSection in this.ProjectSections)
@@ -402,7 +400,7 @@ namespace CWDev.SLNTools.Core
                             childs);
         }
 
-        public static Project FromElement(string projectGuid, NodeElement element)
+        public static Project FromElement(string projectGuid, NodeElement element, Dictionary<string, string> solutionFolderGuids)
         {
             string projectTypeGuid = null;
             string projectName = null;
@@ -429,7 +427,13 @@ namespace CWDev.SLNTools.Core
                 }
                 else if (identifier.Name == TagParentFolder)
                 {
-                    parentFolderGuid = ((ValueElement)child).Value.Split('|')[1];
+                    string parentProjectFullName = ((ValueElement)child).Value;
+                    if (! solutionFolderGuids.ContainsKey(parentProjectFullName))
+                    {
+                        throw new Exception("TODO");
+                    }
+
+                    parentFolderGuid = solutionFolderGuids[parentProjectFullName];
                 }
                 else if (identifier.Name.StartsWith(TagProjectSection))
                 {

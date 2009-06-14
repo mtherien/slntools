@@ -172,7 +172,9 @@ namespace CWDev.SLNTools.Core
         #region Methods ToElement / FromElement
 
         private const string TagHeader = "Header";
+        private const string TagSolutionFolderGuids = "SolutionFolderGuids";
         private const string TagProject = "P_";
+        private const string TagSolutionFolder = "SF_";
         private const string TagGlobalSection = "GS_";
 
         public NodeElement ToElement()
@@ -183,14 +185,34 @@ namespace CWDev.SLNTools.Core
                             new ElementIdentifier(TagHeader),
                             String.Join("|", m_headers.ToArray())));
 
+            List<Element> solutionFoldersElements = new List<Element>();
             foreach (Project project in this.Projects)
             {
-                childs.Add(
-                            project.ToElement(
-                                new ElementIdentifier(
-                                    TagProject + project.ProjectGuid,
-                                    string.Format("Project \"{0}\"", project.ProjectFullName))));
+                if (project.ProjectTypeGuid == KnownProjectTypeGuid.SolutionFolder)
+                {
+                    childs.Add(
+                                project.ToElement(
+                                    new ElementIdentifier(
+                                        TagSolutionFolder + project.ProjectFullName,
+                                        string.Format("SolutionFolder \"{0}\"", project.ProjectFullName))));
+                    solutionFoldersElements.Add(
+                                new ValueElement(
+                                    new ElementIdentifier(project.ProjectFullName),
+                                    project.ProjectGuid));
+                }
+                else
+                {
+                    childs.Add(
+                                project.ToElement(
+                                    new ElementIdentifier(
+                                        TagProject + project.ProjectGuid,
+                                        string.Format("Project \"{0}\"", project.ProjectFullName))));
+                }
             }
+            childs.Add(new NodeElement(
+                            new ElementIdentifier(TagSolutionFolderGuids),
+                            solutionFoldersElements));
+
             foreach (Section globalSection in this.GlobalSections)
             {
                 childs.Add(
@@ -210,17 +232,36 @@ namespace CWDev.SLNTools.Core
             List<Project> projects = new List<Project>();
             List<Section> globalSections = new List<Section>();
 
+            Dictionary<string, string> solutionFolderGuids = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+            foreach (ValueElement solutionGuid in ((NodeElement)element.Childs[new ElementIdentifier(TagSolutionFolderGuids)]).Childs)
+            {
+                solutionFolderGuids.Add(solutionGuid.Identifier.Name, solutionGuid.Value);
+            }
+
             foreach (Element child in element.Childs)
             {
                 ElementIdentifier identifier = child.Identifier;
-                if (identifier.Name.StartsWith(TagHeader))
+                if (identifier.Name == TagHeader)
                 {
                     headers = ((ValueElement)child).Value.Split('|');
+                }
+                else if (identifier.Name == TagSolutionFolderGuids)
+                {
+                    // Ignore it because we already handled it above
                 }
                 else if (identifier.Name.StartsWith(TagProject))
                 {
                     string projectGuid = identifier.Name.Substring(TagProject.Length);
-                    projects.Add(Project.FromElement(projectGuid, (NodeElement)child));
+                    projects.Add(Project.FromElement(projectGuid, (NodeElement)child, solutionFolderGuids));
+                }
+                else if (identifier.Name.StartsWith(TagSolutionFolder))
+                {
+                    string projectFullPath = identifier.Name.Substring(TagSolutionFolder.Length);
+                    if (!solutionFolderGuids.ContainsKey(projectFullPath))
+                    {
+                        throw new Exception("TODO");
+                    }
+                    projects.Add(Project.FromElement(solutionFolderGuids[projectFullPath], (NodeElement)child, solutionFolderGuids));
                 }
                 else if (identifier.Name.StartsWith(TagGlobalSection))
                 {
