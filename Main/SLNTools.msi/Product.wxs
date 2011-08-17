@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
+     xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
+
+  <!--The following variables must be modified for each release. A new GUID should be generated each time.-->
+  <?define ProductVersion=0.9.3 ?>
+  <?define ProductCode=F64DA708-0F8F-4333-AB0C-6488034153D2 ?>
+
+  <!--The following variable should NEVER be modified. -->
+  <?define UpgradeCode=9A791ED6-C6EA-4234-84E2-9A08122BBC61 ?>
+  
+	<Product Id="$(var.ProductCode)" 
+           Name="Tools for SLN File" 
+           Language="1033" 
+           Version="$(var.ProductVersion)" 
+           Manufacturer="SLNTools.msi" 
+           UpgradeCode="$(var.UpgradeCode)">
+		<Package InstallerVersion="200" Compressed="yes" />
+
+		<Media Id="1" Cabinet="media.cab" EmbedCab="yes" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="ProgramFilesFolder">
+				<Directory Id="INSTALLLOCATION" Name="Tools for SLN File" />
+			</Directory>
+		</Directory>
+
+    <Feature Id="ProductFeature" Title="Application" Level="1">
+      <!-- Note: The following ComponentGroupRef is required to pull in generated authoring from project references. -->
+      <ComponentGroupRef Id="Product.Generated" />
+    </Feature>
+
+    <!-- Validation : .Net framework installed or not. ====================================================-->
+
+    <PropertyRef Id="NETFRAMEWORK20"/>
+    <Condition Message="This application requires .NET Framework 2.0. Please install the .NET Framework then run this installer again.">
+      <![CDATA[Installed OR NETFRAMEWORK20]]>
+    </Condition>
+
+    <!-- Validation : Another version is already installed ? ==============================================-->
+
+    <Condition Message="A more recent version of this product is already installed. Installation of this version cannot continue. To configure or remove the existing version of this product, use Add/Remove Programs on the Control Panel"><![CDATA[NOT NEWERPRODUCTFOUND]]></Condition>
+
+    <Property Id="PREVIOUSVERSIONSINSTALLED" Secure="yes" />
+    <Property Id="NEWERPRODUCTFOUND" Secure="yes" />
+    <Upgrade Id="$(var.UpgradeCode)">
+      <UpgradeVersion IncludeMaximum="no" Maximum="$(var.ProductVersion)" Property="PREVIOUSVERSIONSINSTALLED" />
+      <UpgradeVersion IncludeMinimum="yes" Minimum="$(var.ProductVersion)" Property="NEWERPRODUCTFOUND" OnlyDetect="yes" />
+    </Upgrade>
+
+    <!-- Execute Sequence tweaking ========================================================================-->
+
+    <InstallExecuteSequence>
+      <RemoveExistingProducts After="InstallInitialize" />
+    </InstallExecuteSequence>
+
+    <!-- UI configuration =================================================================================-->
+
+    <Property Id="ALLUSERS"><![CDATA[1]]></Property>
+
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
+    <UIRef Id="WixUI_InstallDir" />
+    <UIRef Id="WixUI_ErrorProgressText" />
+  </Product>
+</Wix>
