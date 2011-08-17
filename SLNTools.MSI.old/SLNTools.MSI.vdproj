@@ -3,7 +3,7 @@
 "VSVersion" = "3:800"
 "ProjectType" = "8:{978C614F-708E-4E1A-B201-565925725DBA}"
 "IsWebType" = "8:FALSE"
-"ProjectName" = "8:SLNTools.MSI"
+"ProjectName" = "8:SLNTools.MSI.old"
 "LanguageId" = "3:1033"
 "CodePage" = "3:1252"
 "UILanguageId" = "3:1033"
@@ -15,26 +15,14 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_49D82775B26134B1E7468B6CDCBD57E6"
-        "OwnerKey" = "8:_4B4413AF76324B4D9B0B5D719480AF5A"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_49D82775B26134B1E7468B6CDCBD57E6"
-        "OwnerKey" = "8:_81160FBD3FBD479FB783F9D6730F0C32"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_49D82775B26134B1E7468B6CDCBD57E6"
-        "OwnerKey" = "8:_B3346A78DED845AB34B80BD19AB8345E"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_4B4413AF76324B4D9B0B5D719480AF5A"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5475ECE18C8C31425F74F805BDEB7B76"
+        "OwnerKey" = "8:_4B4413AF76324B4D9B0B5D719480AF5A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -45,14 +33,26 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_B3346A78DED845AB34B80BD19AB8345E"
+        "MsmKey" = "8:_B8949AA2DC0C4D10A25D8BB7C114824A"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E46A2EB9B637D799DD33C8522DFD333C"
         "OwnerKey" = "8:_4B4413AF76324B4D9B0B5D719480AF5A"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_B8949AA2DC0C4D10A25D8BB7C114824A"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_E46A2EB9B637D799DD33C8522DFD333C"
+        "OwnerKey" = "8:_81160FBD3FBD479FB783F9D6730F0C32"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_E46A2EB9B637D799DD33C8522DFD333C"
+        "OwnerKey" = "8:_5475ECE18C8C31425F74F805BDEB7B76"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -76,13 +76,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_B3346A78DED845AB34B80BD19AB8345E"
+        "OwnerKey" = "8:_5475ECE18C8C31425F74F805BDEB7B76"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_49D82775B26134B1E7468B6CDCBD57E6"
+        "OwnerKey" = "8:_E46A2EB9B637D799DD33C8522DFD333C"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -182,7 +182,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "Version" = "8:2.0.50727"
+                "FrameworkVersion" = "8:2.0.50727"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=9832"
                 }
@@ -190,20 +190,20 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_49D82775B26134B1E7468B6CDCBD57E6"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5475ECE18C8C31425F74F805BDEB7B76"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:CWDev.SLNTools.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:CWDev.SLNTools.UIKit.dll, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_49D82775B26134B1E7468B6CDCBD57E6"
+                    "_5475ECE18C8C31425F74F805BDEB7B76"
                     {
-                    "Name" = "8:CWDev.SLNTools.Core.dll"
+                    "Name" = "8:CWDev.SLNTools.UIKit.dll.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:CWDev.SLNTools.Core.dll"
+            "SourcePath" = "8:CWDev.SLNTools.UIKit.dll.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_256EFD712D6B45DCB7AD7BF5C72114D7"
@@ -221,20 +221,20 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_B3346A78DED845AB34B80BD19AB8345E"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_E46A2EB9B637D799DD33C8522DFD333C"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:CWDev.SLNTools.UIKit.dll, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:CWDev.SLNTools.Core, Version=1.0.0.1, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_B3346A78DED845AB34B80BD19AB8345E"
+                    "_E46A2EB9B637D799DD33C8522DFD333C"
                     {
-                    "Name" = "8:CWDev.SLNTools.UIKit.dll.dll"
+                    "Name" = "8:CWDev.SLNTools.Core.dll"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:CWDev.SLNTools.UIKit.dll.dll"
+            "SourcePath" = "8:CWDev.SLNTools.Core.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_256EFD712D6B45DCB7AD7BF5C72114D7"
@@ -341,6 +341,7 @@
         "ProductCode" = "8:{B06A5739-57E6-4BF7-85A2-C586BEFA36D6}"
         "PackageCode" = "8:{6E16CC67-C1AB-4763-B62D-120338090199}"
         "UpgradeCode" = "8:{9A791ED6-C6EA-4234-84E2-9A08122BBC61}"
+        "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
