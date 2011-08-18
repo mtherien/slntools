@@ -6,7 +6,7 @@
     <ProductVersion>3.5</ProductVersion>
     <ProjectGuid>{90671c26-71a1-4596-9103-904d420e755c}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>SLNTools.msi</OutputName>
+    <OutputName>SLNTools</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
@@ -33,8 +33,7 @@
       <Name>CWDev.SLNTools.Core.dll</Name>
       <Project>{055cf73f-58d6-4e8f-89b0-3fddc5cc57f5}</Project>
       <Private>True</Private>
-      <DoNotHarvest>
-      </DoNotHarvest>
+      <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
@@ -42,8 +41,7 @@
       <Name>CWDev.SLNTools.UIKit.dll</Name>
       <Project>{71cbd77b-d29a-42f6-b0f1-d0effe095ccc}</Project>
       <Private>True</Private>
-      <DoNotHarvest>
-      </DoNotHarvest>
+      <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
@@ -51,8 +49,7 @@
       <Name>SLNTools.exe</Name>
       <Project>{00082d4f-899d-4a3b-b8c6-e9a25244e2b3}</Project>
       <Private>True</Private>
-      <DoNotHarvest>
-      </DoNotHarvest>
+      <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLLOCATION</RefTargetDir>
     </ProjectReference>
