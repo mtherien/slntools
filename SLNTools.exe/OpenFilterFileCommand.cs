@@ -44,6 +44,9 @@ namespace CWDev.SLNTools
 
             [Argument(ArgumentType.AtMostOnce)]
             public bool Wait = false;
+
+            [Argument(ArgumentType.AtMostOnce)]
+            public bool CreateOnly = false;
         }
 
         public override void Run(string[] args, MessageBoxErrorReporter reporter)
@@ -62,42 +65,45 @@ namespace CWDev.SLNTools
                 filteredSolution.Projects.Add(originalSolutionProject);
                 filteredSolution.Save();
 
-                filterFile.StartFilteredSolutionWatcher(
-                            filteredSolution,
-                            delegate(NodeDifference difference)
-                            {
-                                using (TopMostFormFix fix = new TopMostFormFix())
-                                {
-                                    using (UpdateOriginalSolutionForm form = new UpdateOriginalSolutionForm(difference, filterFile.SourceSolutionFullPath))
-                                    {
-                                        return (form.ShowDialog() == DialogResult.Yes);
-                                    }
-                                }
-                            });
-
-                DateTime startTime = DateTime.Now;
-                Process process = Process.Start(filteredSolution.SolutionFullPath);
-
-                if (parsedArguments.Wait || filterFile.WatchForChangesOnFilteredSolution)
+                if (!parsedArguments.CreateOnly)
                 {
-                    process.WaitForExit();
+                    filterFile.StartFilteredSolutionWatcher(
+                                filteredSolution,
+                                delegate(NodeDifference difference)
+                                {
+                                    using (TopMostFormFix fix = new TopMostFormFix())
+                                    {
+                                        using (UpdateOriginalSolutionForm form = new UpdateOriginalSolutionForm(difference, filterFile.SourceSolutionFullPath))
+                                        {
+                                            return (form.ShowDialog() == DialogResult.Yes);
+                                        }
+                                    }
+                                });
 
-                    // If the process exited "too fast", we wait on the processes that were spawned by the process 
-                    // we started. This allow us to handle the case where the '.sln' is associated to an application like 
-                    // "VSLauncher.exe". That type of application only live for a short period of time because it's job 
-                    // is to analyse the sln file, launch the right version of "devenv.exe" (i.e. VS2002, VS2005, VS2008) 
-                    // and then exit. 
-                    // This "trick" should not be needed with others IDE like SharpDevelop.
-                    if (DateTime.Now - startTime < TimeSpan.FromMinutes(1))
+                    DateTime startTime = DateTime.Now;
+                    Process process = Process.Start(filteredSolution.SolutionFullPath);
+
+                    if (parsedArguments.Wait || filterFile.WatchForChangesOnFilteredSolution)
                     {
-                        foreach (Process processSpawned in ProcessEx.GetChildsOfProcess(process))
+                        process.WaitForExit();
+
+                        // If the process exited "too fast", we wait on the processes that were spawned by the process 
+                        // we started. This allow us to handle the case where the '.sln' is associated to an application like 
+                        // "VSLauncher.exe". That type of application only live for a short period of time because it's job 
+                        // is to analyse the sln file, launch the right version of "devenv.exe" (i.e. VS2002, VS2005, VS2008) 
+                        // and then exit. 
+                        // This "trick" should not be needed with others IDE like SharpDevelop.
+                        if (DateTime.Now - startTime < TimeSpan.FromMinutes(1))
                         {
-                            processSpawned.WaitForExit();
+                            foreach (Process processSpawned in ProcessEx.GetChildsOfProcess(process))
+                            {
+                                processSpawned.WaitForExit();
+                            }
                         }
                     }
-                }
 
-                filterFile.StopFilteredSolutionWatcher();
+                    filterFile.StopFilteredSolutionWatcher();
+                }
             }
         }
 
