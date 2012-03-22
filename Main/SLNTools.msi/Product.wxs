@@ -3,13 +3,13 @@
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
 
   <!--The following variables must be modified for each release. A new GUID should be generated each time.-->
-  <?define ProductVersion=0.9.3 ?>
-  <?define ProductCode=D45198EC-867A-44BC-AFD2-7A3CC1D0C463 ?>
+  <?define ProductVersion=1.1.0 ?>
+  <?define ProductCode=2D309C13-323A-47FE-B322-5B96FD17E72D ?>
 
   <!--The following variable should NEVER be modified. -->
   <?define UpgradeCode=9A791ED6-C6EA-4234-84E2-9A08122BBC61 ?>
 
-  <Product Id="$(var.ProductCode)" 
+  <Product Id="$(var.ProductCode)"
            Name="Tools for SLN File" 
            Language="1033" 
            Version="$(var.ProductVersion)" 
@@ -36,6 +36,7 @@
           <Extension Id="SLNFILTER" Advertise="yes">
             <Verb Id="open" Command="&amp;Open" Argument="OpenFilterFile &quot;%1&quot;" Sequence="1" />
             <Verb Id="edit" Command="&amp;Edit" Argument="EditFilterFile &quot;%1&quot;" Sequence="2" />
+            <Verb Id="createsln" Command="&amp;Create Filtered Solution Only" Argument="OpenFilterFile &quot;%1&quot; -CreateOnly" Sequence="3" />
           </Extension>
         </ProgId>
       </Component>
