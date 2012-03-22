@@ -301,7 +301,7 @@ namespace CWDev.SLNTools.Core
                             null));
         }
 
-        private static readonly Regex ms_regexParseVersionControlName = new Regex(@"^(?<NAME_WITHOUT_INDEX>[a-zA-Z]*)(?<INDEX>[1-9][0-9]*)$");
+        private static readonly Regex ms_regexParseVersionControlName = new Regex(@"^(?<NAME_WITHOUT_INDEX>[a-zA-Z]*)(?<INDEX>[0-9]+)$");
         private static readonly Regex ms_regexConvertEscapedValues = new Regex(@"\\u(?<HEXACODE>[0-9a-fA-F]{4})");
 
         private void HandleVersionControlLines(string name, string type, string step, List<PropertyLine> propertyLines)
@@ -316,11 +316,19 @@ namespace CWDev.SLNTools.Core
                     string nameWithoutIndex = match.Groups["NAME_WITHOUT_INDEX"].Value.Trim();
                     int index = int.Parse(match.Groups["INDEX"].Value.Trim());
 
-                    if (! propertyLinesByIndex.ContainsKey(index))
+                    if ((nameWithoutIndex == "SccLocalPath") && (propertyLine.Value == "."))
                     {
-                        propertyLinesByIndex[index] = new List<PropertyLine>();
+                        // Handle the special case for the solution itself.
+                        othersVersionControlLines.Add(new PropertyLine("SccLocalPath0", "."));
                     }
-                    propertyLinesByIndex[index].Add(new PropertyLine(nameWithoutIndex, propertyLine.Value));
+                    else
+                    {
+                        if (!propertyLinesByIndex.ContainsKey(index))
+                        {
+                            propertyLinesByIndex[index] = new List<PropertyLine>();
+                        }
+                        propertyLinesByIndex[index].Add(new PropertyLine(nameWithoutIndex, propertyLine.Value));
+                    }
                 }
                 else
                 {
