@@ -3,7 +3,7 @@
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
 
   <!--The following variables must be modified for each release. A new GUID should be generated each time.-->
-  <?define ProductVersion=1.0.1 ?>
+  <?define ProductVersion=0.9.3 ?>
   <?define ProductCode=D45198EC-867A-44BC-AFD2-7A3CC1D0C463 ?>
 
   <!--The following variable should NEVER be modified. -->
