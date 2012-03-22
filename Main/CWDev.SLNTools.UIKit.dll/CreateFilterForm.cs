@@ -254,7 +254,10 @@ namespace CWDev.SLNTools.UIKit
                     fileDialog.Filter = "Solution Filter File (*.slnfilter)|*.slnfilter|All files (*.*)|*.*";
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        if (Path.GetDirectoryName(Path.GetFullPath(fileDialog.FileName)) == Path.GetDirectoryName(Path.GetFullPath(m_filterFile.SourceSolutionFullPath)))
+                        if (string.Equals(
+                                    Path.GetDirectoryName(Path.GetFullPath(fileDialog.FileName)), 
+                                    Path.GetDirectoryName(Path.GetFullPath(m_filterFile.SourceSolutionFullPath)), 
+                                    StringComparison.InvariantCultureIgnoreCase))                                    
                         {
                             m_filterFile.FilterFullPath = fileDialog.FileName;
                             m_filterFile.WatchForChangesOnFilteredSolution = m_checkboxWatchForChangesOnFilteredSolution.Checked;
