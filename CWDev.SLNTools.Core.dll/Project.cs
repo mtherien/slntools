@@ -204,6 +204,7 @@ namespace CWDev.SLNTools.Core
                     case KnownProjectTypeGuid.VisualBasic:
                     case KnownProjectTypeGuid.CSharp:
                     case KnownProjectTypeGuid.JSharp:
+                    case KnownProjectTypeGuid.FSharp:
                     default:
                         if (! File.Exists(this.FullPath))
                         {
