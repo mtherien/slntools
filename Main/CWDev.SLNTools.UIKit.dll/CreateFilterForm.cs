@@ -235,6 +235,9 @@ namespace CWDev.SLNTools.UIKit
             {
                 m_filterFile.WatchForChangesOnFilteredSolution = m_checkboxWatchForChangesOnFilteredSolution.Checked;
                 m_filterFile.Save();
+
+                SolutionFile filteredSolution = m_filterFile.Apply();
+                filteredSolution.Save();
                 return true;
             }
             catch (Exception ex)
@@ -262,6 +265,9 @@ namespace CWDev.SLNTools.UIKit
                             m_filterFile.FilterFullPath = fileDialog.FileName;
                             m_filterFile.WatchForChangesOnFilteredSolution = m_checkboxWatchForChangesOnFilteredSolution.Checked;
                             m_filterFile.Save();
+
+                            SolutionFile filteredSolution = m_filterFile.Apply();
+                            filteredSolution.Save();
                             return true;
                         }
                         else
