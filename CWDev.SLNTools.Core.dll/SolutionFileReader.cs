@@ -316,19 +316,11 @@ namespace CWDev.SLNTools.Core
                     string nameWithoutIndex = match.Groups["NAME_WITHOUT_INDEX"].Value.Trim();
                     int index = int.Parse(match.Groups["INDEX"].Value.Trim());
 
-                    if ((nameWithoutIndex == "SccLocalPath") && (propertyLine.Value == "."))
+                    if (!propertyLinesByIndex.ContainsKey(index))
                     {
-                        // Handle the special case for the solution itself.
-                        othersVersionControlLines.Add(new PropertyLine("SccLocalPath0", "."));
+                        propertyLinesByIndex[index] = new List<PropertyLine>();
                     }
-                    else
-                    {
-                        if (!propertyLinesByIndex.ContainsKey(index))
-                        {
-                            propertyLinesByIndex[index] = new List<PropertyLine>();
-                        }
-                        propertyLinesByIndex[index].Add(new PropertyLine(nameWithoutIndex, propertyLine.Value));
-                    }
+                    propertyLinesByIndex[index].Add(new PropertyLine(nameWithoutIndex, propertyLine.Value));
                 }
                 else
                 {
@@ -340,6 +332,9 @@ namespace CWDev.SLNTools.Core
                 }
             }
 
+            // Handle the special case for the solution itself.
+            othersVersionControlLines.Add(new PropertyLine("SccLocalPath0", "."));
+
             foreach (KeyValuePair<int, List<PropertyLine>> item in propertyLinesByIndex)
             {
                 int index = item.Key;
@@ -349,37 +344,35 @@ namespace CWDev.SLNTools.Core
                             {
                                 return property.Name == "SccProjectUniqueName";
                             });
-                if (uniqueNameProperty == null)
+                // If there is no ProjectUniqueName, we assume that it's the entry related to the solution by itself. We
+                // can ignore it because we added the special case above.
+                if (uniqueNameProperty != null)
                 {
-                    throw new SolutionFileException(string.Format("Missing property 'SccProjectUniqueName' for the element #{0} in the global section '{1}'.\nFound: Nothing.\nExpected: A property with the name 'SccProjectUniqueName{0}'.",
-                                    index,
-                                    name));
-                }
+                    string uniqueName = ms_regexConvertEscapedValues.Replace(uniqueNameProperty.Value, delegate(Match match)
+                                {
+                                    int hexaValue = int.Parse(match.Groups["HEXACODE"].Value, NumberStyles.AllowHexSpecifier);
+                                    return char.ConvertFromUtf32(hexaValue);
+                                });
+                    uniqueName = uniqueName.Replace(@"\\", @"\");
 
-                string uniqueName = ms_regexConvertEscapedValues.Replace(uniqueNameProperty.Value, delegate(Match match)
-                            {
-                                int hexaValue = int.Parse(match.Groups["HEXACODE"].Value, NumberStyles.AllowHexSpecifier);
-                                return char.ConvertFromUtf32(hexaValue);
-                            });
-                uniqueName = uniqueName.Replace(@"\\", @"\");
-
-                Project relatedProject = null;
-                foreach (Project project in m_solutionFile.Projects)
-                {
-                    if (string.Compare(project.RelativePath, uniqueName, StringComparison.InvariantCultureIgnoreCase) == 0)
+                    Project relatedProject = null;
+                    foreach (Project project in m_solutionFile.Projects)
                     {
-                        relatedProject = project;
+                        if (string.Compare(project.RelativePath, uniqueName, StringComparison.InvariantCultureIgnoreCase) == 0)
+                        {
+                            relatedProject = project;
+                        }
                     }
-                }
-                if (relatedProject == null)
-                {
-                    throw new SolutionFileException(string.Format("Invalid value for the property 'SccProjectUniqueName{0}' of the global section '{1}'.\nFound: {2}\nExpected: A value equal to the field 'RelativePath' of one of the projects in the solution.",
-                                    index,
-                                    name,
-                                    uniqueName));
-                }
+                    if (relatedProject == null)
+                    {
+                        throw new SolutionFileException(string.Format("Invalid value for the property 'SccProjectUniqueName{0}' of the global section '{1}'.\nFound: {2}\nExpected: A value equal to the field 'RelativePath' of one of the projects in the solution.",
+                                        index,
+                                        name,
+                                        uniqueName));
+                    }
 
-                relatedProject.VersionControlLines.AddRange(propertiesForIndex);
+                    relatedProject.VersionControlLines.AddRange(propertiesForIndex);
+                }
             }
 
             m_solutionFile.GlobalSections.Add(
