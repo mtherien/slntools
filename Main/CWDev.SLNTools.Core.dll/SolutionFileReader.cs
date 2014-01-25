@@ -371,12 +371,15 @@ namespace CWDev.SLNTools.Core
                 }
             }
 
-            this._solutionFile.GlobalSections.Add(
-                    new Section(
-                        name, 
-                        type, 
-                        step, 
-                        othersVersionControlLines));
+            if (!_solutionFile.GlobalSections.Contains(name))
+            {
+                this._solutionFile.GlobalSections.Add(
+                            new Section(
+                                name,
+                                type,
+                                step,
+                                othersVersionControlLines));
+            }
         }
 
         private static readonly string ms_patternParsePropertyLine = @"^(?<PROPERTYNAME>[^=]*)\s*=\s*(?<PROPERTYVALUE>[^=]*)$";
