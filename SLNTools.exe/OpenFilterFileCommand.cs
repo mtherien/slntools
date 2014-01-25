@@ -73,7 +73,7 @@ namespace CWDev.SLNTools
                     }
 
                     var resharperUserFileSettingsSource = filterFile.SourceSolutionFullPath + ".DotSettings.user";
-                    var resharperUserFileSettingsDestination = filterFile.SourceSolutionFullPath + ".DotSettings.user";
+                    var resharperUserFileSettingsDestination = filteredSolution.SolutionFullPath + ".DotSettings.user";
                     if (File.Exists(resharperUserFileSettingsSource) && !File.Exists(resharperUserFileSettingsDestination))
                     {
                         File.Copy(resharperUserFileSettingsSource, resharperUserFileSettingsDestination);
