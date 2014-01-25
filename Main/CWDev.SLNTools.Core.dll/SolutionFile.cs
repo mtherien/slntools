@@ -34,7 +34,7 @@ namespace CWDev.SLNTools.Core
 
         public static SolutionFile FromFile(string solutionFullPath)
         {
-            using (SolutionFileReader reader = new SolutionFileReader(solutionFullPath))
+            using (var reader = new SolutionFileReader(solutionFullPath))
             {
                 SolutionFile f = reader.ReadSolutionFile();
                 f.SolutionFullPath = solutionFullPath;
@@ -44,7 +44,7 @@ namespace CWDev.SLNTools.Core
 
         public static SolutionFile FromStream(string solutionFullPath, Stream stream)
         {
-            using (SolutionFileReader reader = new SolutionFileReader(stream))
+            using (var reader = new SolutionFileReader(stream))
             {
                 SolutionFile f = reader.ReadSolutionFile();
                 f.SolutionFullPath = solutionFullPath;
@@ -57,9 +57,9 @@ namespace CWDev.SLNTools.Core
         public SolutionFile()
         {
             m_solutionFullPath = null;
-            m_headers = new List<string>();
-            m_projects = new ProjectHashList(this);
-            m_globalSections = new SectionHashList();
+            this.Headers = new List<string>();
+            this.Projects = new ProjectHashList(this);
+            this.GlobalSections = new SectionHashList();
         }
 
         public SolutionFile(SolutionFile original)
@@ -70,38 +70,30 @@ namespace CWDev.SLNTools.Core
         public SolutionFile(string fullpath, IEnumerable<string> headers, IEnumerable<Project> projects, IEnumerable<Section> globalSections)
         {
             m_solutionFullPath = fullpath;
-            m_headers = new List<string>(headers);
-            m_projects = new ProjectHashList(this, projects);
-            m_globalSections = new SectionHashList(globalSections);
+            this.Headers = new List<string>(headers);
+            this.Projects = new ProjectHashList(this, projects);
+            this.GlobalSections = new SectionHashList(globalSections);
         }
 
         private string m_solutionFullPath;
-        private List<string> m_headers;
-        private ProjectHashList m_projects;
-        private SectionHashList m_globalSections;
 
         public string SolutionFullPath
         { 
             get { return m_solutionFullPath; }
             set { m_solutionFullPath = value; }
         }
-        public List<string> Headers 
-        { 
-            get { return m_headers; } 
-        }
-        public ProjectHashList Projects 
-        { 
-            get { return m_projects; } 
-        }
-        public SectionHashList GlobalSections 
-        { 
-            get { return m_globalSections; } 
-        }
+
+        public List<string> Headers { get; private set; }
+
+        public ProjectHashList Projects { get; private set; }
+
+        public SectionHashList GlobalSections { get; private set; }
+
         public IEnumerable<Project> Childs
         {
             get
             {
-                foreach (Project project in m_projects)
+                foreach (var project in this.Projects)
                 {
                     if (project.ParentFolder == null)
                     {
@@ -118,7 +110,7 @@ namespace CWDev.SLNTools.Core
 
         public void SaveAs(string solutionPath)
         {
-            using (SolutionFileWriter writer = new SolutionFileWriter(solutionPath))
+            using (var writer = new SolutionFileWriter(solutionPath))
             {
                 writer.WriteSolutionFile(this);
             }
@@ -134,10 +126,10 @@ namespace CWDev.SLNTools.Core
             // TODO Finish this.
             messages = new List<string>();
 
-            Dictionary<string, Project> projectsByFullName = new Dictionary<string, Project>(StringComparer.InvariantCultureIgnoreCase);
-            List<Difference> acceptedDifferences = new List<Difference>();
-            List<Conflict> conflicts = new List<Conflict>();
-            foreach (Project project in m_projects)
+            var projectsByFullName = new Dictionary<string, Project>(StringComparer.InvariantCultureIgnoreCase);
+            var acceptedDifferences = new List<Difference>();
+            var conflicts = new List<Conflict>();
+            foreach (var project in this.Projects)
             {
                 Project otherProject;
                 if (projectsByFullName.TryGetValue(project.ProjectFullName, out otherProject))
@@ -150,7 +142,7 @@ namespace CWDev.SLNTools.Core
                                     OperationOnParent.Removed, 
                                     null));
 
-                    ElementIdentifier otherProjectIdentifier = new ElementIdentifier(
+                    var otherProjectIdentifier = new ElementIdentifier(
                                         TagProject + otherProject.ProjectGuid,
                                         string.Format("Project \"{0}\" [{1}]", otherProject.ProjectFullName, otherProject.ProjectGuid));
 
@@ -179,14 +171,15 @@ namespace CWDev.SLNTools.Core
 
         public NodeElement ToElement()
         {
-            List<Element> childs = new List<Element>();
-            childs.Add(
-                        new ValueElement(
-                            new ElementIdentifier(TagHeader),
-                            String.Join("|", m_headers.ToArray())));
+            var childs = new List<Element>
+                        {
+                            new ValueElement(
+                                        new ElementIdentifier(TagHeader),
+                                        String.Join("|", this.Headers.ToArray()))
+                        };
 
-            List<Element> solutionFoldersElements = new List<Element>();
-            foreach (Project project in this.Projects)
+            var solutionFoldersElements = new List<Element>();
+            foreach (var project in this.Projects)
             {
                 if (project.ProjectTypeGuid == KnownProjectTypeGuid.SolutionFolder)
                 {
@@ -213,7 +206,7 @@ namespace CWDev.SLNTools.Core
                             new ElementIdentifier(TagSolutionFolderGuids),
                             solutionFoldersElements));
 
-            foreach (Section globalSection in this.GlobalSections)
+            foreach (var globalSection in this.GlobalSections)
             {
                 childs.Add(
                             globalSection.ToElement(
@@ -228,19 +221,19 @@ namespace CWDev.SLNTools.Core
 
         public static SolutionFile FromElement(NodeElement element)
         {
-            string[] headers = new string[0];
-            List<Project> projects = new List<Project>();
-            List<Section> globalSections = new List<Section>();
+            var headers = new string[0];
+            var projects = new List<Project>();
+            var globalSections = new List<Section>();
 
-            Dictionary<string, string> solutionFolderGuids = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+            var solutionFolderGuids = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
             foreach (ValueElement solutionGuid in ((NodeElement)element.Childs[new ElementIdentifier(TagSolutionFolderGuids)]).Childs)
             {
                 solutionFolderGuids.Add(solutionGuid.Identifier.Name, solutionGuid.Value);
             }
 
-            foreach (Element child in element.Childs)
+            foreach (var child in element.Childs)
             {
-                ElementIdentifier identifier = child.Identifier;
+                var identifier = child.Identifier;
                 if (identifier.Name == TagHeader)
                 {
                     headers = ((ValueElement)child).Value.Split('|');
@@ -251,12 +244,12 @@ namespace CWDev.SLNTools.Core
                 }
                 else if (identifier.Name.StartsWith(TagProject))
                 {
-                    string projectGuid = identifier.Name.Substring(TagProject.Length);
+                    var projectGuid = identifier.Name.Substring(TagProject.Length);
                     projects.Add(Project.FromElement(projectGuid, (NodeElement)child, solutionFolderGuids));
                 }
                 else if (identifier.Name.StartsWith(TagSolutionFolder))
                 {
-                    string projectFullPath = identifier.Name.Substring(TagSolutionFolder.Length);
+                    var projectFullPath = identifier.Name.Substring(TagSolutionFolder.Length);
                     if (!solutionFolderGuids.ContainsKey(projectFullPath))
                     {
                         throw new Exception("TODO");
@@ -265,7 +258,7 @@ namespace CWDev.SLNTools.Core
                 }
                 else if (identifier.Name.StartsWith(TagGlobalSection))
                 {
-                    string sectionName = identifier.Name.Substring(TagGlobalSection.Length);
+                    var sectionName = identifier.Name.Substring(TagGlobalSection.Length);
                     globalSections.Add(Section.FromElement(sectionName, (NodeElement)child));
                 }
                 else
