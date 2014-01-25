@@ -35,7 +35,7 @@ namespace CWDev.SLNTools.Core.Filter
     {
         public static FilterFile FromFile(string filterFullPath)
         {
-            using (FileStream stream = new FileStream(filterFullPath, FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream(filterFullPath, FileMode.Open, FileAccess.Read))
             {
                 return FromStream(filterFullPath, stream);
             }
@@ -43,10 +43,10 @@ namespace CWDev.SLNTools.Core.Filter
 
         public static FilterFile FromStream(string filterFullPath, Stream stream)
         {
-            FilterFile filterFile = new FilterFile();
+            var filterFile = new FilterFile();
             filterFile.FilterFullPath = filterFullPath;
 
-            XmlDocument xmldoc = new XmlDocument();
+            var xmldoc = new XmlDocument();
             xmldoc.Load(stream);
 
             XmlNode configNode = xmldoc.SelectSingleNode("Config");
@@ -61,6 +61,11 @@ namespace CWDev.SLNTools.Core.Filter
             {
                 filterFile.WatchForChangesOnFilteredSolution = bool.Parse(watchForChangesNode.InnerText);
             }
+            XmlNode copyReSharperFilesNode = configNode.SelectSingleNode("CopyReSharperFiles");
+            if (copyReSharperFilesNode != null)
+            {
+                filterFile.CopyReSharperFiles = bool.Parse(copyReSharperFilesNode.InnerText);
+            }
 
             foreach (XmlNode node in configNode.SelectNodes("ProjectToKeep"))
             {
@@ -72,51 +77,34 @@ namespace CWDev.SLNTools.Core.Filter
 
         public FilterFile()
         {
-            m_sourceSolutionFullPath = null;
-            m_filterFullPath = null;
-            m_projectsToKeep = new List<string>();
-            m_watchForChangesOnFilteredSolution = false;
+            this.SourceSolutionFullPath = null;
+            this.FilterFullPath = null;
+            this.ProjectsToKeep = new List<string>();
+            this.WatchForChangesOnFilteredSolution = false;
             m_watcher = null;
         }
 
-        private string m_sourceSolutionFullPath;
-        private string m_filterFullPath;
-        private List<string> m_projectsToKeep;
-        private bool m_watchForChangesOnFilteredSolution;
-        private FilteredSolutionWatcher m_watcher;   
+        private FilteredSolutionWatcher m_watcher;
 
-        public string SourceSolutionFullPath
-        {
-            get { return m_sourceSolutionFullPath; }
-            set { m_sourceSolutionFullPath = value; }
-        }
+        public string SourceSolutionFullPath { get; set; }
 
         public SolutionFile SourceSolution
         {
-            get { return SolutionFile.FromFile(m_sourceSolutionFullPath); }
+            get { return SolutionFile.FromFile(this.SourceSolutionFullPath); }
         }
 
-        public string FilterFullPath
-        {
-            get { return m_filterFullPath; }
-            set { m_filterFullPath = value; }
-        }
+        public string FilterFullPath { get; set; }
 
         public string DestinationSolutionFullPath
         {
             get { return Path.ChangeExtension(this.FilterFullPath, ".sln"); }
         }
 
-        public List<string> ProjectsToKeep
-        {
-            get { return m_projectsToKeep; }
-        }
+        public List<string> ProjectsToKeep { get; private set; }
 
-        public bool WatchForChangesOnFilteredSolution
-        {
-            get { return m_watchForChangesOnFilteredSolution; }
-            set { m_watchForChangesOnFilteredSolution = value; }
-        }
+        public bool WatchForChangesOnFilteredSolution { get; set; }
+
+        public bool CopyReSharperFiles { get; set; }
 
         public SolutionFile Apply()
         {
@@ -125,14 +113,14 @@ namespace CWDev.SLNTools.Core.Filter
 
         public SolutionFile ApplyOn(SolutionFile original)
         {
-            List<Project> includedProjects = new List<Project>();
-            foreach (string projectFullName in this.ProjectsToKeep)
+            var includedProjects = new List<Project>();
+            foreach (var projectFullName in this.ProjectsToKeep)
             {
-                Project projectToKeep = original.Projects.FindByFullName(projectFullName);
+                var projectToKeep = original.Projects.FindByFullName(projectFullName);
                 if (projectToKeep != null)
                 {
                     AddRecursiveDependenciesToList(includedProjects, projectToKeep);
-                    foreach (Project descendant in projectToKeep.AllDescendants)
+                    foreach (var descendant in projectToKeep.AllDescendants)
                     {
                         AddRecursiveDependenciesToList(includedProjects, descendant);
                     }
@@ -164,7 +152,7 @@ namespace CWDev.SLNTools.Core.Filter
 
         public void StartFilteredSolutionWatcher(SolutionFile filteredSolution, AcceptDifferencesHandler handler)
         {
-            if (m_watchForChangesOnFilteredSolution && (m_watcher == null))
+            if (this.WatchForChangesOnFilteredSolution && (m_watcher == null))
             {
                 m_watcher = new FilteredSolutionWatcher(
                             handler,
@@ -190,18 +178,22 @@ namespace CWDev.SLNTools.Core.Filter
 
         public void SaveAs(string filterFullPath)
         {
-            XmlDocument docFilter = new XmlDocument();
+            var docFilter = new XmlDocument();
 
             XmlNode configNode = docFilter.CreateElement("Config");
             docFilter.AppendChild(configNode);
 
             XmlNode sourceSlnNode = docFilter.CreateElement("SourceSLN");
-            sourceSlnNode.InnerText = Path.GetFileName(m_sourceSolutionFullPath);
+            sourceSlnNode.InnerText = Path.GetFileName(this.SourceSolutionFullPath);
             configNode.AppendChild(sourceSlnNode);
 
             XmlNode watchForChangesNode = docFilter.CreateElement("WatchForChangesOnFilteredSolution");
-            watchForChangesNode.InnerText = m_watchForChangesOnFilteredSolution.ToString();
+            watchForChangesNode.InnerText = this.WatchForChangesOnFilteredSolution.ToString();
             configNode.AppendChild(watchForChangesNode);
+
+            XmlNode copyReSharperFilesNode = docFilter.CreateElement("CopyReSharperFiles");
+            copyReSharperFilesNode.InnerText = this.CopyReSharperFiles.ToString();
+            configNode.AppendChild(copyReSharperFilesNode);
 
             foreach (string projectFullName in this.ProjectsToKeep)
             {

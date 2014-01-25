@@ -45,6 +45,7 @@ namespace CWDev.SLNTools.UIKit
             this.m_menuitemExit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_treeview = new System.Windows.Forms.TreeView();
             this.m_buttonSaveAndQuit = new System.Windows.Forms.Button();
+            this.m_checkboxCopyReSharperFiles = new System.Windows.Forms.CheckBox();
             labelSourceSolution = new System.Windows.Forms.Label();
             labelSelectTheProjectsYouWishToKeep = new System.Windows.Forms.Label();
             this.m_groupboxOptions.SuspendLayout();
@@ -71,12 +72,13 @@ namespace CWDev.SLNTools.UIKit
             // 
             // m_groupboxOptions
             // 
-            this.m_groupboxOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_groupboxOptions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_groupboxOptions.Controls.Add(this.m_checkboxCopyReSharperFiles);
             this.m_groupboxOptions.Controls.Add(this.m_checkboxWatchForChangesOnFilteredSolution);
-            this.m_groupboxOptions.Location = new System.Drawing.Point(8, 157);
+            this.m_groupboxOptions.Location = new System.Drawing.Point(8, 299);
             this.m_groupboxOptions.Name = "m_groupboxOptions";
-            this.m_groupboxOptions.Size = new System.Drawing.Size(452, 47);
+            this.m_groupboxOptions.Size = new System.Drawing.Size(663, 47);
             this.m_groupboxOptions.TabIndex = 5;
             this.m_groupboxOptions.TabStop = false;
             this.m_groupboxOptions.Text = "Options (when the filter file is opened)";
@@ -95,29 +97,29 @@ namespace CWDev.SLNTools.UIKit
             // 
             this.m_labelSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_labelSelected.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.m_labelSelected.Location = new System.Drawing.Point(237, 74);
+            this.m_labelSelected.Location = new System.Drawing.Point(448, 74);
             this.m_labelSelected.Name = "m_labelSelected";
             this.m_labelSelected.Size = new System.Drawing.Size(220, 13);
             this.m_labelSelected.TabIndex = 3;
             // 
             // m_textboxSourceSolution
             // 
-            this.m_textboxSourceSolution.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_textboxSourceSolution.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.m_textboxSourceSolution.Location = new System.Drawing.Point(117, 37);
             this.m_textboxSourceSolution.Name = "m_textboxSourceSolution";
             this.m_textboxSourceSolution.ReadOnly = true;
-            this.m_textboxSourceSolution.Size = new System.Drawing.Size(340, 20);
+            this.m_textboxSourceSolution.Size = new System.Drawing.Size(551, 20);
             this.m_textboxSourceSolution.TabIndex = 1;
             // 
             // m_labelErrorMessage
             // 
-            this.m_labelErrorMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_labelErrorMessage.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.m_labelErrorMessage.ForeColor = System.Drawing.Color.Red;
-            this.m_labelErrorMessage.Location = new System.Drawing.Point(9, 207);
+            this.m_labelErrorMessage.Location = new System.Drawing.Point(9, 349);
             this.m_labelErrorMessage.Name = "m_labelErrorMessage";
-            this.m_labelErrorMessage.Size = new System.Drawing.Size(448, 13);
+            this.m_labelErrorMessage.Size = new System.Drawing.Size(659, 13);
             this.m_labelErrorMessage.TabIndex = 6;
             // 
             // m_menuStrip
@@ -126,7 +128,7 @@ namespace CWDev.SLNTools.UIKit
             this.fileToolStripMenuItem});
             this.m_menuStrip.Location = new System.Drawing.Point(0, 0);
             this.m_menuStrip.Name = "m_menuStrip";
-            this.m_menuStrip.Size = new System.Drawing.Size(472, 24);
+            this.m_menuStrip.Size = new System.Drawing.Size(683, 24);
             this.m_menuStrip.TabIndex = 0;
             this.m_menuStrip.Text = "m_menuStrip";
             // 
@@ -140,63 +142,63 @@ namespace CWDev.SLNTools.UIKit
             this.toolStripSeparator2,
             this.m_menuitemExit});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(35, 20);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
             // 
             // m_menuitemOpen
             // 
             this.m_menuitemOpen.Name = "m_menuitemOpen";
-            this.m_menuitemOpen.Size = new System.Drawing.Size(136, 22);
+            this.m_menuitemOpen.Size = new System.Drawing.Size(123, 22);
             this.m_menuitemOpen.Text = "Open...";
             this.m_menuitemOpen.Click += new System.EventHandler(this.m_menuitemOpen_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(133, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(120, 6);
             // 
             // m_menuitemSave
             // 
             this.m_menuitemSave.Name = "m_menuitemSave";
-            this.m_menuitemSave.Size = new System.Drawing.Size(136, 22);
+            this.m_menuitemSave.Size = new System.Drawing.Size(123, 22);
             this.m_menuitemSave.Text = "Save";
             this.m_menuitemSave.Click += new System.EventHandler(this.m_menuitemSave_Click);
             // 
             // m_menuitemSaveAs
             // 
             this.m_menuitemSaveAs.Name = "m_menuitemSaveAs";
-            this.m_menuitemSaveAs.Size = new System.Drawing.Size(136, 22);
+            this.m_menuitemSaveAs.Size = new System.Drawing.Size(123, 22);
             this.m_menuitemSaveAs.Text = "Save As...";
             this.m_menuitemSaveAs.Click += new System.EventHandler(this.m_menuitemSaveAs_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(133, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(120, 6);
             // 
             // m_menuitemExit
             // 
             this.m_menuitemExit.Name = "m_menuitemExit";
-            this.m_menuitemExit.Size = new System.Drawing.Size(136, 22);
+            this.m_menuitemExit.Size = new System.Drawing.Size(123, 22);
             this.m_menuitemExit.Text = "Exit";
             this.m_menuitemExit.Click += new System.EventHandler(this.m_menuitemExit_Click);
             // 
             // m_treeview
             // 
-            this.m_treeview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_treeview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.m_treeview.CheckBoxes = true;
             this.m_treeview.Location = new System.Drawing.Point(8, 90);
             this.m_treeview.Name = "m_treeview";
-            this.m_treeview.Size = new System.Drawing.Size(452, 61);
+            this.m_treeview.Size = new System.Drawing.Size(663, 203);
             this.m_treeview.TabIndex = 4;
             this.m_treeview.AfterCheck += new System.Windows.Forms.TreeViewEventHandler(this.m_treeview_AfterCheck);
             // 
             // m_buttonSaveAndQuit
             // 
             this.m_buttonSaveAndQuit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_buttonSaveAndQuit.Location = new System.Drawing.Point(359, 231);
+            this.m_buttonSaveAndQuit.Location = new System.Drawing.Point(570, 373);
             this.m_buttonSaveAndQuit.Name = "m_buttonSaveAndQuit";
             this.m_buttonSaveAndQuit.Size = new System.Drawing.Size(101, 23);
             this.m_buttonSaveAndQuit.TabIndex = 7;
@@ -204,11 +206,21 @@ namespace CWDev.SLNTools.UIKit
             this.m_buttonSaveAndQuit.UseVisualStyleBackColor = true;
             this.m_buttonSaveAndQuit.Click += new System.EventHandler(this.m_buttonSaveAndQuit_Click);
             // 
+            // m_checkboxCopyReSharperFiles
+            // 
+            this.m_checkboxCopyReSharperFiles.AutoSize = true;
+            this.m_checkboxCopyReSharperFiles.Location = new System.Drawing.Point(235, 19);
+            this.m_checkboxCopyReSharperFiles.Name = "m_checkboxCopyReSharperFiles";
+            this.m_checkboxCopyReSharperFiles.Size = new System.Drawing.Size(125, 17);
+            this.m_checkboxCopyReSharperFiles.TabIndex = 1;
+            this.m_checkboxCopyReSharperFiles.Text = "Copy &ReSharper files";
+            this.m_checkboxCopyReSharperFiles.UseVisualStyleBackColor = true;
+            // 
             // CreateFilterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(472, 260);
+            this.ClientSize = new System.Drawing.Size(683, 402);
             this.Controls.Add(this.m_groupboxOptions);
             this.Controls.Add(this.m_buttonSaveAndQuit);
             this.Controls.Add(this.m_treeview);
@@ -248,5 +260,6 @@ namespace CWDev.SLNTools.UIKit
         private System.Windows.Forms.Button m_buttonSaveAndQuit;
         private System.Windows.Forms.CheckBox m_checkboxWatchForChangesOnFilteredSolution;
         private System.Windows.Forms.GroupBox m_groupboxOptions;
+        private System.Windows.Forms.CheckBox m_checkboxCopyReSharperFiles;
     }
 }

@@ -64,6 +64,21 @@ namespace CWDev.SLNTools
                 Project originalSolutionProject = CreateOriginalSolutionProject(filterFile.SourceSolutionFullPath);
                 filteredSolution.Projects.Add(originalSolutionProject);
                 filteredSolution.Save();
+                if (filterFile.CopyReSharperFiles)
+                {
+                    var resharperGlobalFileSettingsSource = filterFile.SourceSolutionFullPath + ".DotSettings";
+                    if (File.Exists(resharperGlobalFileSettingsSource))
+                    {
+                        File.Copy(resharperGlobalFileSettingsSource, filteredSolution.SolutionFullPath + ".DotSettings", true);
+                    }
+
+                    var resharperUserFileSettingsSource = filterFile.SourceSolutionFullPath + ".DotSettings.user";
+                    var resharperUserFileSettingsDestination = filterFile.SourceSolutionFullPath + ".DotSettings.user";
+                    if (File.Exists(resharperUserFileSettingsSource) && !File.Exists(resharperUserFileSettingsDestination))
+                    {
+                        File.Copy(resharperUserFileSettingsSource, resharperUserFileSettingsDestination);
+                    }
+                }
 
                 if (!parsedArguments.CreateOnly)
                 {
