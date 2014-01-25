@@ -82,6 +82,7 @@ namespace CWDev.SLNTools.UIKit
                     m_treeview.SelectedNode = m_treeview.Nodes[0];
                     m_treeview.EndUpdate();
                     m_checkboxWatchForChangesOnFilteredSolution.Checked = this._filterFile.WatchForChangesOnFilteredSolution;
+                    m_checkboxCopyReSharperFiles.Checked = this._filterFile.CopyReSharperFiles;
                 }
             }
             catch (Exception ex)
