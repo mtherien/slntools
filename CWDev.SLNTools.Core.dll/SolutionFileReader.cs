@@ -37,38 +37,49 @@ namespace CWDev.SLNTools.Core
 
         public SolutionFileReader(Stream reader)
         {
-            m_reader = new StreamReader(reader, Encoding.Default);
-            m_currentLineNumber = 0;
+            this._reader = new StreamReader(reader, Encoding.Default);
+            this._currentLineNumber = 0;
         }
 
-        private StreamReader m_reader;
-        private int m_currentLineNumber;
-        private SolutionFile m_solutionFile;
+        private StreamReader _reader;
+        private int _currentLineNumber;
+        private SolutionFile _solutionFile;
 
         #region IDisposable Members
 
         public void Dispose()
         {
-            if (m_reader != null)
+            if (this._reader != null)
             {
-                m_reader.Dispose();
-                m_reader = null;
+                this._reader.Dispose();
+                this._reader = null;
             }
         }
 
         #endregion
 
+        private static readonly string ms_patternParseHeader = @"^(\s*|Microsoft Visual Studio Solution File.*|#.*|VisualStudioVersion.*|MinimumVisualStudioVersion.*)$";
+        private static readonly Regex ms_regexParseHeader = new Regex(ms_patternParseHeader);
+
         public SolutionFile ReadSolutionFile()
         {
-            lock (m_reader)
+            lock (this._reader)
             {
-                m_solutionFile = new SolutionFile();
-                ReadHeader();
-                for (string line = ReadLine(); line != null; line = ReadLine())
+                this._solutionFile = new SolutionFile();
+
+                var isHeader = true;
+                for (var line = ReadLine(); line != null; line = ReadLine())
                 {
+                    if (isHeader && ms_regexParseHeader.IsMatch(line))
+                    {
+                        _solutionFile.Headers.Add(line);
+                        continue;
+                    }
+
+                    isHeader = false;
                     if (line.StartsWith("Project(", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        m_solutionFile.Projects.Add(ReadProject(line));
+                        this._solutionFile.Projects.Add(ReadProject(line));
                     }
                     else if (String.Compare(line, "Global", StringComparison.InvariantCultureIgnoreCase) == 0)
                     {
@@ -79,29 +90,29 @@ namespace CWDev.SLNTools.Core
                     else
                     {
                         throw new SolutionFileException(string.Format("Invalid line read on line #{0}.\nFound: {1}\nExpected: A line beginning with 'Project(' or 'Global'.",
-                                        m_currentLineNumber, 
+                                        this._currentLineNumber, 
                                         line));
                     }
                 }
-                return m_solutionFile;
+                return this._solutionFile;
             }
         }
 
         private string ReadLine()
         {
-            string line = m_reader.ReadLine();
+            string line = this._reader.ReadLine();
             if (line == null)
             {
-                throw new SolutionFileException("Unexpected end of file encounted while reading the solution file.");
+                throw new SolutionFileException("Unexpected end of file encountered while reading the solution file.");
             }
 
-            m_currentLineNumber++;
+            this._currentLineNumber++;
             return line.Trim();
         }
 
         private Project FindProjectByGuid(string guid, int lineNumber)
         {
-            Project p = m_solutionFile.Projects.FindByGuid(guid);
+            Project p = this._solutionFile.Projects.FindByGuid(guid);
             if (p == null)
             {
                 throw new SolutionFileException(string.Format("Invalid guid found on line #{0}.\nFound: {1}\nExpected: A guid from one of the projects in the solution.",
@@ -111,29 +122,16 @@ namespace CWDev.SLNTools.Core
             return p;
         }
 
-        private void ReadHeader()
-        {
-            for (int i = 1; i <= 3; i++)
-            {
-                string line = ReadLine();
-                m_solutionFile.Headers.Add(line);
-                if (line.StartsWith("#"))
-                {
-                    return;
-                }
-            }
-        }
-
         private static readonly string ms_patternParseProject = "^Project\\(\"(?<PROJECTTYPEGUID>.*)\"\\)\\s*=\\s*\"(?<PROJECTNAME>.*)\"\\s*,\\s*\"(?<RELATIVEPATH>.*)\"\\s*,\\s*\"(?<PROJECTGUID>.*)\"$";
         private static readonly Regex ms_regexParseProject = new Regex(ms_patternParseProject);
 
         private Project ReadProject(string firstLine)
         {
-            Match match = ms_regexParseProject.Match(firstLine);
+            var match = ms_regexParseProject.Match(firstLine);
             if (!match.Success)
             {
                 throw new SolutionFileException(string.Format("Invalid format for a project on line #{0}.\nFound: {1}\nExpected: A line starting with 'Global' or respecting the pattern '{2}'.",
-                                m_currentLineNumber,
+                                this._currentLineNumber,
                                 firstLine,
                                 ms_patternParseProject));
             }
@@ -143,8 +141,8 @@ namespace CWDev.SLNTools.Core
             string relativePath = match.Groups["RELATIVEPATH"].Value.Trim();
             string projectGuid = match.Groups["PROJECTGUID"].Value.Trim();
 
-            List<Section> projectSections = new List<Section>();
-            for (string line = ReadLine(); !line.StartsWith("EndProject"); line = ReadLine())
+            var projectSections = new List<Section>();
+            for (var line = ReadLine(); !line.StartsWith("EndProject"); line = ReadLine())
             {
                 projectSections.Add(ReadProjectSection(line));
             }
@@ -163,7 +161,7 @@ namespace CWDev.SLNTools.Core
 
         private void ReadGlobal()
         {
-            for (string line = ReadLine(); !line.StartsWith("EndGlobal"); line = ReadLine())
+            for (var line = ReadLine(); !line.StartsWith("EndGlobal"); line = ReadLine())
             {
                 ReadGlobalSection(line);
             }
@@ -174,11 +172,11 @@ namespace CWDev.SLNTools.Core
 
         private Section ReadProjectSection(string firstLine)
         {
-            Match match = ms_regexParseProjectSection.Match(firstLine);
+            var match = ms_regexParseProjectSection.Match(firstLine);
             if (!match.Success)
             {
                 throw new SolutionFileException(string.Format("Invalid format for a project section on line #{0}.\nFound: {1}\nExpected: A line starting with 'EndProject' or respecting the pattern '{2}'.",
-                                m_currentLineNumber,
+                                this._currentLineNumber,
                                 firstLine,
                                 ms_patternParseProjectSection));
             }
@@ -187,7 +185,7 @@ namespace CWDev.SLNTools.Core
             string name = match.Groups["NAME"].Value.Trim();
             string step = match.Groups["STEP"].Value.Trim();
 
-            List<PropertyLine> propertyLines = new List<PropertyLine>();
+            var propertyLines = new List<PropertyLine>();
             string endOfSectionToken = "End" + type;
             for (string line = ReadLine(); !line.StartsWith(endOfSectionToken, StringComparison.InvariantCultureIgnoreCase); line = ReadLine())
             {
@@ -201,23 +199,23 @@ namespace CWDev.SLNTools.Core
 
         private void ReadGlobalSection(string firstLine)
         {
-            Match match = ms_regexParseGlobalSection.Match(firstLine);
+            var match = ms_regexParseGlobalSection.Match(firstLine);
             if (! match.Success)
             {
                 throw new SolutionFileException(string.Format("Invalid format for a global section on line #{0}.\nFound: {1}\nExpected: A line starting with 'EndGlobal' or respecting the pattern '{2}'.",
-                                m_currentLineNumber,
+                                this._currentLineNumber,
                                 firstLine,
                                 ms_patternParseGlobalSection));
             }
 
-            string type = match.Groups["TYPE"].Value.Trim();
-            string name = match.Groups["NAME"].Value.Trim();
-            string step = match.Groups["STEP"].Value.Trim();
+            var type = match.Groups["TYPE"].Value.Trim();
+            var name = match.Groups["NAME"].Value.Trim();
+            var step = match.Groups["STEP"].Value.Trim();
 
-            List<PropertyLine> propertyLines = new List<PropertyLine>();
-            int startLineNumber = m_currentLineNumber;
-            string endOfSectionToken = "End" + type;
-            for (string line = ReadLine(); !line.StartsWith(endOfSectionToken, StringComparison.InvariantCultureIgnoreCase); line = ReadLine())
+            var propertyLines = new List<PropertyLine>();
+            var startLineNumber = this._currentLineNumber;
+            var endOfSectionToken = "End" + type;
+            for (var line = ReadLine(); !line.StartsWith(endOfSectionToken, StringComparison.InvariantCultureIgnoreCase); line = ReadLine())
             {
                 propertyLines.Add(ReadPropertyLine(line, endOfSectionToken));
             }
@@ -239,7 +237,7 @@ namespace CWDev.SLNTools.Core
                     }
                     else
                     {
-                        m_solutionFile.GlobalSections.Add(
+                        this._solutionFile.GlobalSections.Add(
                                     new Section(
                                         name, 
                                         type, 
@@ -250,16 +248,16 @@ namespace CWDev.SLNTools.Core
             }
         }
 
-        private void HandleNestedProjects(string name, string type, string step, List<PropertyLine> propertyLines, int startLineNumber)
+        private void HandleNestedProjects(string name, string type, string step, IEnumerable<PropertyLine> propertyLines, int startLineNumber)
         {
-            int currentLineNumber = startLineNumber;
-            foreach (PropertyLine propertyLine in propertyLines)
+            var currentLineNumber = startLineNumber;
+            foreach (var propertyLine in propertyLines)
             {
                 currentLineNumber++;
-                Project left = FindProjectByGuid(propertyLine.Name, currentLineNumber);
+                var left = FindProjectByGuid(propertyLine.Name, currentLineNumber);
                 left.ParentFolderGuid = propertyLine.Value;
             }
-            m_solutionFile.GlobalSections.Add(
+            this._solutionFile.GlobalSections.Add(
                         new Section(
                             name, 
                             type, 
@@ -270,30 +268,30 @@ namespace CWDev.SLNTools.Core
         private static readonly string ms_patternParseProjectConfigurationPlatformsName = @"^(?<GUID>\{[-0-9a-zA-Z]+\})\.(?<DESCRIPTION>.*)$";
         private static readonly Regex ms_regexParseProjectConfigurationPlatformsName = new Regex(ms_patternParseProjectConfigurationPlatformsName);
 
-        private void HandleProjectConfigurationPlatforms(string name, string type, string step, List<PropertyLine> propertyLines, int startLineNumber)
+        private void HandleProjectConfigurationPlatforms(string name, string type, string step, IEnumerable<PropertyLine> propertyLines, int startLineNumber)
         {
-            int currentLineNumber = startLineNumber;
-            foreach (PropertyLine propertyLine in propertyLines)
+            var currentLineNumber = startLineNumber;
+            foreach (var propertyLine in propertyLines)
             {
                 currentLineNumber++;
-                Match match = ms_regexParseProjectConfigurationPlatformsName.Match(propertyLine.Name);
+                var match = ms_regexParseProjectConfigurationPlatformsName.Match(propertyLine.Name);
                 if (! match.Success)
                 {
                     throw new SolutionFileException(string.Format("Invalid format for a project configuration name on line #{0}.\nFound: {1}\nExpected: A line respecting the pattern '{2}'.",
-                                    m_currentLineNumber,
+                                    this._currentLineNumber,
                                     propertyLine.Name,
                                     ms_patternParseProjectConfigurationPlatformsName));
                 }
 
-                string projectGuid = match.Groups["GUID"].Value;
-                string description = match.Groups["DESCRIPTION"].Value;
-                Project left = FindProjectByGuid(projectGuid, currentLineNumber);
+                var projectGuid = match.Groups["GUID"].Value;
+                var description = match.Groups["DESCRIPTION"].Value;
+                var left = FindProjectByGuid(projectGuid, currentLineNumber);
                 left.ProjectConfigurationPlatformsLines.Add(
                             new PropertyLine(
                                 description,
                                 propertyLine.Value));
             }
-            m_solutionFile.GlobalSections.Add(
+            this._solutionFile.GlobalSections.Add(
                         new Section(
                             name, 
                             type, 
@@ -304,17 +302,17 @@ namespace CWDev.SLNTools.Core
         private static readonly Regex ms_regexParseVersionControlName = new Regex(@"^(?<NAME_WITHOUT_INDEX>[a-zA-Z]*)(?<INDEX>[0-9]+)$");
         private static readonly Regex ms_regexConvertEscapedValues = new Regex(@"\\u(?<HEXACODE>[0-9a-fA-F]{4})");
 
-        private void HandleVersionControlLines(string name, string type, string step, List<PropertyLine> propertyLines)
+        private void HandleVersionControlLines(string name, string type, string step, IEnumerable<PropertyLine> propertyLines)
         {
-            Dictionary<int, List<PropertyLine>> propertyLinesByIndex = new Dictionary<int, List<PropertyLine>>();
-            List<PropertyLine> othersVersionControlLines = new List<PropertyLine>();
-            foreach (PropertyLine propertyLine in propertyLines)
+            var propertyLinesByIndex = new Dictionary<int, List<PropertyLine>>();
+            var othersVersionControlLines = new List<PropertyLine>();
+            foreach (var propertyLine in propertyLines)
             {
-                Match match = ms_regexParseVersionControlName.Match(propertyLine.Name);
+                var match = ms_regexParseVersionControlName.Match(propertyLine.Name);
                 if (match.Success)
                 {
-                    string nameWithoutIndex = match.Groups["NAME_WITHOUT_INDEX"].Value.Trim();
-                    int index = int.Parse(match.Groups["INDEX"].Value.Trim());
+                    var nameWithoutIndex = match.Groups["NAME_WITHOUT_INDEX"].Value.Trim();
+                    var index = int.Parse(match.Groups["INDEX"].Value.Trim());
 
                     if (!propertyLinesByIndex.ContainsKey(index))
                     {
@@ -335,20 +333,18 @@ namespace CWDev.SLNTools.Core
             // Handle the special case for the solution itself.
             othersVersionControlLines.Add(new PropertyLine("SccLocalPath0", "."));
 
-            foreach (KeyValuePair<int, List<PropertyLine>> item in propertyLinesByIndex)
+            foreach (var item in propertyLinesByIndex)
             {
-                int index = item.Key;
-                List<PropertyLine> propertiesForIndex = item.Value;
+                var index = item.Key;
+                var propertiesForIndex = item.Value;
 
-                PropertyLine uniqueNameProperty = propertiesForIndex.Find(delegate(PropertyLine property)
-                            {
-                                return property.Name == "SccProjectUniqueName";
-                            });
+                var uniqueNameProperty = propertiesForIndex.Find(property => property.Name == "SccProjectUniqueName");
+
                 // If there is no ProjectUniqueName, we assume that it's the entry related to the solution by itself. We
                 // can ignore it because we added the special case above.
                 if (uniqueNameProperty != null)
                 {
-                    string uniqueName = ms_regexConvertEscapedValues.Replace(uniqueNameProperty.Value, delegate(Match match)
+                    var uniqueName = ms_regexConvertEscapedValues.Replace(uniqueNameProperty.Value, delegate(Match match)
                                 {
                                     int hexaValue = int.Parse(match.Groups["HEXACODE"].Value, NumberStyles.AllowHexSpecifier);
                                     return char.ConvertFromUtf32(hexaValue);
@@ -356,7 +352,7 @@ namespace CWDev.SLNTools.Core
                     uniqueName = uniqueName.Replace(@"\\", @"\");
 
                     Project relatedProject = null;
-                    foreach (Project project in m_solutionFile.Projects)
+                    foreach (var project in this._solutionFile.Projects)
                     {
                         if (string.Compare(project.RelativePath, uniqueName, StringComparison.InvariantCultureIgnoreCase) == 0)
                         {
@@ -375,7 +371,7 @@ namespace CWDev.SLNTools.Core
                 }
             }
 
-            m_solutionFile.GlobalSections.Add(
+            this._solutionFile.GlobalSections.Add(
                     new Section(
                         name, 
                         type, 
@@ -388,11 +384,11 @@ namespace CWDev.SLNTools.Core
 
         private PropertyLine ReadPropertyLine(string line, string endOfSectionToken)
         {
-            Match match = ms_regexParsePropertyLine.Match(line);
+            var match = ms_regexParsePropertyLine.Match(line);
             if (!match.Success)
             {
                 throw new SolutionFileException(string.Format("Invalid format for a property on line #{0}.\nFound: {1}\nExpected: A line starting with '{2}' or respecting the pattern '{3}'.",
-                                m_currentLineNumber,
+                                this._currentLineNumber,
                                 line,
                                 endOfSectionToken,
                                 ms_patternParsePropertyLine));
