@@ -52,7 +52,8 @@ namespace CWDev.SLNTools
             //args = new string[] { "CreateFilterFileFromSolution", @"C:\DevCodePlex\SLNTools\Main\SLNTools.sln" };
             //args = new string[] { "OpenFilterFile", @"C:\DevCodePlex\SLNTools\Main\Test.slnfilter" };
             //args = new string[] { "/?" };
-            //args = new string[] { "CreateFilterFileFromSolution", @"D:\DevClean\Baseline\D-NewAccountManagement\TousLesProjets.sln" };
+            //args = new string[] { "CreateFilterFileFromSolution", @"E:\Partage\DropBox\Documents\Projects\TFSCodePlex\SLNTools\SLNTools\Main\SLNTools.sln" };
+            //args = new string[] { "CreateFilterFileFromSolution", @"E:\Partage\DropBox\Documents\GitRepo\StrategyGameUpgradePlanner\StrategyGameUpgradePlanner.sln" };
             //args = new string[] { "MergeSolutions" };
 
             try
@@ -72,10 +73,12 @@ namespace CWDev.SLNTools
                     commandArguments = new string[0];
                 }
 
-                Arguments parsedArguments = new Arguments();
+                var parsedArguments = new Arguments();
 
-                MessageBoxErrorReporter reporter = new MessageBoxErrorReporter();
-                reporter.CommandUsage = Parser.ArgumentsUsage(parsedArguments.GetType());
+                var reporter = new MessageBoxErrorReporter
+                            {
+                                CommandUsage = Parser.ArgumentsUsage(parsedArguments.GetType())
+                            };
 
                 if (Parser.ParseArguments(commandName, parsedArguments, reporter.Handler))
                 {
