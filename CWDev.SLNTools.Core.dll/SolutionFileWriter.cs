@@ -65,6 +65,13 @@ namespace CWDev.SLNTools.Core
 
         private void WriteHeader(SolutionFile solutionFile)
         {
+            // If the header doesn't start with an empty line, add one
+            // (The first line of sln files saved as UTF-8 with BOM must be blank, otherwise Visual Studio Version Selector will not detect VS version correctly.)
+            if (solutionFile.Headers.Count == 0 || solutionFile.Headers[0].Trim().Length > 0)
+            {
+                m_writer.WriteLine();
+            }
+
             foreach (string line in solutionFile.Headers)
             {
                 m_writer.WriteLine(line);
