@@ -28,14 +28,14 @@ namespace CWDev.SLNTools
 {
     internal class MessageBoxErrorReporter
     {
+        private string m_commandName;
+        private string m_commandUsage;
+
         internal MessageBoxErrorReporter()
         {
             m_commandName = "";
             m_commandUsage = null;
         }
-
-        private string m_commandName;
-        private string m_commandUsage;
 
         public string CommandName
         {

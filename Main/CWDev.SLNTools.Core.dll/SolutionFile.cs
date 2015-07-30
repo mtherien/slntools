@@ -1,21 +1,21 @@
 #region License
 
 // SLNTools
-// Copyright (c) 2009 
+// Copyright (c) 2009
 // by Christian Warren
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-// documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
-// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
 // to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all copies or substantial portions
 // of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
-// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
 #endregion
@@ -36,7 +36,7 @@ namespace CWDev.SLNTools.Core
         {
             using (var reader = new SolutionFileReader(solutionFullPath))
             {
-                SolutionFile f = reader.ReadSolutionFile();
+                var f = reader.ReadSolutionFile();
                 f.SolutionFullPath = solutionFullPath;
                 return f;
             }
@@ -46,13 +46,15 @@ namespace CWDev.SLNTools.Core
         {
             using (var reader = new SolutionFileReader(stream))
             {
-                SolutionFile f = reader.ReadSolutionFile();
+                var f = reader.ReadSolutionFile();
                 f.SolutionFullPath = solutionFullPath;
                 return f;
             }
         }
 
         #endregion
+
+        private string m_solutionFullPath;
 
         public SolutionFile()
         {
@@ -75,10 +77,8 @@ namespace CWDev.SLNTools.Core
             this.GlobalSections = new SectionHashList(globalSections);
         }
 
-        private string m_solutionFullPath;
-
         public string SolutionFullPath
-        { 
+        {
             get { return m_solutionFullPath; }
             set { m_solutionFullPath = value; }
         }
@@ -138,8 +138,8 @@ namespace CWDev.SLNTools.Core
                                 new NodeDifference(
                                     new ElementIdentifier(
                                         TagProject + project.ProjectGuid,
-                                        string.Format("Project \"{0}\" [{1}]", project.ProjectFullName, project.ProjectGuid)), 
-                                    OperationOnParent.Removed, 
+                                        string.Format("Project \"{0}\" [{1}]", project.ProjectFullName, project.ProjectGuid)),
+                                    OperationOnParent.Removed,
                                     null));
 
                     var otherProjectIdentifier = new ElementIdentifier(
@@ -155,7 +155,7 @@ namespace CWDev.SLNTools.Core
                 else
                 {
                     projectsByFullName.Add(project.ProjectFullName, project);
-                } 
+                }
             }
 
             return new NodeConflict(new ElementIdentifier("SolutionFile"), OperationOnParent.Modified, acceptedDifferences, conflicts);

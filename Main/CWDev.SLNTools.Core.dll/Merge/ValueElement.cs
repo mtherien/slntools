@@ -1,21 +1,21 @@
 ﻿#region License
 
 // SLNTools
-// Copyright (c) 2009 
+// Copyright (c) 2009
 // by Christian Warren
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-// documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
-// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
 // to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all copies or substantial portions
 // of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
-// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
 #endregion
@@ -26,19 +26,19 @@ namespace CWDev.SLNTools.Core.Merge
 {
     public class ValueElement : Element
     {
+        private readonly string r_value;
+
         public ValueElement(
-                    ElementIdentifier identifier, 
+                    ElementIdentifier identifier,
                     string value)
             : base(identifier)
         {
             if (value == null)
                 throw new ArgumentNullException("value");
-            m_value = value;
+            r_value = value;
         }
 
-        private string m_value;
-
-        public string Value { get { return m_value; } }
+        public string Value { get { return r_value; } }
 
         public override Difference CompareTo(Element oldElement)
         {
@@ -53,18 +53,18 @@ namespace CWDev.SLNTools.Core.Merge
                             this.Identifier,
                             OperationOnParent.Added,
                             null,
-                            m_value);
+                            r_value);
             }
             else if (oldElement is ValueElement)
             {
-                string oldValue = ((ValueElement)oldElement).Value;
-                if (oldValue != m_value)
+                var oldValue = ((ValueElement)oldElement).Value;
+                if (oldValue != r_value)
                 {
                     return new ValueDifference(
                                 this.Identifier,
                                 OperationOnParent.Modified,
                                 oldValue,
-                                m_value);
+                                r_value);
                 }
                 else
                 {
@@ -87,7 +87,7 @@ namespace CWDev.SLNTools.Core.Merge
             if (difference is ValueDifference)
             {
                 return new ValueElement(
-                            this.Identifier, 
+                            this.Identifier,
                             ((ValueDifference)difference).NewValue);
             }
             else
@@ -98,7 +98,7 @@ namespace CWDev.SLNTools.Core.Merge
 
         public override string ToString()
         {
-            return string.Format("{0} = {1}", this.Identifier, m_value);
+            return string.Format("{0} = {1}", this.Identifier, r_value);
         }
     }
 }
