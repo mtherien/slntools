@@ -99,7 +99,7 @@ namespace CWDev.SLNTools.Core
         }
         public string FullPath
         {
-            get { return Path.Combine(Path.GetDirectoryName(r_container.SolutionFullPath), m_relativePath); }
+            get { return Environment.ExpandEnvironmentVariables(Path.Combine(Path.GetDirectoryName(r_container.SolutionFullPath), m_relativePath)); }
         }
         public string ParentFolderGuid
         {
@@ -166,10 +166,10 @@ namespace CWDev.SLNTools.Core
         {
             get
             {
-                foreach (Project child in this.Childs)
+                foreach (var child in this.Childs)
                 {
                     yield return child;
-                    foreach (Project subchild in child.AllDescendants)
+                    foreach (var subchild in child.AllDescendants)
                     {
                         yield return subchild;
                     }
@@ -289,7 +289,7 @@ namespace CWDev.SLNTools.Core
                             var match = regex.Match(line);
                             if (match.Success)
                             {
-                                string dependencyGuid = match.Groups["PROJECTGUID"].Value.Trim();
+                                var dependencyGuid = match.Groups["PROJECTGUID"].Value.Trim();
                                 yield return FindProjectInContainer(
                                             dependencyGuid,
                                             "Cannot find one of the dependency of project '{0}'.\nProject guid: {1}\nDependency guid: {2}\nReference found in: OutputProjectGuid line of file '{3}'",
