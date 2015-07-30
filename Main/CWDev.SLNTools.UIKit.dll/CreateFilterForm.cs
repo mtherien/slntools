@@ -1,21 +1,21 @@
 #region License
 
 // SLNTools
-// Copyright (c) 2009 
+// Copyright (c) 2009
 // by Christian Warren
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-// documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
-// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
 // to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all copies or substantial portions
 // of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
-// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
 #endregion
@@ -34,6 +34,10 @@ namespace CWDev.SLNTools.UIKit
 
     public partial class CreateFilterForm : Form
     {
+        private FilterFile m_filterFile;
+        private readonly List<TreeNode> r_allNodes = new List<TreeNode>();
+        private int m_nbProjectsSelected = 0;
+
         public CreateFilterForm(string filename)
         {
             InitializeComponent();
@@ -41,14 +45,10 @@ namespace CWDev.SLNTools.UIKit
             FormPosition.LoadFromRegistry(this);
         }
 
-        private FilterFile _filterFile;
-        private readonly List<TreeNode> _allNodes = new List<TreeNode>();
-        private int _nbProjectsSelected = 0;
-
         private void ClearAllFields()
         {
-            this._filterFile = null;
-            this._allNodes.Clear();
+            m_filterFile = null;
+            r_allNodes.Clear();
             m_textboxSourceSolution.Text = "";
             m_treeview.Nodes.Clear();
             m_labelErrorMessage.Text = "";
@@ -64,25 +64,25 @@ namespace CWDev.SLNTools.UIKit
                     switch (Path.GetExtension(filename).ToLower())
                     {
                         case ".slnfilter":
-                            this._filterFile = FilterFile.FromFile(filename);
+                            m_filterFile = FilterFile.FromFile(filename);
                             break;
 
                         default:
                         case ".sln":
-                            this._filterFile = new FilterFile();
-                            this._filterFile.SourceSolutionFullPath = filename;
+                            m_filterFile = new FilterFile();
+                            m_filterFile.SourceSolutionFullPath = filename;
                             break;
                     }
 
-                    m_textboxSourceSolution.Text = this._filterFile.SourceSolutionFullPath;
+                    m_textboxSourceSolution.Text = m_filterFile.SourceSolutionFullPath;
                     m_treeview.BeginUpdate();
-                    AddProjectToNode(m_treeview.Nodes, this._filterFile.ProjectsToKeep, this._filterFile.SourceSolution.Childs);
+                    AddProjectToNode(m_treeview.Nodes, m_filterFile.ProjectsToKeep, m_filterFile.SourceSolution.Childs);
                     m_treeview.ExpandAll();
                     m_treeview.Sort();
                     m_treeview.SelectedNode = m_treeview.Nodes[0];
                     m_treeview.EndUpdate();
-                    m_checkboxWatchForChangesOnFilteredSolution.Checked = this._filterFile.WatchForChangesOnFilteredSolution;
-                    m_checkboxCopyReSharperFiles.Checked = this._filterFile.CopyReSharperFiles;
+                    m_checkboxWatchForChangesOnFilteredSolution.Checked = m_filterFile.WatchForChangesOnFilteredSolution;
+                    m_checkboxCopyReSharperFiles.Checked = m_filterFile.CopyReSharperFiles;
                 }
             }
             catch (Exception ex)
@@ -103,7 +103,7 @@ namespace CWDev.SLNTools.UIKit
                                 Tag = child,
                                 Checked = (projectsToCheck.Contains(child.ProjectFullName))
                             };
-                this._allNodes.Add(node);
+                r_allNodes.Add(node);
                 parentNodes.Add(node);
 
                 AddProjectToNode(node.Nodes, projectsToCheck, child.Childs);
@@ -112,14 +112,14 @@ namespace CWDev.SLNTools.UIKit
 
         private void UpdateTreeView()
         {
-            this._nbProjectsSelected = 0;
+            m_nbProjectsSelected = 0;
             var nbProjectsIncludedInFilteredSolution = 0;
-            if (this._filterFile != null)
+            if (m_filterFile != null)
             {
-                var filteredSolution = this._filterFile.Apply();
+                var filteredSolution = m_filterFile.Apply();
 
                 m_treeview.BeginUpdate();
-                foreach (var treeNode in this._allNodes)
+                foreach (var treeNode in r_allNodes)
                 {
                     var project = treeNode.Tag as Project;
                     if (filteredSolution.Projects.FindByGuid(project.ProjectGuid) != null)
@@ -133,31 +133,31 @@ namespace CWDev.SLNTools.UIKit
                     }
 
                     if (treeNode.Checked)
-                        this._nbProjectsSelected++;
+                        m_nbProjectsSelected++;
                 }
 
                 m_treeview.EndUpdate();
             }
             m_labelSelected.Text = string.Format(
                         "Checked = {0}, Included in filter = {1}/{2}",
-                        this._nbProjectsSelected,
+                        m_nbProjectsSelected,
                         nbProjectsIncludedInFilteredSolution,
-                        this._allNodes.Count);
+                        r_allNodes.Count);
         }
 
         private void UpdateControls()
         {
             m_labelErrorMessage.Text = "";
 
-            if (this._filterFile != null)
+            if (m_filterFile != null)
             {
                 m_treeview.Enabled = true;
                 m_groupboxOptions.Enabled = true;
-                m_buttonSaveAndQuit.Enabled = (this._nbProjectsSelected > 0);
-                m_menuitemSave.Enabled = (this._filterFile.FilterFullPath != null) && (this._nbProjectsSelected > 0);
-                m_menuitemSaveAs.Enabled = (this._nbProjectsSelected > 0);
+                m_buttonSaveAndQuit.Enabled = (m_nbProjectsSelected > 0);
+                m_menuitemSave.Enabled = (m_filterFile.FilterFullPath != null) && (m_nbProjectsSelected > 0);
+                m_menuitemSaveAs.Enabled = (m_nbProjectsSelected > 0);
 
-                if (this._nbProjectsSelected == 0)
+                if (m_nbProjectsSelected == 0)
                 {
                     m_labelErrorMessage.Text = "At least one project or solution folder need to be checked";
                 }
@@ -177,11 +177,11 @@ namespace CWDev.SLNTools.UIKit
             var project = e.Node.Tag as Project;
             if (e.Node.Checked)
             {
-                this._filterFile.ProjectsToKeep.Add(project.ProjectFullName);
+                m_filterFile.ProjectsToKeep.Add(project.ProjectFullName);
             }
             else
             {
-                this._filterFile.ProjectsToKeep.Remove(project.ProjectFullName);
+                m_filterFile.ProjectsToKeep.Remove(project.ProjectFullName);
             }
             UpdateTreeView();
             UpdateControls();
@@ -220,7 +220,7 @@ namespace CWDev.SLNTools.UIKit
 
         private void m_buttonSaveAndQuit_Click(object sender, EventArgs e)
         {
-            if (this._filterFile.FilterFullPath != null)
+            if (m_filterFile.FilterFullPath != null)
             {
                 if (Save())
                     this.Close();
@@ -236,11 +236,11 @@ namespace CWDev.SLNTools.UIKit
         {
             try
             {
-                this._filterFile.WatchForChangesOnFilteredSolution = m_checkboxWatchForChangesOnFilteredSolution.Checked;
-                this._filterFile.CopyReSharperFiles = m_checkboxCopyReSharperFiles.Checked;
-                this._filterFile.Save();
+                m_filterFile.WatchForChangesOnFilteredSolution = m_checkboxWatchForChangesOnFilteredSolution.Checked;
+                m_filterFile.CopyReSharperFiles = m_checkboxCopyReSharperFiles.Checked;
+                m_filterFile.Save();
 
-                SolutionFile filteredSolution = this._filterFile.Apply();
+                SolutionFile filteredSolution = m_filterFile.Apply();
                 filteredSolution.Save();
                 return true;
             }
@@ -257,21 +257,21 @@ namespace CWDev.SLNTools.UIKit
             {
                 using (var fileDialog = new SaveFileDialog())
                 {
-                    fileDialog.InitialDirectory = Path.GetDirectoryName(this._filterFile.SourceSolutionFullPath);
+                    fileDialog.InitialDirectory = Path.GetDirectoryName(m_filterFile.SourceSolutionFullPath);
                     fileDialog.Filter = "Solution Filter File (*.slnfilter)|*.slnfilter|All files (*.*)|*.*";
                     if (fileDialog.ShowDialog() == DialogResult.OK)
                     {
                         if (string.Equals(
-                                    Path.GetDirectoryName(Path.GetFullPath(fileDialog.FileName)), 
-                                    Path.GetDirectoryName(Path.GetFullPath(this._filterFile.SourceSolutionFullPath)), 
-                                    StringComparison.InvariantCultureIgnoreCase))                                    
+                                    Path.GetDirectoryName(Path.GetFullPath(fileDialog.FileName)),
+                                    Path.GetDirectoryName(Path.GetFullPath(m_filterFile.SourceSolutionFullPath)),
+                                    StringComparison.InvariantCultureIgnoreCase))
                         {
-                            this._filterFile.FilterFullPath = fileDialog.FileName;
-                            this._filterFile.WatchForChangesOnFilteredSolution = m_checkboxWatchForChangesOnFilteredSolution.Checked;
-                            this._filterFile.CopyReSharperFiles = m_checkboxCopyReSharperFiles.Checked;
-                            this._filterFile.Save();
+                            m_filterFile.FilterFullPath = fileDialog.FileName;
+                            m_filterFile.WatchForChangesOnFilteredSolution = m_checkboxWatchForChangesOnFilteredSolution.Checked;
+                            m_filterFile.CopyReSharperFiles = m_checkboxCopyReSharperFiles.Checked;
+                            m_filterFile.Save();
 
-                            var filteredSolution = this._filterFile.Apply();
+                            var filteredSolution = m_filterFile.Apply();
                             filteredSolution.Save();
                             return true;
                         }

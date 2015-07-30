@@ -1,21 +1,21 @@
 #region License
 
 // SLNTools
-// Copyright (c) 2009 
+// Copyright (c) 2009
 // by Christian Warren
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-// documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
-// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
 // to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all copies or substantial portions
 // of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
-// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
 #endregion
@@ -28,68 +28,67 @@ using System.Windows.Forms;
 namespace CWDev.SLNTools.Core.Filter
 {
     using Core;
-    using Core.Merge;
+    using Merge;
 
     internal class FilteredSolutionWatcher
     {
+        private readonly AcceptDifferencesHandler r_acceptDifferencesHandler;
+        private readonly FilterFile r_filterFile;
+        private SolutionFile m_filteredSolution;
+        private readonly FileSystemWatcher r_watcher;
+
         public FilteredSolutionWatcher(
                     AcceptDifferencesHandler handler,
                     FilterFile filterFile,
                     SolutionFile filteredSolution)
         {
-            m_acceptDifferencesHandler = handler;
-            m_filterFile = filterFile;
+            r_acceptDifferencesHandler = handler;
+            r_filterFile = filterFile;
             m_filteredSolution = filteredSolution;
 
-            m_watcher = new FileSystemWatcher();
-            m_watcher.NotifyFilter = NotifyFilters.LastWrite;
-            m_watcher.Path = Path.GetDirectoryName(m_filteredSolution.SolutionFullPath);
-            m_watcher.Filter = Path.GetFileName(m_filteredSolution.SolutionFullPath);
-            m_watcher.Changed += OnChanged;
+            r_watcher = new FileSystemWatcher
+                {
+                    NotifyFilter = NotifyFilters.LastWrite,
+                    Path = Path.GetDirectoryName(m_filteredSolution.SolutionFullPath),
+                    Filter = Path.GetFileName(m_filteredSolution.SolutionFullPath)
+                };
+            r_watcher.Changed += OnChanged;
         }
-
-        private AcceptDifferencesHandler m_acceptDifferencesHandler;
-        private FilterFile m_filterFile;
-        private SolutionFile m_filteredSolution;
-        private FileSystemWatcher m_watcher;
 
         public void Start()
         {
-            lock (m_watcher)
+            lock (r_watcher)
             {
-                m_watcher.EnableRaisingEvents = true;
+                r_watcher.EnableRaisingEvents = true;
             }
         }
 
         public void Stop()
         {
-            lock (m_watcher)
+            lock (r_watcher)
             {
-                m_watcher.EnableRaisingEvents = false;
+                r_watcher.EnableRaisingEvents = false;
             }
         }
 
         private void OnChanged(object source, FileSystemEventArgs e)
         {
-            lock (m_watcher)
+            lock (r_watcher)
             {
                 try
                 {
                     WaitForFileToBeReleased(e.FullPath);
 
-                    SolutionFile newFilteredSolution = SolutionFile.FromFile(m_filteredSolution.SolutionFullPath);
-                    NodeDifference difference = newFilteredSolution.CompareTo(m_filteredSolution);
+                    var newFilteredSolution = SolutionFile.FromFile(m_filteredSolution.SolutionFullPath);
+                    var difference = newFilteredSolution.CompareTo(m_filteredSolution);
                     if (difference != null)
                     {
-                        difference.Remove(delegate(Difference diff)
-                        {
-                            return diff.Identifier.Name.Contains("SccProjectTopLevelParentUniqueName");
-                        });
+                        difference.Remove(diff => diff.Identifier.Name.Contains("SccProjectTopLevelParentUniqueName"));
                         if (difference.Subdifferences.Count > 0)
                         {
-                            if (m_acceptDifferencesHandler(difference))
+                            if (r_acceptDifferencesHandler(difference))
                             {
-                                SolutionFile newOriginalSolution = SolutionFile.FromElement((NodeElement)m_filterFile.SourceSolution.ToElement().Apply(difference));
+                                var newOriginalSolution = SolutionFile.FromElement((NodeElement)r_filterFile.SourceSolution.ToElement().Apply(difference));
                                 newOriginalSolution.Save();
                                 m_filteredSolution = newFilteredSolution;
                             }
@@ -109,12 +108,12 @@ namespace CWDev.SLNTools.Core.Filter
             if (!File.Exists(path))
                 return;
 
-            DateTime start = DateTime.Now;
+            var start = DateTime.Now;
             do
             {
                 try
                 {
-                    using (FileStream fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
+                    using (var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.None))
                     {
                         return;
                     }
