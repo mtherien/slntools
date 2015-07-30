@@ -1,28 +1,27 @@
 #region License
 
 // SLNTools
-// Copyright (c) 2009 
+// Copyright (c) 2009
 // by Christian Warren
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-// documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
-// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
 // to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all copies or substantial portions
 // of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
-// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
 #endregion
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace CWDev.SLNTools.Core.Merge
 {
@@ -31,6 +30,8 @@ namespace CWDev.SLNTools.Core.Merge
 
     public class NodeDifference : Difference
     {
+        private DifferenceHashList m_subdifferences;
+
         public NodeDifference(
                     ElementIdentifier identifier,
                     OperationOnParent operationOnParent,
@@ -40,11 +41,9 @@ namespace CWDev.SLNTools.Core.Merge
             m_subdifferences = new DifferenceHashList(subdifferences);
         }
 
-        private DifferenceHashList m_subdifferences;
-
         public DifferenceHashList Subdifferences
-        { 
-            get { return m_subdifferences; } 
+        {
+            get { return m_subdifferences; }
         }
 
         public override Conflict CompareTo(Difference destinationDifference)
@@ -54,8 +53,8 @@ namespace CWDev.SLNTools.Core.Merge
             if (!destinationDifference.Identifier.Equals(this.Identifier))
                 throw new MergeException("Cannot compare differences that does not share the same identifier.");
 
-            NodeDifference source = this;
-            NodeDifference destination = destinationDifference as NodeDifference;
+            var source = this;
+            var destination = destinationDifference as NodeDifference;
             if (destination == null)
                 throw new MergeException(string.Format("Cannot compare a {0} to a {1}.", destinationDifference.GetType().Name, this.GetType().Name));
 
@@ -67,14 +66,14 @@ namespace CWDev.SLNTools.Core.Merge
             }
             else
             {
-                List<Conflict> subconflicts = new List<Conflict>();
-                DifferenceHashList acceptedSubdifferences = new DifferenceHashList();
-                foreach (Difference destinationSubdifference in destination.Subdifferences)
+                var subconflicts = new List<Conflict>();
+                var acceptedSubdifferences = new DifferenceHashList();
+                foreach (var destinationSubdifference in destination.Subdifferences)
                 {
                     // Add all the destinationBranchDifferences to the acceptedSubdifferences (they might be removed from the list later).
                     acceptedSubdifferences.Add(destinationSubdifference);
                 }
-                foreach (Difference sourceSubdifference in source.Subdifferences)
+                foreach (var sourceSubdifference in source.Subdifferences)
                 {
                     if (!acceptedSubdifferences.Contains(sourceSubdifference.Identifier))
                     {
@@ -84,18 +83,18 @@ namespace CWDev.SLNTools.Core.Merge
                     else
                     {
                         // There is a difference in both branch for the same identifier, see if there is a conflict or not
-                        Difference destinationSubdifference = acceptedSubdifferences[sourceSubdifference.Identifier];
-                        Conflict conflict = sourceSubdifference.CompareTo(destinationSubdifference);
+                        var destinationSubdifference = acceptedSubdifferences[sourceSubdifference.Identifier];
+                        var conflict = sourceSubdifference.CompareTo(destinationSubdifference);
                         if (conflict != null)
                         {
-                            NodeConflict nodeConflict = conflict as NodeConflict;
+                            var nodeConflict = conflict as NodeConflict;
                             if ((nodeConflict != null) && (nodeConflict.Subconflicts.Count == 0))
                             {
                                 acceptedSubdifferences.Remove(sourceSubdifference.Identifier);
                                 acceptedSubdifferences.Add(
                                             new NodeDifference(
-                                                nodeConflict.Identifier, 
-                                                nodeConflict.OperationOnParent, 
+                                                nodeConflict.Identifier,
+                                                nodeConflict.OperationOnParent,
                                                 nodeConflict.AcceptedSubdifferences));
                             }
                             else
@@ -108,17 +107,17 @@ namespace CWDev.SLNTools.Core.Merge
                 }
 
                 return new NodeConflict(
-                            source.Identifier, 
-                            source.OperationOnParent, 
-                            acceptedSubdifferences, 
+                            source.Identifier,
+                            source.OperationOnParent,
+                            acceptedSubdifferences,
                             subconflicts);
             }
         }
 
         public void Remove(ShouldBeRemovedHandler shouldBeRemovedHandler)
         {
-            DifferenceHashList filteredSubdifferences = new DifferenceHashList();
-            foreach (Difference subdifference in m_subdifferences)
+            var filteredSubdifferences = new DifferenceHashList();
+            foreach (var subdifference in m_subdifferences)
             {
                 if (shouldBeRemovedHandler(subdifference))
                 {
@@ -126,8 +125,8 @@ namespace CWDev.SLNTools.Core.Merge
                 }
                 else if (subdifference is NodeDifference)
                 {
-                    NodeDifference nodeSubdifference = subdifference as NodeDifference;
-                    int nbSubdiffsBefore = nodeSubdifference.Subdifferences.Count;
+                    var nodeSubdifference = subdifference as NodeDifference;
+                    var nbSubdiffsBefore = nodeSubdifference.Subdifferences.Count;
                     nodeSubdifference.Remove(shouldBeRemovedHandler);
                     if ((nodeSubdifference.Subdifferences.Count > 0) || (nbSubdiffsBefore == 0))
                     {

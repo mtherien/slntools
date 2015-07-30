@@ -1,21 +1,21 @@
 #region License
 
 // SLNTools
-// Copyright (c) 2009 
+// Copyright (c) 2009
 // by Christian Warren
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-// documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
-// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
 // to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all copies or substantial portions
 // of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
-// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
 #endregion
@@ -30,6 +30,11 @@ namespace CWDev.SLNTools.Core
 
     public class Section
     {
+        private readonly string r_name;
+        private string m_sectionType;
+        private string m_step;
+        private readonly PropertyLineHashList r_propertyLines;
+
         public Section(Section original)
             : this(original.Name, original.SectionType, original.Step, original.PropertyLines)
         {
@@ -37,20 +42,15 @@ namespace CWDev.SLNTools.Core
 
         public Section(string name, string sectionType, string step, IEnumerable<PropertyLine> propertyLines)
         {
-            m_name = name;
+            r_name = name;
             m_sectionType = sectionType;
             m_step = step;
-            m_propertyLines = new PropertyLineHashList(propertyLines);
+            r_propertyLines = new PropertyLineHashList(propertyLines);
         }
 
-        private string m_name;
-        private string m_sectionType;
-        private string m_step;
-        private PropertyLineHashList m_propertyLines;
-
-        public string Name 
-        { 
-            get { return m_name; } 
+        public string Name
+        {
+            get { return r_name; }
         }
         public string SectionType
         {
@@ -62,9 +62,9 @@ namespace CWDev.SLNTools.Core
             get { return m_step; }
             set { m_step = value; }
         }
-        public PropertyLineHashList PropertyLines 
-        { 
-            get { return m_propertyLines; } 
+        public PropertyLineHashList PropertyLines
+        {
+            get { return r_propertyLines; }
         }
 
         public override string ToString()
@@ -80,15 +80,15 @@ namespace CWDev.SLNTools.Core
 
         public NodeElement ToElement(ElementIdentifier identifier)
         {
-            List<Element> childs = new List<Element>();
+            var childs = new List<Element>();
             childs.Add(new ValueElement(new ElementIdentifier(TagSectionType), this.SectionType));
             childs.Add(new ValueElement(new ElementIdentifier(TagStep), this.Step));
-            foreach (PropertyLine propertyLine in this.PropertyLines)
+            foreach (var propertyLine in this.PropertyLines)
             {
-                ElementIdentifier lineIdentifier = new ElementIdentifier(
+                var lineIdentifier = new ElementIdentifier(
                             TagPropertyLines + propertyLine.Name,
                             @"Line\" + propertyLine.Name);
-                if ((m_name == "WebsiteProperties") && (propertyLine.Name == "ProjectReferences"))
+                if ((r_name == "WebsiteProperties") && (propertyLine.Name == "ProjectReferences"))
                 {
                     childs.Add(new NodeElement(lineIdentifier, ConvertProjectReferencesValueToHashList(propertyLine.Value)));
                 }
@@ -101,16 +101,16 @@ namespace CWDev.SLNTools.Core
         }
 
         public static Section FromElement(
-                    string name, 
+                    string name,
                     NodeElement element)
         {
             string sectionType = null;
             string step = null;
-            List<PropertyLine> propertyLines = new List<PropertyLine>();
+            var propertyLines = new List<PropertyLine>();
 
-            foreach (Element child in element.Childs)
+            foreach (var child in element.Childs)
             {
-                ElementIdentifier identifier = child.Identifier;
+                var identifier = child.Identifier;
                 if (identifier.Name == TagSectionType)
                 {
                     sectionType = ((ValueElement)child).Value;
@@ -121,7 +121,7 @@ namespace CWDev.SLNTools.Core
                 }
                 else if (identifier.Name.StartsWith(TagPropertyLines))
                 {
-                    string lineName = identifier.Name.Substring(TagPropertyLines.Length);
+                    var lineName = identifier.Name.Substring(TagPropertyLines.Length);
                     string lineValue;
                     if ((name == "WebsiteProperties") && (lineName == "ProjectReferences"))
                     {
@@ -149,9 +149,9 @@ namespace CWDev.SLNTools.Core
 
         private static List<Element> ConvertProjectReferencesValueToHashList(string value)
         {
-            List<Element> references = new List<Element>();
-            string pattern = "^\"((?<ReferenceGuid>[^|]+)\\|(?<ReferenceName>[^;]*)(;)?)*\"$";
-            Match match = Regex.Match(value, pattern);
+            var references = new List<Element>();
+            const string pattern = "^\"((?<ReferenceGuid>[^|]+)\\|(?<ReferenceName>[^;]*)(;)?)*\"$";
+            var match = Regex.Match(value, pattern);
             if (!match.Success)
             {
                 throw new SolutionFileException(string.Format("Invalid format for a ProjectReferences line value.\nFound: {0}\nExpected: A value respecting the pattern '{1}'.",
@@ -159,9 +159,9 @@ namespace CWDev.SLNTools.Core
                                 pattern));
             }
 
-            CaptureCollection capturesGuid = match.Groups["ReferenceGuid"].Captures;
-            CaptureCollection capturesName = match.Groups["ReferenceName"].Captures;
-            for (int i = 0; i < capturesGuid.Count; i++)
+            var capturesGuid = match.Groups["ReferenceGuid"].Captures;
+            var capturesName = match.Groups["ReferenceName"].Captures;
+            for (var i = 0; i < capturesGuid.Count; i++)
             {
                 references.Add(
                             new ValueElement(
@@ -173,7 +173,7 @@ namespace CWDev.SLNTools.Core
 
         private static string ConvertHashListToProjectReferencesValue(IEnumerable<Element> childs)
         {
-            StringBuilder lineValue = new StringBuilder();
+            var lineValue = new StringBuilder();
             lineValue.Append("\"");
             foreach (ValueElement reference in childs)
             {

@@ -1,21 +1,21 @@
 #region License
 
 // SLNTools
-// Copyright (c) 2009 
+// Copyright (c) 2009
 // by Christian Warren
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-// documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
-// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
 // to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all copies or substantial portions
 // of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
-// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
 #endregion
@@ -32,6 +32,16 @@ namespace CWDev.SLNTools.Core
 
     public class Project
     {
+        private readonly SolutionFile r_container;
+        private readonly string r_projectGuid;
+        private string m_projectTypeGuid;
+        private string m_projectName;
+        private string m_relativePath;
+        private string m_parentFolderGuid;
+        private readonly SectionHashList r_projectSections;
+        private readonly PropertyLineHashList r_versionControlLines;
+        private readonly PropertyLineHashList r_projectConfigurationPlatformsLines;
+
         public Project(SolutionFile container, Project original)
             : this(
                     container,
@@ -47,40 +57,30 @@ namespace CWDev.SLNTools.Core
         }
 
         public Project(
-                    SolutionFile container, 
-                    string projectGuid, 
-                    string projectTypeGuid, 
-                    string projectName, 
+                    SolutionFile container,
+                    string projectGuid,
+                    string projectTypeGuid,
+                    string projectName,
                     string relativePath,
                     string parentFolderGuid,
                     IEnumerable<Section> projectSections,
                     IEnumerable<PropertyLine> versionControlLines,
                     IEnumerable<PropertyLine> projectConfigurationPlatformsLines)
         {
-            m_container = container;
-            m_projectGuid = projectGuid;
+            r_container = container;
+            r_projectGuid = projectGuid;
             m_projectTypeGuid = projectTypeGuid;
             m_projectName = projectName;
             m_relativePath = relativePath;
             m_parentFolderGuid = parentFolderGuid;
-            m_projectSections = new SectionHashList(projectSections);
-            m_versionControlLines = new PropertyLineHashList(versionControlLines);
-            m_projectConfigurationPlatformsLines = new PropertyLineHashList(projectConfigurationPlatformsLines);
+            r_projectSections = new SectionHashList(projectSections);
+            r_versionControlLines = new PropertyLineHashList(versionControlLines);
+            r_projectConfigurationPlatformsLines = new PropertyLineHashList(projectConfigurationPlatformsLines);
         }
 
-        private SolutionFile m_container;
-        private string m_projectGuid;
-        private string m_projectTypeGuid;
-        private string m_projectName;
-        private string m_relativePath;
-        private string m_parentFolderGuid;
-        private SectionHashList m_projectSections;
-        private PropertyLineHashList m_versionControlLines;
-        private PropertyLineHashList m_projectConfigurationPlatformsLines;
-
-        public string ProjectGuid 
-        { 
-            get { return m_projectGuid; } 
+        public string ProjectGuid
+        {
+            get { return r_projectGuid; }
         }
         public string ProjectTypeGuid
         {
@@ -97,26 +97,26 @@ namespace CWDev.SLNTools.Core
             get { return m_relativePath; }
             set { m_relativePath = value; }
         }
-        public string FullPath 
-        { 
-            get { return Path.Combine(Path.GetDirectoryName(m_container.SolutionFullPath), m_relativePath); } 
+        public string FullPath
+        {
+            get { return Path.Combine(Path.GetDirectoryName(r_container.SolutionFullPath), m_relativePath); }
         }
         public string ParentFolderGuid
         {
             get { return m_parentFolderGuid; }
             set { m_parentFolderGuid = value; }
         }
-        public SectionHashList ProjectSections 
-        { 
-            get { return m_projectSections; } 
+        public SectionHashList ProjectSections
+        {
+            get { return r_projectSections; }
         }
-        public PropertyLineHashList VersionControlLines 
-        { 
-            get { return m_versionControlLines; } 
+        public PropertyLineHashList VersionControlLines
+        {
+            get { return r_versionControlLines; }
         }
-        public PropertyLineHashList ProjectConfigurationPlatformsLines 
-        { 
-            get { return m_projectConfigurationPlatformsLines; } 
+        public PropertyLineHashList ProjectConfigurationPlatformsLines
+        {
+            get { return r_projectConfigurationPlatformsLines; }
         }
 
         public Project ParentFolder
@@ -128,9 +128,9 @@ namespace CWDev.SLNTools.Core
 
                 return FindProjectInContainer(
                             m_parentFolderGuid,
-                            "Cannot find the parent folder of project '{0}'. \nProject guid: {1}\nParent folder guid: {2}", 
+                            "Cannot find the parent folder of project '{0}'. \nProject guid: {1}\nParent folder guid: {2}",
                             m_projectName,
-                            m_projectGuid,
+                            r_projectGuid,
                             m_parentFolderGuid);
             }
         }
@@ -154,9 +154,9 @@ namespace CWDev.SLNTools.Core
             {
                 if (m_projectTypeGuid == KnownProjectTypeGuid.SolutionFolder)
                 {
-                    foreach (Project project in m_container.Projects)
+                    foreach (Project project in r_container.Projects)
                     {
-                        if (project.m_parentFolderGuid == m_projectGuid)
+                        if (project.m_parentFolderGuid == r_projectGuid)
                             yield return project;
                     }
                 }
@@ -185,16 +185,16 @@ namespace CWDev.SLNTools.Core
                     yield return this.ParentFolder;
                 }
 
-                if (m_projectSections.Contains("ProjectDependencies"))
+                if (r_projectSections.Contains("ProjectDependencies"))
                 {
-                    foreach (PropertyLine propertyLine in m_projectSections["ProjectDependencies"].PropertyLines)
+                    foreach (var propertyLine in r_projectSections["ProjectDependencies"].PropertyLines)
                     {
-                        string dependencyGuid = propertyLine.Name;
+                        var dependencyGuid = propertyLine.Name;
                         yield return FindProjectInContainer(
                                     dependencyGuid,
                                     "Cannot find one of the dependency of project '{0}'.\nProject guid: {1}\nDependency guid: {2}\nReference found in: ProjectDependencies section of the solution file",
                                     m_projectName,
-                                    m_projectGuid,
+                                    r_projectGuid,
                                     dependencyGuid);
                     }
                 }
@@ -214,10 +214,10 @@ namespace CWDev.SLNTools.Core
                                         this.FullPath));
                         }
 
-                        XmlDocument docManaged = new XmlDocument();
+                        var docManaged = new XmlDocument();
                         docManaged.Load(this.FullPath);
 
-                        XmlNamespaceManager xmlManager = new XmlNamespaceManager(docManaged.NameTable);
+                        var xmlManager = new XmlNamespaceManager(docManaged.NameTable);
                         xmlManager.AddNamespace("prefix", "http://schemas.microsoft.com/developer/msbuild/2003");
 
                         foreach (XmlNode xmlNode in docManaged.SelectNodes(@"//prefix:ProjectReference", xmlManager))
@@ -228,7 +228,7 @@ namespace CWDev.SLNTools.Core
                                         dependencyGuid,
                                         "Cannot find one of the dependency of project '{0}'.\nProject guid: {1}\nDependency guid: {2}\nDependency name: {3}\nReference found in: ProjectReference node of file '{4}'",
                                         m_projectName,
-                                        m_projectGuid,
+                                        r_projectGuid,
                                         dependencyGuid,
                                         dependencyName,
                                         this.FullPath);
@@ -247,12 +247,12 @@ namespace CWDev.SLNTools.Core
                                         this.FullPath));
                         }
 
-                        XmlDocument docVisualC = new XmlDocument();
+                        var docVisualC = new XmlDocument();
                         docVisualC.Load(this.FullPath);
 
                         foreach (XmlNode xmlNode in docVisualC.SelectNodes(@"//ProjectReference"))
                         {
-                            string dependencyGuid = xmlNode.Attributes["ReferencedProjectIdentifier"].Value; // TODO handle null
+                            var dependencyGuid = xmlNode.Attributes["ReferencedProjectIdentifier"].Value; // TODO handle null
                             string dependencyRelativePathToProject;
                             XmlNode relativePathToProjectNode = xmlNode.Attributes["RelativePathToProject"];
                             if (relativePathToProjectNode != null)
@@ -267,7 +267,7 @@ namespace CWDev.SLNTools.Core
                                         dependencyGuid,
                                         "Cannot find one of the dependency of project '{0}'.\nProject guid: {1}\nDependency guid: {2}\nDependency relative path: '{3}'\nReference found in: ProjectReference node of file '{4}'",
                                         m_projectName,
-                                        m_projectGuid,
+                                        r_projectGuid,
                                         dependencyGuid,
                                         dependencyRelativePathToProject,
                                         this.FullPath);
@@ -285,8 +285,8 @@ namespace CWDev.SLNTools.Core
 
                         foreach (string line in File.ReadAllLines(this.FullPath))
                         {
-                            Regex regex = new Regex("^\\s*\"OutputProjectGuid\" = \"\\d*\\:(?<PROJECTGUID>.*)\"$");
-                            Match match = regex.Match(line);
+                            var regex = new Regex("^\\s*\"OutputProjectGuid\" = \"\\d*\\:(?<PROJECTGUID>.*)\"$");
+                            var match = regex.Match(line);
                             if (match.Success)
                             {
                                 string dependencyGuid = match.Groups["PROJECTGUID"].Value.Trim();
@@ -294,7 +294,7 @@ namespace CWDev.SLNTools.Core
                                             dependencyGuid,
                                             "Cannot find one of the dependency of project '{0}'.\nProject guid: {1}\nDependency guid: {2}\nReference found in: OutputProjectGuid line of file '{3}'",
                                             m_projectName,
-                                            m_projectGuid,
+                                            r_projectGuid,
                                             dependencyGuid,
                                             this.FullPath);
                             }
@@ -304,8 +304,8 @@ namespace CWDev.SLNTools.Core
                     case KnownProjectTypeGuid.WebProject:
                         // Format is: "({GUID}|ProjectName;)*"
                         // Example: "{GUID}|Infra.dll;{GUID2}|Services.dll;"
-                        PropertyLine propertyLine = m_projectSections["WebsiteProperties"].PropertyLines["ProjectReferences"];
-                        string value = propertyLine.Value;
+                        var propertyLine = r_projectSections["WebsiteProperties"].PropertyLines["ProjectReferences"];
+                        var value = propertyLine.Value;
                         if (value.StartsWith("\""))
                             value = value.Substring(1);
                         if (value.EndsWith("\""))
@@ -315,14 +315,14 @@ namespace CWDev.SLNTools.Core
                         {
                             if (dependency.Trim().Length > 0)
                             {
-                                string[] parts = dependency.Split('|');
-                                string dependencyGuid = parts[0];
-                                string dependencyName = parts[1]; // TODO handle null
+                                var parts = dependency.Split('|');
+                                var dependencyGuid = parts[0];
+                                var dependencyName = parts[1]; // TODO handle null
                                 yield return FindProjectInContainer(
                                             dependencyGuid,
                                             "Cannot find one of the dependency of project '{0}'.\nProject guid: {1}\nDependency guid: {2}\nDependency name: {3}\nReference found in: ProjectReferences line in WebsiteProperties section of the solution file",
                                             m_projectName,
-                                            m_projectGuid,
+                                            r_projectGuid,
                                             dependencyGuid,
                                             dependencyName);
                             }
@@ -339,7 +339,7 @@ namespace CWDev.SLNTools.Core
 
         private Project FindProjectInContainer(string projectGuid, string errorMessageFormat, params object[] errorMessageParams)
         {
-            Project project = m_container.Projects.FindByGuid(projectGuid);
+            var project = r_container.Projects.FindByGuid(projectGuid);
             if (project == null)
             {
                 throw new SolutionFileException(string.Format(errorMessageFormat, errorMessageParams));
@@ -359,10 +359,12 @@ namespace CWDev.SLNTools.Core
 
         public NodeElement ToElement(ElementIdentifier identifier)
         {
-            List<Element> childs = new List<Element>();
-            childs.Add(new ValueElement(new ElementIdentifier(TagProjectTypeGuid), this.ProjectTypeGuid));
-            childs.Add(new ValueElement(new ElementIdentifier(TagProjectName), this.ProjectName));
-            childs.Add(new ValueElement(new ElementIdentifier(TagRelativePath), this.RelativePath));
+            var childs = new List<Element>
+                {
+                    new ValueElement(new ElementIdentifier(TagProjectTypeGuid), this.ProjectTypeGuid),
+                    new ValueElement(new ElementIdentifier(TagProjectName), this.ProjectName),
+                    new ValueElement(new ElementIdentifier(TagRelativePath), this.RelativePath)
+                };
             if (this.ParentFolder != null)
             {
                 childs.Add(new ValueElement(
@@ -370,7 +372,7 @@ namespace CWDev.SLNTools.Core
                             this.ParentFolder.ProjectFullName));
             }
 
-            foreach (Section projectSection in this.ProjectSections)
+            foreach (var projectSection in this.ProjectSections)
             {
                 childs.Add(
                             projectSection.ToElement(
@@ -378,7 +380,7 @@ namespace CWDev.SLNTools.Core
                                     TagProjectSection + projectSection.Name,
                                     string.Format("{0} \"{1}\"", projectSection.SectionType, projectSection.Name))));
             }
-            foreach (PropertyLine propertyLine in this.VersionControlLines)
+            foreach (var propertyLine in this.VersionControlLines)
             {
                 childs.Add(
                             new ValueElement(
@@ -387,7 +389,7 @@ namespace CWDev.SLNTools.Core
                                     @"VersionControlLine\" + propertyLine.Name),
                                 propertyLine.Value));
             }
-            foreach (PropertyLine propertyLine in this.ProjectConfigurationPlatformsLines)
+            foreach (var propertyLine in this.ProjectConfigurationPlatformsLines)
             {
                 childs.Add(
                             new ValueElement(
@@ -407,13 +409,13 @@ namespace CWDev.SLNTools.Core
             string projectName = null;
             string relativePath = null;
             string parentFolderGuid = null;
-            List<Section> projectSections = new List<Section>();
-            List<PropertyLine> versionControlLines = new List<PropertyLine>();
-            List<PropertyLine> projectConfigurationPlatformsLines = new List<PropertyLine>();
+            var projectSections = new List<Section>();
+            var versionControlLines = new List<PropertyLine>();
+            var projectConfigurationPlatformsLines = new List<PropertyLine>();
 
-            foreach (Element child in element.Childs)
+            foreach (var child in element.Childs)
             {
-                ElementIdentifier identifier = child.Identifier;
+                var identifier = child.Identifier;
                 if (identifier.Name == TagProjectTypeGuid)
                 {
                     projectTypeGuid = ((ValueElement)child).Value;
@@ -428,7 +430,7 @@ namespace CWDev.SLNTools.Core
                 }
                 else if (identifier.Name == TagParentFolder)
                 {
-                    string parentProjectFullName = ((ValueElement)child).Value;
+                    var parentProjectFullName = ((ValueElement)child).Value;
                     if (! solutionFolderGuids.ContainsKey(parentProjectFullName))
                     {
                         throw new Exception("TODO");
@@ -438,7 +440,7 @@ namespace CWDev.SLNTools.Core
                 }
                 else if (identifier.Name.StartsWith(TagProjectSection))
                 {
-                    string sectionName = identifier.Name.Substring(TagProjectSection.Length);
+                    var sectionName = identifier.Name.Substring(TagProjectSection.Length);
                     projectSections.Add(
                                 Section.FromElement(
                                     sectionName,
@@ -446,14 +448,14 @@ namespace CWDev.SLNTools.Core
                 }
                 else if (identifier.Name.StartsWith(TagVersionControlLines))
                 {
-                    string name = identifier.Name.Substring(TagVersionControlLines.Length);
-                    string value = ((ValueElement)child).Value;
+                    var name = identifier.Name.Substring(TagVersionControlLines.Length);
+                    var value = ((ValueElement)child).Value;
                     versionControlLines.Add(new PropertyLine(name, value));
                 }
                 else if (identifier.Name.StartsWith(TagProjectConfigurationPlatformsLines))
                 {
-                    string name = identifier.Name.Substring(TagProjectConfigurationPlatformsLines.Length);
-                    string value = ((ValueElement)child).Value;
+                    var name = identifier.Name.Substring(TagProjectConfigurationPlatformsLines.Length);
+                    var value = ((ValueElement)child).Value;
                     projectConfigurationPlatformsLines.Add(new PropertyLine(name, value));
                 }
                 else

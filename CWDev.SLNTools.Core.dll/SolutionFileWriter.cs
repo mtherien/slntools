@@ -1,21 +1,21 @@
 #region License
 
 // SLNTools
-// Copyright (c) 2009 
+// Copyright (c) 2009
 // by Christian Warren
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-// documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
-// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
 // to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all copies or substantial portions
 // of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
-// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
 #endregion
@@ -29,7 +29,10 @@ namespace CWDev.SLNTools.Core
 {
     public class SolutionFileWriter : IDisposable
     {
-        public SolutionFileWriter(string solutionFullPath) : this(new FileStream(solutionFullPath, FileMode.Create, FileAccess.Write))
+        private StreamWriter m_writer;
+
+        public SolutionFileWriter(string solutionFullPath)
+            : this(new FileStream(solutionFullPath, FileMode.Create, FileAccess.Write))
         {
         }
 
@@ -37,8 +40,6 @@ namespace CWDev.SLNTools.Core
         {
             m_writer = new StreamWriter(writer, Encoding.UTF8);
         }
-
-        private StreamWriter m_writer;
 
         #region IDisposable Members
 
@@ -72,7 +73,7 @@ namespace CWDev.SLNTools.Core
                 m_writer.WriteLine();
             }
 
-            foreach (string line in solutionFile.Headers)
+            foreach (var line in solutionFile.Headers)
             {
                 m_writer.WriteLine(line);
             }
@@ -80,14 +81,14 @@ namespace CWDev.SLNTools.Core
 
         private void WriteProjects(SolutionFile solutionFile)
         {
-            foreach (Project project in solutionFile.Projects)
+            foreach (var project in solutionFile.Projects)
             {
                 m_writer.WriteLine("Project(\"{0}\") = \"{1}\", \"{2}\", \"{3}\"",
                             project.ProjectTypeGuid,
                             project.ProjectName,
                             project.RelativePath,
                             project.ProjectGuid);
-                foreach (Section projectSection in project.ProjectSections)
+                foreach (var projectSection in project.ProjectSections)
                 {
                     WriteSection(projectSection, projectSection.PropertyLines);
                 }
@@ -104,13 +105,13 @@ namespace CWDev.SLNTools.Core
 
         private void WriteGlobalSections(SolutionFile solutionFile)
         {
-            foreach (Section globalSection in solutionFile.GlobalSections)
+            foreach (var globalSection in solutionFile.GlobalSections)
             {
-                List<PropertyLine> propertyLines = new List<PropertyLine>(globalSection.PropertyLines);
+                var propertyLines = new List<PropertyLine>(globalSection.PropertyLines);
                 switch (globalSection.Name)
                 {
                     case "NestedProjects":
-                        foreach (Project project in solutionFile.Projects)
+                        foreach (var project in solutionFile.Projects)
                         {
                             if (project.ParentFolderGuid != null)
                             {
@@ -120,9 +121,9 @@ namespace CWDev.SLNTools.Core
                         break;
 
                     case "ProjectConfigurationPlatforms":
-                        foreach (Project project in solutionFile.Projects)
+                        foreach (var project in solutionFile.Projects)
                         {
-                            foreach (PropertyLine propertyLine in project.ProjectConfigurationPlatformsLines)
+                            foreach (var propertyLine in project.ProjectConfigurationPlatformsLines)
                             {
                                 propertyLines.Add(
                                             new PropertyLine(
@@ -135,12 +136,12 @@ namespace CWDev.SLNTools.Core
                     default:
                         if (globalSection.Name.EndsWith("Control", StringComparison.InvariantCultureIgnoreCase))
                         {
-                            int index = 1;
-                            foreach (Project project in solutionFile.Projects)
+                            var index = 1;
+                            foreach (var project in solutionFile.Projects)
                             {
                                 if (project.VersionControlLines.Count > 0)
                                 {
-                                    foreach (PropertyLine propertyLine in project.VersionControlLines)
+                                    foreach (var propertyLine in project.VersionControlLines)
                                     {
                                         propertyLines.Add(
                                                     new PropertyLine(
@@ -151,7 +152,7 @@ namespace CWDev.SLNTools.Core
                                 }
                             }
 
-                            propertyLines.Insert(0, new PropertyLine("SccNumberOfProjects", index.ToString()));                            
+                            propertyLines.Insert(0, new PropertyLine("SccNumberOfProjects", index.ToString()));
                         }
                         break;
                 }
@@ -163,7 +164,7 @@ namespace CWDev.SLNTools.Core
         private void WriteSection(Section section, IEnumerable<PropertyLine> propertyLines)
         {
             m_writer.WriteLine("\t{0}({1}) = {2}", section.SectionType, section.Name, section.Step);
-            foreach (PropertyLine propertyLine in propertyLines)
+            foreach (var propertyLine in propertyLines)
             {
                 m_writer.WriteLine("\t\t{0} = {1}", propertyLine.Name, propertyLine.Value);
             }

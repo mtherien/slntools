@@ -1,27 +1,26 @@
 #region License
 
 // SLNTools
-// Copyright (c) 2009 
+// Copyright (c) 2009
 // by Christian Warren
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-// documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
-// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
 // to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all copies or substantial portions
 // of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
-// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
 #endregion
 
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Xml;
 
@@ -43,17 +42,19 @@ namespace CWDev.SLNTools.Core.Filter
 
         public static FilterFile FromStream(string filterFullPath, Stream stream)
         {
-            var filterFile = new FilterFile();
-            filterFile.FilterFullPath = filterFullPath;
+            var filterFile = new FilterFile
+                {
+                    FilterFullPath = filterFullPath
+                };
 
             var xmldoc = new XmlDocument();
             xmldoc.Load(stream);
 
-            XmlNode configNode = xmldoc.SelectSingleNode("Config");
+            var configNode = xmldoc.SelectSingleNode("Config");
 
-            XmlNode sourceSlnNode = configNode.SelectSingleNode("SourceSLN");
+            var sourceSlnNode = configNode.SelectSingleNode("SourceSLN");
             filterFile.SourceSolutionFullPath = Path.Combine(
-                        Path.GetDirectoryName(filterFullPath), 
+                        Path.GetDirectoryName(filterFullPath),
                         Path.GetFileName(sourceSlnNode.InnerText));
 
             XmlNode watchForChangesNode = configNode.SelectSingleNode("WatchForChangesOnFilteredSolution");
@@ -75,6 +76,9 @@ namespace CWDev.SLNTools.Core.Filter
             return filterFile;
         }
 
+
+        private FilteredSolutionWatcher m_watcher;
+
         public FilterFile()
         {
             this.SourceSolutionFullPath = null;
@@ -83,8 +87,6 @@ namespace CWDev.SLNTools.Core.Filter
             this.WatchForChangesOnFilteredSolution = false;
             m_watcher = null;
         }
-
-        private FilteredSolutionWatcher m_watcher;
 
         public string SourceSolutionFullPath { get; set; }
 
@@ -132,19 +134,19 @@ namespace CWDev.SLNTools.Core.Filter
             }
 
             return new SolutionFile(
-                        this.DestinationSolutionFullPath, 
+                        this.DestinationSolutionFullPath,
                         original.Headers,
                         includedProjects,
                         original.GlobalSections);
         }
 
-        private void AddRecursiveDependenciesToList(List<Project> includedProjects, Project project)
+        private static void AddRecursiveDependenciesToList(List<Project> includedProjects, Project project)
         {
             if (includedProjects.Contains(project))
                 return;
 
             includedProjects.Add(project);
-            foreach (Project dependency in project.Dependencies)
+            foreach (var dependency in project.Dependencies)
             {
                 AddRecursiveDependenciesToList(includedProjects, dependency);
             }
@@ -195,7 +197,7 @@ namespace CWDev.SLNTools.Core.Filter
             copyReSharperFilesNode.InnerText = this.CopyReSharperFiles.ToString();
             configNode.AppendChild(copyReSharperFilesNode);
 
-            foreach (string projectFullName in this.ProjectsToKeep)
+            foreach (var projectFullName in this.ProjectsToKeep)
             {
                 XmlNode node = docFilter.CreateElement("ProjectToKeep");
                 node.InnerText = projectFullName;

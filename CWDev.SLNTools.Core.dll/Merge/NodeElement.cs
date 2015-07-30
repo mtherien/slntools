@@ -1,21 +1,21 @@
 ﻿#region License
 
 // SLNTools
-// Copyright (c) 2009 
+// Copyright (c) 2009
 // by Christian Warren
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated 
-// documentation files (the "Software"), to deal in the Software without restriction, including without limitation 
-// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and 
+// Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+// documentation files (the "Software"), to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and
 // to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all copies or substantial portions
 // of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL 
-// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
-// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+// TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+// CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
 #endregion
@@ -27,17 +27,17 @@ namespace CWDev.SLNTools.Core.Merge
 {
     public class NodeElement : Element
     {
+        private readonly ElementHashList r_childs;
+
         public NodeElement(
                     ElementIdentifier identifier,
                     IEnumerable<Element> childs)
             : base(identifier)
         {
-            m_childs = new ElementHashList(childs);
+            r_childs = new ElementHashList(childs);
         }
 
-        private ElementHashList m_childs;
-
-        public ElementHashList Childs { get { return m_childs; } }
+        public ElementHashList Childs { get { return r_childs; } }
 
         public override Difference CompareTo(Element oldElement)
         {
@@ -63,27 +63,21 @@ namespace CWDev.SLNTools.Core.Merge
                 throw new MergeException(string.Format("Cannot compare a {0} to a {1}.", oldElement.GetType().Name, this.GetType().Name));
             }
 
-            List<Difference> differences = new List<Difference>();
-            ElementHashList newChilds = this.Childs;
-            foreach (Element oldChild in oldChilds)
+            var differences = new List<Difference>();
+            var newChilds = this.Childs;
+            foreach (var oldChild in oldChilds)
             {
-                Element newChild;
-                if (newChilds.Contains(oldChild.Identifier))
-                {
-                    newChild = newChilds[oldChild.Identifier];
-                }
-                else
-                {
-                    newChild = oldChild.Identifier.CreateEmptyElement();
-                }
+                var newChild = newChilds.Contains(oldChild.Identifier)
+                            ? newChilds[oldChild.Identifier]
+                            : oldChild.Identifier.CreateEmptyElement();
 
-                Difference difference = newChild.CompareTo(oldChild);
+                var difference = newChild.CompareTo(oldChild);
                 if (difference != null)
                 {
                     differences.Add(difference);
                 }
             }
-            foreach (Element newChild in newChilds)
+            foreach (var newChild in newChilds)
             {
                 if (!oldChilds.Contains(newChild.Identifier))
                 {
@@ -92,14 +86,9 @@ namespace CWDev.SLNTools.Core.Merge
                 }
             }
 
-            if (differences.Count > 0)
-            {
-                return new NodeDifference(this.Identifier, operationOnParent, differences);
-            }
-            else
-            {
-                return null;
-            }
+            return differences.Count > 0
+                        ? new NodeDifference(this.Identifier, operationOnParent, differences)
+                        : null;
         }
 
         public override Element Apply(Difference difference)
@@ -111,8 +100,8 @@ namespace CWDev.SLNTools.Core.Merge
 
             if (difference is NodeDifference)
             {
-                ElementHashList mergedChilds = new ElementHashList(m_childs);
-                foreach (Difference subdifference in ((NodeDifference)difference).Subdifferences)
+                var mergedChilds = new ElementHashList(r_childs);
+                foreach (var subdifference in ((NodeDifference)difference).Subdifferences)
                 {
                     switch (subdifference.OperationOnParent)
                     {

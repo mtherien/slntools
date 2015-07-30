@@ -14,7 +14,7 @@
 //
 //    In return, we simply require that you agree:
 //
-//    1. Not to remove any copyright or other notices from the Software. 
+//    1. Not to remove any copyright or other notices from the Software.
 //    2. That if you distribute the Software in source code form you do so only
 //    under this license (i.e. you must include a complete copy of this license
 //    with your distribution), and if you distribute the Software solely in
@@ -56,15 +56,15 @@
 //    Usage
 //    -----
 //
-//    Parsing command line arguments to a console application is a common problem. 
-//    This library handles the common task of reading arguments from a command line 
+//    Parsing command line arguments to a console application is a common problem.
+//    This library handles the common task of reading arguments from a command line
 //    and filling in the values in a type.
 //
-//    To use this library, define a class whose fields represent the data that your 
-//    application wants to receive from arguments on the command line. Then call 
-//    CommandLine.ParseArguments() to fill the object with the data 
-//    from the command line. Each field in the class defines a command line argument. 
-//    The type of the field is used to validate the data read from the command line. 
+//    To use this library, define a class whose fields represent the data that your
+//    application wants to receive from arguments on the command line. Then call
+//    CommandLine.ParseArguments() to fill the object with the data
+//    from the command line. Each field in the class defines a command line argument.
+//    The type of the field is used to validate the data read from the command line.
 //    The name of the field defines the name of the command line option.
 //
 //    The parser can handle fields of the following types:
@@ -76,7 +76,7 @@
 //    - enum
 //    - array of the above type
 //
-//    For example, suppose you want to read in the argument list for wc (word count). 
+//    For example, suppose you want to read in the argument list for wc (word count).
 //    wc takes three optional boolean arguments: -l, -w, and -c and a list of files.
 //
 //    You could parse these arguments using the following code:
@@ -100,12 +100,12 @@
 //        }
 //    }
 //
-//    So you could call this aplication with the following command line to count 
+//    So you could call this aplication with the following command line to count
 //    lines in the foo and bar files:
 //
 //        wc.exe /lines /files:foo /files:bar
 //
-//    The program will display the following usage message when bad command line 
+//    The program will display the following usage message when bad command line
 //    arguments are used:
 //
 //        wc.exe -x
@@ -117,14 +117,14 @@
 //        /files:<string>                     short form /f
 //        @<file>                             Read response file for more options
 //
-//    That was pretty easy. However, you realy want to omit the "/files:" for the 
-//    list of files. The details of field parsing can be controled using custom 
+//    That was pretty easy. However, you realy want to omit the "/files:" for the
+//    list of files. The details of field parsing can be controled using custom
 //    attributes. The attributes which control parsing behaviour are:
 //
-//    ArgumentAttribute 
+//    ArgumentAttribute
 //        - controls short name, long name, required, allow duplicates, default value
 //        and help text
-//    DefaultArgumentAttribute 
+//    DefaultArgumentAttribute
 //        - allows omition of the "/name".
 //        - This attribute is allowed on only one field in the argument class.
 //
@@ -163,7 +163,7 @@
 //
 //        wc.exe /lines foo bar
 //
-//    This will set lines to true and will set files to an array containing the 
+//    This will set lines to true and will set files to an array containing the
 //    strings "foo" and "bar".
 //
 //    The new usage message becomes:
@@ -177,7 +177,7 @@
 //    @<file>      Read response file for more options
 //    <files>      Input files to count. (short form /f)
 //
-//    If you want more control over how error messages are reported, how /help is 
+//    If you want more control over how error messages are reported, how /help is
 //    dealt with, etc you can instantiate the CommandLine.Parser class.
 //
 //
@@ -196,7 +196,7 @@
 //    10/02/2002 Initial Release
 //    10/14/2002 Bug Fix
 //    01/08/2003 Bug Fix in @ include files
-//    10/23/2004 Added user specified help text, formatting of help text to 
+//    10/23/2004 Added user specified help text, formatting of help text to
 //            screen width. Added ParseHelp for /?.
 //    11/23/2004 Added support for default values.
 //////////////////////////////////////////////////////////////////////////////
@@ -247,7 +247,7 @@ namespace CWDev.SLNTools.CommandLine
 
         /// <summary>
         /// The default type for collection arguments.
-        /// The argument is permitted to occur multiple times, but duplicate 
+        /// The argument is permitted to occur multiple times, but duplicate
         /// values will cause an error to be reported.
         /// </summary>
         MultipleUnique = Multiple | Unique,
@@ -379,7 +379,7 @@ namespace CWDev.SLNTools.CommandLine
     /// specified as the destination of the parse.
     /// Valid argument types are: int, uint, string, bool, enums
     /// Also argument types of Array of the above types are also valid.
-    /// 
+    ///
     /// Error checking options can be controlled by adding a ArgumentAttribute
     /// to the instance fields of the destination object.
     ///
@@ -430,7 +430,7 @@ namespace CWDev.SLNTools.CommandLine
         }
 
         /// <summary>
-        /// Parses Command Line Arguments. 
+        /// Parses Command Line Arguments.
         /// Errors are output on Console.Error.
         /// Use ArgumentAttributes to control parsing behaviour.
         /// </summary>
@@ -443,7 +443,7 @@ namespace CWDev.SLNTools.CommandLine
         }
 
         /// <summary>
-        /// Parses Command Line Arguments. 
+        /// Parses Command Line Arguments.
         /// Use ArgumentAttributes to control parsing behaviour.
         /// </summary>
         /// <param name="arguments"> The actual arguments. </param>
@@ -850,7 +850,7 @@ namespace CWDev.SLNTools.CommandLine
                         index++;
                 }
 
-                // add newline if there's no help text                
+                // add newline if there's no help text
                 if (helpStrings.help.Length == 0)
                 {
                     builder.Append(newLine);
@@ -995,7 +995,7 @@ namespace CWDev.SLNTools.CommandLine
             }
             catch (System.IndexOutOfRangeException)
             {
-                // got EOF 
+                // got EOF
                 if (inQuotes)
                 {
                     this.reporter(string.Format("Error: Unbalanced '\"' in command line argument file '{0}'", fileName));
