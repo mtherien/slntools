@@ -164,7 +164,11 @@ namespace CWDev.SLNTools.Core
         {
             for (var line = ReadLine(); !line.StartsWith("EndGlobal"); line = ReadLine())
             {
-                ReadGlobalSection(line);
+                line = line.Trim();
+                if (line.Length > 0)
+                {
+                    ReadGlobalSection(line);
+                }
             }
         }
 
@@ -235,6 +239,10 @@ namespace CWDev.SLNTools.Core
                     if (name.EndsWith("Control", StringComparison.InvariantCultureIgnoreCase))
                     {
                         HandleVersionControlLines(name, type, step, propertyLines);
+                    }
+                    else if (m_solutionFile.GlobalSections.Contains(name))
+                    {
+                        m_solutionFile.AddWarning("Duplicate global section '{0}' found in solution.", name);
                     }
                     else
                     {

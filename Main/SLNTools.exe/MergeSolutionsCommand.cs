@@ -31,6 +31,9 @@ namespace CWDev.SLNTools
     {
         private class Arguments
         {
+            [Argument(ArgumentType.AtMostOnce)]
+            public bool IgnoreWarning = false;
+
             [DefaultArgument(ArgumentType.Multiple)]
             public string[] Solutions = null;
         }
@@ -48,9 +51,9 @@ namespace CWDev.SLNTools
                     return;
                 }
 
-                var solutionInSourceBranch = SolutionFile.FromFile(parsedArguments.Solutions[0]);
-                var solutionInDestinationBranch = SolutionFile.FromFile(parsedArguments.Solutions[1]);
-                var commonAncestrorSolution = SolutionFile.FromFile(parsedArguments.Solutions[2]);
+                var solutionInSourceBranch = CheckForWarnings(SolutionFile.FromFile(parsedArguments.Solutions[0]), parsedArguments.IgnoreWarning);
+                var solutionInDestinationBranch = CheckForWarnings(SolutionFile.FromFile(parsedArguments.Solutions[1]), parsedArguments.IgnoreWarning);
+                var commonAncestrorSolution = CheckForWarnings(SolutionFile.FromFile(parsedArguments.Solutions[2]), parsedArguments.IgnoreWarning);
                 var mergedSolutionName = parsedArguments.Solutions[3];
 
                 var elementInSourceBranch = solutionInSourceBranch.ToElement();

@@ -31,6 +31,9 @@ namespace CWDev.SLNTools
     {
         private class Arguments
         {
+            [Argument(ArgumentType.AtMostOnce)]
+            public bool IgnoreWarning = false;
+
             [DefaultArgument(ArgumentType.Multiple)]
             public string[] Solutions = null;
         }
@@ -48,8 +51,8 @@ namespace CWDev.SLNTools
                     return;
                 }
 
-                var oldSolution = SolutionFile.FromFile(parsedArguments.Solutions[0]);
-                var newSolution = SolutionFile.FromFile(parsedArguments.Solutions[1]);
+                var oldSolution = CheckForWarnings(SolutionFile.FromFile(parsedArguments.Solutions[0]), parsedArguments.IgnoreWarning);
+                var newSolution = CheckForWarnings(SolutionFile.FromFile(parsedArguments.Solutions[1]), parsedArguments.IgnoreWarning);
                 var difference = newSolution.CompareTo(oldSolution)
                             ?? new NodeDifference(new ElementIdentifier("SolutionFile"), OperationOnParent.Modified, null);
                 using (var form = new CompareSolutionsForm(difference))

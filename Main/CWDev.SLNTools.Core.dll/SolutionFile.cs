@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 
 namespace CWDev.SLNTools.Core
@@ -55,10 +56,12 @@ namespace CWDev.SLNTools.Core
         #endregion
 
         private string m_solutionFullPath;
+        private readonly List<String> r_warnings;
 
         public SolutionFile()
         {
             m_solutionFullPath = null;
+            r_warnings = new List<string>();
             this.Headers = new List<string>();
             this.Projects = new ProjectHashList(this);
             this.GlobalSections = new SectionHashList();
@@ -89,6 +92,8 @@ namespace CWDev.SLNTools.Core
 
         public SectionHashList GlobalSections { get; private set; }
 
+        public ReadOnlyCollection<string> Warnings { get { return new ReadOnlyCollection<string>(r_warnings);} }
+
         public IEnumerable<Project> Childs
         {
             get
@@ -101,6 +106,11 @@ namespace CWDev.SLNTools.Core
                     }
                 }
             }
+        }
+
+        public void AddWarning(string format, params object[] args)
+        {
+            r_warnings.Add(string.Format(format, args));
         }
 
         public void Save()
