@@ -21,6 +21,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
@@ -56,16 +57,13 @@ namespace CWDev.SLNTools
             {
                 var filterFile = FilterFile.FromFile(parsedArguments.FilterFile);
 
-                foreach (var warning in filterFile.SourceSolution.Warnings)
-                {
-                    Console.WriteLine("WARNING: {0}", warning);
-                }
-
                 // Save the filtered solution. We also add a link to the original solution file in the filtered solution.
                 // If we have to checkout the original solution file later on, its easier with that link.
                 var filteredSolution = filterFile.Apply();
-                var originalSolutionProject = CreateOriginalSolutionProject(filterFile.SourceSolutionFullPath);
-                filteredSolution.Projects.Add(originalSolutionProject);
+
+                // Add OriginalSolutionFile to the filter solution (and a warnings file if needed)
+                filteredSolution.Projects.Add(CreateOriginalSolutionProject(filterFile.SourceSolution));
+
                 filteredSolution.Save();
                 if (filterFile.CopyReSharperFiles)
                 {
@@ -126,10 +124,30 @@ namespace CWDev.SLNTools
         }
 
         private static Project CreateOriginalSolutionProject(
-                    string originalSolutionFullPath)
+                    SolutionFile sourceSolutionFile)
         {
-            var originalSolutionName = Path.GetFileName(originalSolutionFullPath);
-            var project = new Project(
+            var originalSolutionName = Path.GetFileName(sourceSolutionFile.SolutionFullPath);
+
+            var propertyLines = new List<PropertyLine>();
+            propertyLines.Add(new PropertyLine(originalSolutionName, originalSolutionName));
+            if (sourceSolutionFile.Warnings.Count > 0)
+            {
+                var warningFileName = originalSolutionName + ".warnings.txt";
+                var warningFullPath = Path.Combine(Path.GetDirectoryName(sourceSolutionFile.SolutionFullPath) ?? ".", warningFileName);
+                using (var output = File.CreateText(warningFullPath))
+                {
+                    output.WriteLine("The following warnings were found while parsing the file '{0}': ", originalSolutionName);
+                    output.WriteLine();
+                    foreach (var warning in sourceSolutionFile.Warnings)
+                    {
+                        output.WriteLine(warning);
+                    }
+                }
+
+                propertyLines.Add(new PropertyLine(warningFileName, warningFileName));
+            }
+
+            return new Project(
                         null,
                         "{3D86F2A1-6348-4351-9B53-2A75735A2AB4}",
                         KnownProjectTypeGuid.SolutionFolder,
@@ -142,11 +160,10 @@ namespace CWDev.SLNTools
                                         "SolutionItems",
                                         "ProjectSection",
                                         "preProject",
-                                        new PropertyLine[] { new PropertyLine(originalSolutionName, originalSolutionName) })
+                                        propertyLines)
                                 },
                         null,
                         null);
-            return project;
         }
     }
 }
