@@ -3,17 +3,17 @@
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension">
 
   <!--The following variables must be modified for each release. A new GUID should be generated each time.-->
-  <?define ProductVersion=1.1.2 ?>
-  <?define ProductCode=CE3B4900-3222-4364-9814-463702D93B84?>
+  <?define ProductVersion=1.1.3 ?>
+  <?define ProductCode=BD71A18D-870E-4DC5-9A89-2A0FC2BEAB30?>
 
   <!--The following variable should NEVER be modified. -->
   <?define UpgradeCode=9A791ED6-C6EA-4234-84E2-9A08122BBC61 ?>
 
   <Product Id="$(var.ProductCode)"
-           Name="Tools for SLN File" 
-           Language="1033" 
-           Version="$(var.ProductVersion)" 
-           Manufacturer="CWDev" 
+           Name="Tools for SLN File"
+           Language="1033"
+           Version="$(var.ProductVersion)"
+           Manufacturer="CWDev"
            UpgradeCode="$(var.UpgradeCode)">
 		<Package InstallerVersion="200" Compressed="yes" />
 
@@ -28,11 +28,11 @@
     <DirectoryRef Id="INSTALLLOCATION">
       <Component Id="Component_SLNTools.exe" Guid="*">
         <File Source="$(var.SLNTools.exe.TargetDir)\SLNTools.exe" KeyPath="yes" />
-        
+
         <ProgId Id="Filter for Microsoft Visual Studio Solution"
                 Description="Filter for Microsoft Visual Studio Solution"
                 IconIndex="0"
-                Advertise="yes">         
+                Advertise="yes">
           <Extension Id="SLNFILTER" Advertise="yes">
             <Verb Id="open" Command="&amp;Open" Argument="OpenFilterFile &quot;%1&quot;" Sequence="1" />
             <Verb Id="edit" Command="&amp;Edit" Argument="EditFilterFile &quot;%1&quot;" Sequence="2" />
@@ -58,7 +58,7 @@
       <ComponentRef Id="Component_CWDev.SLNTools.UIKit.dll" />
       <ComponentRef Id="Component_AddShellCommandForSLNFile" />
     </Feature>
-   
+
     <!-- Validation : .Net framework installed or not. ====================================================-->
 
     <PropertyRef Id="NETFRAMEWORK20"/>
