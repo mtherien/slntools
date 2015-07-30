@@ -56,6 +56,11 @@ namespace CWDev.SLNTools
             {
                 var filterFile = FilterFile.FromFile(parsedArguments.FilterFile);
 
+                foreach (var warning in filterFile.SourceSolution.Warnings)
+                {
+                    Console.WriteLine("WARNING: {0}", warning);
+                }
+
                 // Save the filtered solution. We also add a link to the original solution file in the filtered solution.
                 // If we have to checkout the original solution file later on, its easier with that link.
                 var filteredSolution = filterFile.Apply();
