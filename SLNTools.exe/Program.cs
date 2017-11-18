@@ -47,14 +47,6 @@ namespace CWDev.SLNTools
         [STAThread]
         static void Main(string[] args)
         {
-            //args = new string[] { "CompareSolutions", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\SLNTools.exe\All Projects (Lors du Branch).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\SLNTools.exe\All Projects (Latest Branche WinFixFrs).sln" };
-            //args = new string[] { "MergeSolutions", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\SLNTools.exe\All Projects (Lors du Branch).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\SLNTools.exe\All Projects (Latest Branche WinFixFrs).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\SLNTools.exe\All Projects (Latest Main).sln", @"C:\Dev\VSSolutionMerger.root\VSSolutionMerger\SLNTools.exe\Results.sln" };
-            //args = new string[] { "CreateFilterFileFromSolution", @"C:\DevCodePlex\SLNTools\Main\SLNTools.sln" };
-            //args = new string[] { "OpenFilterFile", @"C:\DevCodePlex\SLNTools\Main\Test.slnfilter" };
-            //args = new string[] { "/?" };
-            //args = new string[] { "CreateFilterFileFromSolution", @"E:\SLNTools\SLNTools\Main\SLNTools.sln" };
-            //args = new string[] { "MergeSolutions" };
-
             try
             {
                 string[] commandName;
