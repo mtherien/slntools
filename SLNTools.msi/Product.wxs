@@ -23,11 +23,22 @@
 			<Directory Id="ProgramFilesFolder">
 				<Directory Id="INSTALLLOCATION" Name="SLN File Tools" />
 			</Directory>
+            <Directory Id="ProgramMenuFolder">
+                <Directory Id="ApplicationProgramsFolder" Name="SLN File Tools"/>
+            </Directory>
 		</Directory>
 
     <DirectoryRef Id="INSTALLLOCATION">
       <Component Id="Component_SLNTools.exe" Guid="*">
-        <File Source="$(var.SLNTools.exe.TargetDir)\SLNTools.exe" KeyPath="yes" />
+        <File Id="Component_SLNTools.exe" Source="$(var.SLNTools.exe.TargetDir)\SLNTools.exe" KeyPath="yes" />
+				  
+	  	<Environment 
+                  Id="Environment" 
+                  Name="PATH" 
+				  Action="set"
+                  Part="last" 
+                  System="yes" 
+                  Value="[INSTALLLOCATION]" /> 
 
         <ProgId Id="Filter for Microsoft Visual Studio Solution"
                 Description="Filter for Microsoft Visual Studio Solution"
@@ -51,14 +62,28 @@
         <File Source="$(var.CWDev.SLNTools.UIKit.dll.TargetDir)\CWDev.SLNTools.UIKit.dll" />
       </Component>
     </DirectoryRef>
+	<DirectoryRef Id="ApplicationProgramsFolder">
+		<Component Id="ApplicationShortcut" Guid="*">
+			<Shortcut Id="ApplicationStartMenuShortcut" 
+					  Name="SLN File Tools"
+					  Description="Tools for managing a SLN file"
+					  Target="[#Component_SLNTools.exe]"
+					  WorkingDirectory="INSTALLLOCATION"
+					  />
+			<RemoveFolder Id="CleanUpShortCut" Directory="ApplicationProgramsFolder" On="uninstall"/>
+			<RegistryValue Root="HKCU" Key="Software\Microsoft\SLNTools" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+		</Component>
+	</DirectoryRef>
 
     <Feature Id="ProductFeature" Title="Application" Level="1">
       <ComponentRef Id="Component_SLNTools.exe" />
       <ComponentRef Id="Component_CWDev.SLNTools.Core.dll" />
       <ComponentRef Id="Component_CWDev.SLNTools.UIKit.dll" />
       <ComponentRef Id="Component_AddShellCommandForSLNFile" />
+      <ComponentRef Id="ApplicationShortcut" />
     </Feature>
 
+				  
     <!-- Validation : .Net framework installed or not. ====================================================-->
 
     <PropertyRef Id="NETFRAMEWORK45"/>
