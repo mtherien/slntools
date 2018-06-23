@@ -46,6 +46,9 @@ namespace CWDev.SLNTools.Commands
 
             [Argument(ArgumentType.AtMostOnce)]
             public bool CreateOnly = false;
+
+            [Argument(ArgumentType.AtMostOnce, ShortName = "p")]
+            public bool NotifyOnCreate = false;
         }
 
         public override void Run(string[] args, ICommandUsageReporter commandUsageReporter)
@@ -119,6 +122,12 @@ namespace CWDev.SLNTools.Commands
                     }
 
                     filterFile.StopFilteredSolutionWatcher();
+                }
+
+                if (parsedArguments.CreateOnly && parsedArguments.NotifyOnCreate)
+                {
+                    MessageBox.Show("Filtered Solution Created/Updated", "Success", MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                 }
             }
         }

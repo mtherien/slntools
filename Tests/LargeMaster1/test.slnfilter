@@ -1,0 +1,6 @@
+<Config>
+  <SourceSLN>LargeMaster1.sln</SourceSLN>
+  <WatchForChangesOnFilteredSolution>True</WatchForChangesOnFilteredSolution>
+  <CopyReSharperFiles>True</CopyReSharperFiles>
+  <ProjectToKeep>Lib\Library1</ProjectToKeep>
+</Config>

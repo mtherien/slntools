@@ -40,14 +40,14 @@
                   System="yes" 
                   Value="[INSTALLLOCATION]" /> 
 
-        <ProgId Id="Filter for Microsoft Visual Studio Solution"
+        <ProgId Id="SLNTools.slnfilter"
                 Description="Filter for Microsoft Visual Studio Solution"
                 IconIndex="0"
                 Advertise="yes">
-          <Extension Id="SLNFILTER" Advertise="yes">
-            <Verb Id="open" Command="&amp;Open" Argument="OpenFilterFile &quot;%1&quot;" Sequence="1" />
-            <Verb Id="edit" Command="&amp;Edit" Argument="EditFilterFile &quot;%1&quot;" Sequence="2" />
-            <Verb Id="createsln" Command="&amp;Create Filtered Solution Only" Argument="OpenFilterFile &quot;%1&quot; -CreateOnly" Sequence="3" />
+          <Extension Id="slnfilter" Advertise="yes">
+            <Verb Id=".UpdateOpen" Command="&amp;Update and Open Filtered Solution" Argument="OpenFilterFile &quot;%1&quot;" Sequence="1" />
+            <Verb Id="Edit Filter" Command="&amp;Edit Filter" Argument="EditFilterFile &quot;%1&quot;" Sequence="2" />
+            <Verb Id="createsln" Command="&amp;Create Filtered Solution Only" Argument="OpenFilterFile &quot;%1&quot; -CreateOnly -p" Sequence="3" />
           </Extension>
         </ProgId>
       </Component>
