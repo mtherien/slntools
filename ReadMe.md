@@ -1,17 +1,19 @@
-SLNTools
-========
+# SLNTools (Solution Tools)
 
-I helpful utility for managing Visual Studio solutions.
+A helpful utility for managing Visual Studio solutions.
 
 Key features include:
-* Merging 2 solution files
-* Maintaining subsets of a solution file from a master solution file
+* Compare 2 solution files and report the differences
+* Merging solution files from source control
+* Create a filtered solution from a larger solution.  This comes in handy when you have one large solution that you want to break into smaller solutions for specific functionality.
 
-Requirements to build only:
-* Framework 4.0.
-* Start "SLNTools.BuildReleaseVersion.cmd", the result will be put in the "bin\Release" subfolder.
+## Building the solution
+.Net Framework 4.0 or greater is necessary to build the solution.  
 
-Requirements to build/modify:
-* Visual Studio 2010
-* Wix Toolset v3.5 (http://wix.codeplex.com/releases/view/60102), although its only used to modify the properties of the WiX projet. The project itself is
-  build using the WiX binaries that has been included in the solution.
+Start "SLNTools.BuildReleaseVersion.cmd", the result will be put in the "bin\Release" subfolder.
+
+## Solution information
+This is a Visual Studio 2017 solution.  The Wix Toolset is used to create the installer.  You can download it here: http://wix.codeplex.com/releases/view/60102
+
+## Acknowledgements
+This project was started by Christian Warren at http://slntools.codeplex.com.  Thank you for your contribution.  With permission, it has moved to GitHub to be maintained by Mike Therien.

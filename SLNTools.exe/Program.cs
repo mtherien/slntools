@@ -21,7 +21,11 @@
 #endregion
 
 using System;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Linq;
 using System.Windows.Forms;
+using CWDev.SLNTools.CommandErrorReporters;
 
 namespace CWDev.SLNTools
 {
@@ -29,24 +33,17 @@ namespace CWDev.SLNTools
 
     internal class Program
     {
-        private enum CommandList
-        {
-            CompareSolutions,
-            MergeSolutions,
-            CreateFilterFileFromSolution,
-            EditFilterFile,
-            OpenFilterFile
-        }
-
-        private class Arguments
-        {
-            [DefaultArgument(ArgumentType.Required, HelpText = "Command Name (CompareSolutions|MergeSolutions|CreateFilterFileFromSolution|EditFilterFile|OpenFilterFile|SortProjects)")]
-            public CommandList Command = (CommandList)(-1);
-        }
-
         [STAThread]
         static void Main(string[] args)
         {
+            if (args.Length == 0)
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new NoArgumentsStart());
+                return;
+            }
+
             try
             {
                 string[] commandName;
@@ -64,55 +61,23 @@ namespace CWDev.SLNTools
                     commandArguments = new string[0];
                 }
 
-                var parsedArguments = new Arguments();
+                var parsedArguments = new BaseArguments();
 
-                var reporter = new MessageBoxErrorReporter
+                var commandErrorReporter = new ConsoleCommandErrorReporter
                             {
-                                CommandUsage = Parser.ArgumentsUsage(parsedArguments.GetType())
+                                CommandUsage = Parser.ArgumentsUsage(parsedArguments.GetType()),
+                                CommandName = commandName.First()
                             };
 
-                if (Parser.ParseArguments(commandName, parsedArguments, reporter.Handler))
-                {
-                    Command command;
-                    switch (parsedArguments.Command)
-                    {
-                        case CommandList.CompareSolutions:
-                            command = new CompareSolutionsCommand();
-                            break;
-
-                        case CommandList.MergeSolutions:
-                            command = new MergeSolutionsCommand();
-                            break;
-
-                        case CommandList.CreateFilterFileFromSolution:
-                            command = new CreateFilterFileFromSolutionCommand();
-                            break;
-
-                        case CommandList.OpenFilterFile:
-                            command = new OpenFilterFileCommand();
-                            break;
-
-                        case CommandList.EditFilterFile:
-                            command = new EditFilterFileCommand();
-                            break;
-
-                        default:
-                            command = null;
-                            reporter.Handler("Invalid command name.");
-                            break;
-                    }
-
-                    if (command != null)
-                    {
-                        reporter.CommandName = parsedArguments.Command.ToString();
-                        command.Run(commandArguments, reporter);
-                    }
-                }
+                var commandRunner = new CommandRunner();
+                commandRunner.RunCommand(parsedArguments.Command, commandErrorReporter, commandArguments);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString());
+                Console.Error.WriteLine($"Unexpected Exception: {ex.Message}");
             }
         }
+
+        
     }
 }
