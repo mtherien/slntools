@@ -30,7 +30,7 @@ namespace CWDev.SLNTools.Commands
     {
         private class Arguments
         {
-            [DefaultArgument(ArgumentType.AtMostOnce)]
+            [DefaultArgument(ArgumentType.AtMostOnce | ArgumentType.Required)]
             public string SolutionFile = null;
         }
 

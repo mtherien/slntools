@@ -62,6 +62,7 @@ namespace CWDev.SLNTools
                 }
 
                 var parsedArguments = new BaseArguments();
+                Parser.ParseArguments(commandName, parsedArguments);
 
                 var commandErrorReporter = new ConsoleCommandErrorReporter
                             {

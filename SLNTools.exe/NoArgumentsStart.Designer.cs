@@ -45,6 +45,8 @@
             this.chkIgnoreWarnings = new System.Windows.Forms.CheckBox();
             this.chkWait = new System.Windows.Forms.CheckBox();
             this.chkCreateOnly = new System.Windows.Forms.CheckBox();
+            this.solution4File = new CWDev.SLNTools.FileSelection();
+            this.lblSolution4 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -59,7 +61,7 @@
             // btnExit
             // 
             this.btnExit.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnExit.Location = new System.Drawing.Point(1080, 531);
+            this.btnExit.Location = new System.Drawing.Point(1070, 638);
             this.btnExit.Name = "btnExit";
             this.btnExit.Size = new System.Drawing.Size(179, 75);
             this.btnExit.TabIndex = 7;
@@ -152,7 +154,7 @@
             // btnOk
             // 
             this.btnOk.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnOk.Location = new System.Drawing.Point(873, 531);
+            this.btnOk.Location = new System.Drawing.Point(863, 638);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(179, 75);
             this.btnOk.TabIndex = 21;
@@ -192,22 +194,44 @@
             // chkWait
             // 
             this.chkWait.AutoSize = true;
-            this.chkWait.Location = new System.Drawing.Point(332, 237);
+            this.chkWait.Location = new System.Drawing.Point(792, 237);
             this.chkWait.Name = "chkWait";
-            this.chkWait.Size = new System.Drawing.Size(87, 29);
+            this.chkWait.Size = new System.Drawing.Size(513, 29);
             this.chkWait.TabIndex = 25;
-            this.chkWait.Text = "Wait";
+            this.chkWait.Text = "Wait for solution to open (needed in some cases)";
             this.chkWait.UseVisualStyleBackColor = true;
             // 
             // chkCreateOnly
             // 
             this.chkCreateOnly.AutoSize = true;
-            this.chkCreateOnly.Location = new System.Drawing.Point(461, 237);
+            this.chkCreateOnly.Location = new System.Drawing.Point(332, 237);
             this.chkCreateOnly.Name = "chkCreateOnly";
-            this.chkCreateOnly.Size = new System.Drawing.Size(158, 29);
+            this.chkCreateOnly.Size = new System.Drawing.Size(432, 29);
             this.chkCreateOnly.TabIndex = 26;
-            this.chkCreateOnly.Text = "Create Only";
+            this.chkCreateOnly.Text = "Create Only. Don\'t open created solution";
             this.chkCreateOnly.UseVisualStyleBackColor = true;
+            this.chkCreateOnly.CheckedChanged += new System.EventHandler(this.chkCreateOnly_CheckedChanged);
+            // 
+            // solution4File
+            // 
+            this.solution4File.AllowDrop = true;
+            this.solution4File.File = null;
+            this.solution4File.FileMask = "Solution File (*.sln)|*.sln|All Files (*.*)|*.*";
+            this.solution4File.ForOpen = true;
+            this.solution4File.ForSave = false;
+            this.solution4File.Location = new System.Drawing.Point(332, 505);
+            this.solution4File.Name = "solution4File";
+            this.solution4File.Size = new System.Drawing.Size(927, 40);
+            this.solution4File.TabIndex = 28;
+            // 
+            // lblSolution4
+            // 
+            this.lblSolution4.AutoSize = true;
+            this.lblSolution4.Location = new System.Drawing.Point(75, 505);
+            this.lblSolution4.Name = "lblSolution4";
+            this.lblSolution4.Size = new System.Drawing.Size(90, 25);
+            this.lblSolution4.TabIndex = 27;
+            this.lblSolution4.Text = "Solution";
             // 
             // NoArgumentsStart
             // 
@@ -215,7 +239,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnExit;
-            this.ClientSize = new System.Drawing.Size(1315, 655);
+            this.ClientSize = new System.Drawing.Size(1315, 760);
+            this.Controls.Add(this.solution4File);
+            this.Controls.Add(this.lblSolution4);
             this.Controls.Add(this.chkCreateOnly);
             this.Controls.Add(this.chkWait);
             this.Controls.Add(this.chkIgnoreWarnings);
@@ -259,5 +285,7 @@
         private System.Windows.Forms.CheckBox chkIgnoreWarnings;
         private System.Windows.Forms.CheckBox chkWait;
         private System.Windows.Forms.CheckBox chkCreateOnly;
+        private FileSelection solution4File;
+        private System.Windows.Forms.Label lblSolution4;
     }
 }

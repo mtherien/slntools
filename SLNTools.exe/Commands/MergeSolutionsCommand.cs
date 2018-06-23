@@ -35,7 +35,7 @@ namespace CWDev.SLNTools.Commands
             [Argument(ArgumentType.AtMostOnce)]
             public bool IgnoreWarning = false;
 
-            [DefaultArgument(ArgumentType.Multiple)]
+            [DefaultArgument(ArgumentType.Multiple | ArgumentType.Required)]
             public string[] Solutions = null;
         }
 

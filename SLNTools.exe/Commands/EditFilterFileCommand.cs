@@ -30,7 +30,7 @@ namespace CWDev.SLNTools.Commands
     {
         private class Arguments
         {
-            [DefaultArgument(ArgumentType.AtMostOnce)]
+            [DefaultArgument(ArgumentType.Required)]
             public string FilterFile = null;
         }
 

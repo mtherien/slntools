@@ -32,6 +32,19 @@ namespace CWDev.SLNTools
         private void cmbCommand_SelectedIndexChanged(object sender, EventArgs e)
         {
             var selectedCommand = (CommandOption) cmbCommand.SelectedItem;
+            lblSolution2.Visible = false;
+            solution2File.Visible = false;
+            solution2File.File = null;
+            lblSolution3.Visible = false;
+            solution3File.Visible = false;
+            solution3File.File = null;
+            lblSolution4.Visible = false;
+            solution4File.Visible = false;
+            solution4File.File = null;
+            chkCreateOnly.Visible = false;
+            chkIgnoreWarnings.Visible = false;
+            chkWait.Visible = false;
+
             switch (selectedCommand)
             {
                 case CommandOption.CompareSolutions:
@@ -45,32 +58,30 @@ namespace CWDev.SLNTools
                     solution2File.FileMask = "Solution File (*.sln)|*.sln|All Files (*.*)|*.*";
                     solution2File.Visible = true;
 
-                    lblSolution3.Visible = false;
-                    solution3File.Visible = false;
-
-                    chkCreateOnly.Visible = false;
                     chkIgnoreWarnings.Visible = true;
-                    chkWait.Visible = false;
                     break;
                 case CommandOption.MergeSolutions:
-                    lblSolution1.Text = "First Solution";
+                    lblSolution1.Text = "Source Solution";
                     lblSolution1.Visible = true;
                     solution1File.FileMask = "Solution File (*.sln)|*.sln|All Files (*.*)|*.*";
                     solution1File.Visible = true;
 
-                    lblSolution2.Text = "Second Solution";
+                    lblSolution2.Text = "Destination Solution";
                     lblSolution2.Visible = true;
                     solution2File.FileMask = "Solution File (*.sln)|*.sln|All Files (*.*)|*.*";
                     solution2File.Visible = true;
 
-                    lblSolution3.Text = "Destination Solution";
+                    lblSolution3.Text = "Common Ancestry";
                     lblSolution3.Visible = true;
                     solution3File.FileMask = "Solution File (*.sln)|*.sln|All Files (*.*)|*.*";
                     solution3File.Visible = true;
 
-                    chkCreateOnly.Visible = false;
+                    lblSolution4.Text = "Resulted Solution";
+                    lblSolution4.Visible = true;
+                    solution4File.FileMask = "Solution File (*.sln)|*.sln|All Files (*.*)|*.*";
+                    solution4File.Visible = true;
+
                     chkIgnoreWarnings.Visible = true;
-                    chkWait.Visible = false;
                     break;
                 case CommandOption.CreateFilterFileFromSolution:
                     lblSolution1.Text = "Solution";
@@ -78,32 +89,12 @@ namespace CWDev.SLNTools
                     solution1File.FileMask = "Solution File (*.sln)|*.sln|All Files (*.*)|*.*";
                     solution1File.Visible = true;
 
-                    lblSolution2.Visible = false;
-                    solution2File.Visible = false;
-
-                    lblSolution3.Visible = false;
-                    solution3File.Visible = false;
-
-                    chkCreateOnly.Visible = false;
-                    chkIgnoreWarnings.Visible = false;
-                    chkWait.Visible = false;
-
                     break;
                 case CommandOption.EditFilterFile:
                     lblSolution1.Text = "Filter File";
                     lblSolution1.Visible = true;
                     solution1File.FileMask = "Solution File (*.slnfilter)|*.slnfilter|All Files (*.*)|*.*";
                     solution1File.Visible = true;
-
-                    lblSolution2.Visible = false;
-                    solution2File.Visible = false;
-
-                    lblSolution3.Visible = false;
-                    solution3File.Visible = false;
-
-                    chkCreateOnly.Visible = false;
-                    chkIgnoreWarnings.Visible = false;
-                    chkWait.Visible = false;
                     break;
                 case CommandOption.OpenFilterFile:
                     lblSolution1.Text = "Filter File";
@@ -111,14 +102,7 @@ namespace CWDev.SLNTools
                     solution1File.FileMask = "Solution File (*.slnfilter)|*.slnfilter|All Files (*.*)|*.*";
                     solution1File.Visible = true;
 
-                    lblSolution2.Visible = false;
-                    solution2File.Visible = false;
-
-                    lblSolution3.Visible = false;
-                    solution3File.Visible = false;
-
                     chkCreateOnly.Visible = true;
-                    chkIgnoreWarnings.Visible = false;
                     chkWait.Visible = true;
                     break;
                 default:
@@ -209,6 +193,18 @@ namespace CWDev.SLNTools
                 (CommandOption) cmbCommand.SelectedItem, 
                 new WindowErrorReporter(),
                 arguments.ToArray());
+        }
+
+        private void chkCreateOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkCreateOnly.Checked && chkWait.Visible)
+            {
+                chkWait.Enabled = false;
+            }
+            else if (chkWait.Visible)
+            {
+                chkWait.Enabled = true;
+            }
         }
     }
 }
