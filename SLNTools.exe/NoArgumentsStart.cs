@@ -189,10 +189,28 @@ namespace CWDev.SLNTools
                 arguments.Add(solution3File.File.FullName);
             }
 
+            var selectedCommand = (CommandOption) cmbCommand.SelectedItem;
+
+            this.Enabled = false;
+
+            if (selectedCommand == CommandOption.OpenFilterFile && !chkCreateOnly.Checked)
+            {
+                lblWaiting.Visible = true;
+            }
+
             _commandRunner.RunCommand(
-                (CommandOption) cmbCommand.SelectedItem, 
+                selectedCommand, 
                 new WindowErrorReporter(),
                 arguments.ToArray());
+
+            this.Enabled = true;
+
+            if (selectedCommand == CommandOption.OpenFilterFile && !chkCreateOnly.Checked)
+            {
+                lblWaiting.Visible = false;
+            }
+
+
         }
 
         private void chkCreateOnly_CheckedChanged(object sender, EventArgs e)

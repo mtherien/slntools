@@ -47,6 +47,7 @@
             this.chkCreateOnly = new System.Windows.Forms.CheckBox();
             this.solution4File = new CWDev.SLNTools.FileSelection();
             this.lblSolution4 = new System.Windows.Forms.Label();
+            this.lblWaiting = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // label1
@@ -233,6 +234,18 @@
             this.lblSolution4.TabIndex = 27;
             this.lblSolution4.Text = "Solution";
             // 
+            // lblWaiting
+            // 
+            this.lblWaiting.AutoSize = true;
+            this.lblWaiting.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblWaiting.ForeColor = System.Drawing.Color.Red;
+            this.lblWaiting.Location = new System.Drawing.Point(72, 646);
+            this.lblWaiting.Name = "lblWaiting";
+            this.lblWaiting.Size = new System.Drawing.Size(735, 46);
+            this.lblWaiting.TabIndex = 29;
+            this.lblWaiting.Text = "Waiting For Spawned Process To Quit";
+            this.lblWaiting.Visible = false;
+            // 
             // NoArgumentsStart
             // 
             this.AcceptButton = this.btnOk;
@@ -240,6 +253,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnExit;
             this.ClientSize = new System.Drawing.Size(1315, 760);
+            this.Controls.Add(this.lblWaiting);
             this.Controls.Add(this.solution4File);
             this.Controls.Add(this.lblSolution4);
             this.Controls.Add(this.chkCreateOnly);
@@ -287,5 +301,6 @@
         private System.Windows.Forms.CheckBox chkCreateOnly;
         private FileSelection solution4File;
         private System.Windows.Forms.Label lblSolution4;
+        private System.Windows.Forms.Label lblWaiting;
     }
 }
