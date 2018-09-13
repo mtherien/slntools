@@ -35,12 +35,13 @@ namespace CWDev.SLNTools
             MergeSolutions,
             CreateFilterFileFromSolution,
             EditFilterFile,
-            OpenFilterFile
+            OpenFilterFile,
+            CreateSolutionFromFilterFile,
         }
 
         private class Arguments
         {
-            [DefaultArgument(ArgumentType.Required, HelpText = "Command Name (CompareSolutions|MergeSolutions|CreateFilterFileFromSolution|EditFilterFile|OpenFilterFile|SortProjects)")]
+            [DefaultArgument(ArgumentType.Required, HelpText = "Command Name (CompareSolutions|MergeSolutions|CreateFilterFileFromSolution|EditFilterFile|OpenFilterFile|SortProjects|CreateSolutionFromFilterFile)")]
             public CommandList Command = (CommandList)(-1);
         }
 
@@ -102,6 +103,10 @@ namespace CWDev.SLNTools
 
                         case CommandList.EditFilterFile:
                             command = new EditFilterFileCommand();
+                            break;
+
+                        case CommandList.CreateSolutionFromFilterFile:
+                            command = new CreateSolutionFromFilterFileCommand();
                             break;
 
                         default:

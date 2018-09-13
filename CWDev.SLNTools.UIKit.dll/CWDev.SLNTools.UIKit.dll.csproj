@@ -84,6 +84,7 @@
     <Compile Include="CreateFilterForm.Designer.cs">
       <DependentUpon>CreateFilterForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="CreateSolutionFromFilterFileNoForm.cs" />
     <Compile Include="DifferencesControl.cs">
       <SubType>Component</SubType>
     </Compile>
